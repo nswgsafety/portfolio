@@ -38,7 +38,7 @@ function bestAI(b: string[]): number {
 
 // ── Types ─────────────────────────────────────────────────────────────────
 type Phase  = 'idle' | 'username' | 'adminpass' | 'pin' | 'denied' | 'granted' | 'terminal'
-type SubApp = 'snake' | 'tictactoe' | 'notepad' | 'credits' | 'cool' | 'hacknet' | null
+type SubApp = 'snake' | 'tictactoe' | 'notepad' | 'credits' | 'cool' | 'hacknet' | 'pong' | null
 type Dir    = 'U' | 'D' | 'L' | 'R'
 interface Pt      { x: number; y: number }
 interface Line    { id: number; type: 'cmd' | 'out' | 'err' | 'sys'; text: string }
@@ -78,6 +78,7 @@ const HELP_LINES = [
   '  │  /sudo         try it                            │',
   '  ├─────────────────────────────────────────────────┤',
   '  │  /snake        play snake                        │',
+  '  │  /pong         play pong vs AI                   │',
   '  │  /tictactoe    play tic-tac-toe vs AI            │',
   '  │  /notepad      open notepad                      │',
   '  │  /credits      view credits                      │',
@@ -192,9 +193,23 @@ export default function SecretTerminal() {
   // TicTacToe
   const aiThink  = useRef(false)
 
+  // Pong
+  const pongCvs    = useRef<HTMLCanvasElement>(null)
+  const pongRaf    = useRef(0)
+  const pongBall   = useRef({ x: SCW / 2, y: SCH / 2, vx: 5, vy: 2 })
+  const pongPL     = useRef(SCH / 2 - 35)
+  const pongPR     = useRef(SCH / 2 - 35)
+  const pongSL     = useRef(0)
+  const pongSR     = useRef(0)
+  const pongSpeed  = useRef(5)
+  const pongKeys   = useRef<Set<string>>(new Set())
+  const [pongScore,  setPongScore]  = useState<[number, number]>([0, 0])
+  const [pongWinner, setPongWinner] = useState<'YOU' | 'AI' | null>(null)
+
   // ── Derived ───────────────────────────────────────────────────────────
   const snakeVisible = sessions.some(s => s.sub === 'snake')
   const coolVisible  = sessions.some(s => s.sub === 'cool')
+  const pongVisible  = sessions.some(s => s.sub === 'pong')
 
   // ── Helpers ───────────────────────────────────────────────────────────
   const mkL = (type: Line['type'], text: string): Line => ({ id: lid.current++, type, text })
@@ -249,6 +264,7 @@ export default function SecretTerminal() {
   function close() {
     cancelAnimationFrame(snakeRaf.current)
     cancelAnimationFrame(coolRaf.current)
+    cancelAnimationFrame(pongRaf.current)
     setPhase('idle')
     setSessions([])
     setActiveSessIdSync(1)
@@ -264,6 +280,8 @@ export default function SecretTerminal() {
   function exitSubForSess(sessId: number) {
     cancelAnimationFrame(snakeRaf.current)
     cancelAnimationFrame(coolRaf.current)
+    cancelAnimationFrame(pongRaf.current)
+    pongKeys.current.clear()
     setSDead(false); setSPause(false); setSScore(0)
     setSessions(prev => prev.map(s => s.id === sessId ? { ...s, sub: null } : s))
     if (sessId === activeSessIdRef.current) {
@@ -631,6 +649,10 @@ export default function SecretTerminal() {
       addLines(mkL('out', '  LAUNCHING SNAKE...'))
       setTimeout(() => { resetSnake(); setSub('snake') }, 300)
 
+    } else if (c === '/pong') {
+      addLines(mkL('out', '  LAUNCHING PONG...'), mkL('sys', '  W/S or ↑↓ to move · first to 7 wins'))
+      setTimeout(() => setSub('pong'), 300)
+
     } else if (c === '/tictactoe') {
       addLines(mkL('out', '  LAUNCHING TIC-TAC-TOE...'))
       setTimeout(() => { setTtt(Array(9).fill('')); setTttMsg(null); aiThink.current = false; setSub('tictactoe') }, 300)
@@ -795,6 +817,131 @@ export default function SecretTerminal() {
     coolRaf.current = requestAnimationFrame(drawCool)
     return () => cancelAnimationFrame(coolRaf.current)
   }, [coolVisible])
+
+  // ── Pong game loop ────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!pongVisible) return
+    const canvas = pongCvs.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')!
+    const PW = 12, PH = 70, BR = 7, PSPD = 5, ASPD = 4, WIN = 7
+
+    function resetBall(dir: 1 | -1) {
+      pongBall.current = { x: SCW / 2, y: SCH / 2, vx: dir * pongSpeed.current, vy: (Math.random() * 4 - 2) }
+      pongSpeed.current = 5
+    }
+
+    pongBall.current = { x: SCW / 2, y: SCH / 2, vx: 5, vy: 2 }
+    pongPL.current = SCH / 2 - 35
+    pongPR.current = SCH / 2 - 35
+    pongSL.current = 0; pongSR.current = 0
+    pongSpeed.current = 5
+    setPongScore([0, 0]); setPongWinner(null)
+
+    function loop() {
+      const b = pongBall.current
+      b.x += b.vx; b.y += b.vy
+
+      // Wall bounce
+      if (b.y - BR <= 0)    { b.y = BR;        b.vy = Math.abs(b.vy) }
+      if (b.y + BR >= SCH)  { b.y = SCH - BR;  b.vy = -Math.abs(b.vy) }
+
+      // Player input
+      if (pongKeys.current.has('w') || pongKeys.current.has('arrowup'))
+        pongPL.current = Math.max(0, pongPL.current - PSPD)
+      if (pongKeys.current.has('s') || pongKeys.current.has('arrowdown'))
+        pongPL.current = Math.min(SCH - PH, pongPL.current + PSPD)
+
+      // AI tracking
+      const aiCenter = pongPR.current + PH / 2
+      if (aiCenter < b.y - 4) pongPR.current = Math.min(SCH - PH, pongPR.current + ASPD)
+      if (aiCenter > b.y + 4) pongPR.current = Math.max(0, pongPR.current - ASPD)
+
+      // Left paddle hit
+      if (b.x - BR <= PW + 8 && b.y >= pongPL.current && b.y <= pongPL.current + PH && b.vx < 0) {
+        pongSpeed.current = Math.min(pongSpeed.current + 0.4, 14)
+        b.vx = Math.abs(b.vx) + 0.3
+        b.vy += (b.y - (pongPL.current + PH / 2)) * 0.1
+        b.x = PW + 8 + BR
+      }
+      // Right paddle hit
+      if (b.x + BR >= SCW - PW - 8 && b.y >= pongPR.current && b.y <= pongPR.current + PH && b.vx > 0) {
+        pongSpeed.current = Math.min(pongSpeed.current + 0.4, 14)
+        b.vx = -(Math.abs(b.vx) + 0.3)
+        b.vy += (b.y - (pongPR.current + PH / 2)) * 0.1
+        b.x = SCW - PW - 8 - BR
+      }
+      b.vy = Math.max(-10, Math.min(10, b.vy))
+
+      // Scoring
+      if (b.x < 0) {
+        pongSR.current++
+        setPongScore([pongSL.current, pongSR.current])
+        if (pongSR.current >= WIN) { setPongWinner('AI'); return }
+        resetBall(1)
+      }
+      if (b.x > SCW) {
+        pongSL.current++
+        setPongScore([pongSL.current, pongSR.current])
+        if (pongSL.current >= WIN) { setPongWinner('YOU'); return }
+        resetBall(-1)
+      }
+
+      // Draw
+      ctx.fillStyle = '#050905'
+      ctx.fillRect(0, 0, SCW, SCH)
+
+      ctx.setLineDash([6, 8])
+      ctx.strokeStyle = 'rgba(34,197,94,0.1)'
+      ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(SCW / 2, 0); ctx.lineTo(SCW / 2, SCH); ctx.stroke()
+      ctx.setLineDash([])
+
+      ctx.font = '32px "DM Mono",monospace'
+      ctx.fillStyle = 'rgba(34,197,94,0.22)'
+      ctx.textAlign = 'center'
+      ctx.fillText(String(pongSL.current), SCW / 2 - 90, 48)
+      ctx.fillText(String(pongSR.current), SCW / 2 + 90, 48)
+      ctx.font = '8px "DM Mono",monospace'
+      ctx.fillText('YOU', SCW / 2 - 90, 62)
+      ctx.fillText('AI', SCW / 2 + 90, 62)
+
+      ctx.fillStyle = '#22C55E'
+      ctx.fillRect(8, pongPL.current, PW, PH)
+      ctx.fillStyle = 'rgba(34,197,94,0.5)'
+      ctx.fillRect(SCW - PW - 8, pongPR.current, PW, PH)
+
+      const grd = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, 18)
+      grd.addColorStop(0, 'rgba(34,197,94,0.35)')
+      grd.addColorStop(1, 'rgba(34,197,94,0)')
+      ctx.beginPath(); ctx.arc(b.x, b.y, 18, 0, Math.PI * 2)
+      ctx.fillStyle = grd; ctx.fill()
+      ctx.beginPath(); ctx.arc(b.x, b.y, BR, 0, Math.PI * 2)
+      ctx.fillStyle = '#22C55E'; ctx.fill()
+
+      ctx.font = '8px "DM Mono",monospace'
+      ctx.fillStyle = 'rgba(34,197,94,0.18)'
+      ctx.textAlign = 'left'
+      ctx.fillText('W/S or ↑↓ to move · first to 7 wins', 10, SCH - 8)
+
+      pongRaf.current = requestAnimationFrame(loop)
+    }
+    pongRaf.current = requestAnimationFrame(loop)
+    return () => cancelAnimationFrame(pongRaf.current)
+  }, [pongVisible]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Pong key handler
+  useEffect(() => {
+    if (!pongVisible) return
+    const down = (e: KeyboardEvent) => {
+      const k = e.key.toLowerCase()
+      if (['w', 's', 'arrowup', 'arrowdown'].includes(k)) { e.preventDefault(); pongKeys.current.add(k) }
+    }
+    const up = (e: KeyboardEvent) => pongKeys.current.delete(e.key.toLowerCase())
+    window.addEventListener('keydown', down)
+    window.addEventListener('keyup', up)
+    return () => { window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); pongKeys.current.clear() }
+  }, [pongVisible])
 
   // ── TicTacToe ─────────────────────────────────────────────────────────
   function tttPlay(idx: number) {
@@ -1051,6 +1198,11 @@ export default function SecretTerminal() {
                         SCORE:{sScore.toString().padStart(3, '0')} · HI:{sHi.toString().padStart(3, '0')}
                       </span>
                     )}
+                    {sess.sub === 'pong' && (
+                      <span style={{ marginLeft: 'auto', fontSize: '9px', color: 'rgba(34,197,94,0.45)', letterSpacing: '0.08em' }}>
+                        YOU {pongScore[0]} · AI {pongScore[1]}
+                      </span>
+                    )}
                     {sessions.length > 1 && sess.sub !== 'snake' && (
                       <button
                         onClick={e => { e.stopPropagation(); addSession() }}
@@ -1169,6 +1321,35 @@ export default function SecretTerminal() {
                       <div style={{ padding: '8px 14px', borderTop: '1px solid rgba(34,197,94,0.07)', fontSize: '8px', color: 'rgba(34,197,94,0.25)', letterSpacing: '0.1em' }}>
                         CLASSIFIED_VISUAL_FEED · LIVE · [ESC] BACK
                       </div>
+                    </motion.div>
+                  )}
+
+                  {/* ── Pong ──────────────────────────────────────────────── */}
+                  {sess.sub === 'pong' && (
+                    <motion.div key="pong" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ position: 'relative' }}>
+                      <canvas ref={pongCvs} width={SCW} height={SCH} style={{ display: 'block' }} />
+                      {pongWinner && (
+                        <div style={{
+                          position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
+                          alignItems: 'center', justifyContent: 'center', background: 'rgba(5,9,5,0.88)',
+                          fontFamily: '"DM Mono",monospace',
+                        }}>
+                          <div style={{ fontSize: 22, color: pongWinner === 'YOU' ? '#22C55E' : '#ef4444', letterSpacing: 3, marginBottom: 10 }}>
+                            {pongWinner === 'YOU' ? '▶ YOU WIN' : '◉ AI WINS'}
+                          </div>
+                          <div style={{ fontSize: 11, color: 'rgba(34,197,94,0.5)', marginBottom: 20 }}>
+                            {pongScore[0]} — {pongScore[1]}
+                          </div>
+                          <button
+                            onClick={() => { setPongWinner(null); setPongScore([0,0]); /* loop restarts via pongVisible effect reset */ exitSubForSess(sess.id); setTimeout(() => { const s = sessions.find(x => x.id === sess.id); if (s) {} }, 50) }}
+                            style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.4)', color: '#22C55E', fontFamily: '"DM Mono",monospace', fontSize: 10, padding: '6px 20px', cursor: 'pointer', letterSpacing: 2 }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(34,197,94,0.2)'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(34,197,94,0.1)'}
+                          >
+                            PLAY AGAIN
+                          </button>
+                        </div>
+                      )}
                     </motion.div>
                   )}
 

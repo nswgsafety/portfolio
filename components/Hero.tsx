@@ -292,14 +292,14 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Contact card — bottom-right */}
+      {/* Contact card — top-right, below reticle */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.6, duration: 0.7, ease: 'easeOut' }}
         style={{
           position: 'absolute',
-          bottom: '72px',
+          top: 'clamp(180px, 22vw, 220px)',
           right: 'clamp(24px, 6vw, 96px)',
           zIndex: 2,
           fontFamily: 'DM Mono, monospace',
