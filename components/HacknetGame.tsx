@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 // ── Dimensions ───────────────────────────────────────────────────────────────
 const MAP_W     = 310
@@ -453,7 +453,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
   const [panel,        setPanel]        = useState<'map' | 'files' | 'shop' | 'base'>('map')
   const [won,          setWon]          = useState(false)
   const [history,      setHistory]      = useState<string[]>([])
-  const [histIdx,      setHistIdx]      = useState(-1)
+  const histIdxRef = useRef(-1)
   const [credits,      setCredits]      = useState(50)
   const [upgrades,     setUpgrades]     = useState<Set<string>>(new Set())
   const [minigame,     setMinigame]     = useState<MiniGame | null>(null)
@@ -461,7 +461,6 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
   const [ctfMode,      setCTFMode]      = useState(false)
   const [ctfFlag,      setCTFFlag]      = useState('')
   const [ctfSolved,    setCTFSolved]    = useState(false)
-  const [alertTimer,   setAlertTimer]   = useState<ReturnType<typeof setTimeout> | null>(null)
   const [alertCountdown, setAlertCountdown] = useState<number | null>(null)
   const [soldFiles,    setSoldFiles]    = useState<Set<string>>(new Set())
   const [mgInput,      setMgInput]      = useState('')  // mini-game text input
@@ -500,7 +499,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
   // Alert level 3 countdown
   useEffect(() => {
     if (alertLevel === 3 && alertCountdown === null) {
-      setAlertCountdown(60)
+      setTimeout(() => setAlertCountdown(60), 0)
       countdownRef.current = setInterval(() => {
         setAlertCountdown(prev => {
           if (prev === null || prev <= 1) {
@@ -532,7 +531,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
         clearInterval(countdownRef.current)
         countdownRef.current = null
       }
-      setAlertCountdown(null)
+      setTimeout(() => setAlertCountdown(null), 0)
     }
     return () => {
       if (alertLevel < 3 && countdownRef.current) {
@@ -551,11 +550,11 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
       const candidates = net.order.filter(id => id !== net.current && id !== net.order[0])
       if (candidates.length === 0) return
       const startId = candidates[rand(candidates.length)]
-      setTracerNode(startId)
       tracerNodeRef.current = startId
-      setTracerActive(true)
-      setTracerPct(0)
       setTimeout(() => {
+        setTracerNode(startId)
+        setTracerActive(true)
+        setTracerPct(0)
         setLog(p => [...p,
           { id: lid.current++, type: 'err', text: '◉ COUNTER-INTEL BOT DETECTED — tracing your signal...' },
           { id: lid.current++, type: 'warn', text: '  Navigate to its node and run: kill tracer' },
@@ -589,28 +588,8 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
           return 0
         }
 
-        // BFS from tracer toward player's current node
+        // BFS from tNode toward player's current node, take one step
         const target = currentNet.current
-        const parent: Record<string, string | null> = { [tNode]: null }
-        const q = [tNode]
-        while (q.length) {
-          const n = q.shift()!
-          if (n === target) break
-          for (const nb of currentNet.nodes[n]?.linked ?? []) {
-            if (parent[nb] === undefined) {
-              parent[nb] = n
-              q.push(nb)
-            }
-          }
-        }
-        // Reconstruct first step
-        let step = target
-        while (parent[step] && parent[parent[step]!] !== null && parent[step] !== tNode) {
-          step = parent[step]!
-        }
-        const nextNode = (parent[step] === null || step === tNode) ? step : step
-
-        // Actually just walk one step from tNode toward target
         let firstStep = tNode
         const visited = new Set<string>([tNode])
         const bfsQ: string[] = [tNode]
@@ -666,7 +645,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
       })
     }, baseDelay)
     return () => { if (tracerRef.current) { clearInterval(tracerRef.current); tracerRef.current = null } }
-  }, [tracerActive, baseUpgrades]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [tracerActive, baseUpgrades])
 
   // Boot message
   useEffect(() => {
@@ -848,7 +827,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
     if (cmd) {
       addLog(mkL('cmd', `${net.nodes[net.current].hostname}$ ${raw}`))
       setHistory(h => [raw, ...h.filter(x => x !== raw)].slice(0, 50))
-      setHistIdx(-1)
+      histIdxRef.current = -1
     }
 
     const cur = net.nodes[net.current]
@@ -1450,18 +1429,14 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
       setInput('')
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
-      setHistIdx(i => {
-        const next = Math.min(i + 1, history.length - 1)
-        setInput(history[next] ?? '')
-        return next
-      })
+      const next = Math.min(histIdxRef.current + 1, history.length - 1)
+      histIdxRef.current = next
+      setInput(history[next] ?? '')
     } else if (e.key === 'ArrowDown') {
       e.preventDefault()
-      setHistIdx(i => {
-        const next = Math.max(i - 1, -1)
-        setInput(next === -1 ? '' : history[next] ?? '')
-        return next
-      })
+      const next = Math.max(histIdxRef.current - 1, -1)
+      histIdxRef.current = next
+      setInput(next === -1 ? '' : history[next] ?? '')
     }
   }
 

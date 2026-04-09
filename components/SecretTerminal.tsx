@@ -37,7 +37,7 @@ function bestAI(b: string[]): number {
 }
 
 // ── Types ─────────────────────────────────────────────────────────────────
-type Phase  = 'idle' | 'pin' | 'denied' | 'granted' | 'terminal'
+type Phase  = 'idle' | 'username' | 'adminpass' | 'pin' | 'denied' | 'granted' | 'terminal'
 type SubApp = 'snake' | 'tictactoe' | 'notepad' | 'credits' | 'cool' | 'hacknet' | null
 type Dir    = 'U' | 'D' | 'L' | 'R'
 interface Pt      { x: number; y: number }
@@ -131,9 +131,19 @@ const LINE_COLOR: Record<Line['type'], string> = {
 export default function SecretTerminal() {
 
   // ── Phase ─────────────────────────────────────────────────────────────
-  const [phase,  setPhase]  = useState<Phase>('idle')
-  const [pin,    setPin]    = useState('')
-  const [denied, setDenied] = useState('')
+  const [phase,          setPhase]         = useState<Phase>('idle')
+  const [pin,            setPin]           = useState('')
+  const [denied,         setDenied]        = useState('')
+  const [usernameInput,  setUsernameInput] = useState('')
+  const [adminPassInput, setAdminPassInput]= useState('')
+  const [authError,      setAuthError]     = useState('')
+  const [isAdmin,        setIsAdmin]       = useState(false)
+  const [adminToken,     setAdminToken]    = useState('')
+  const [loggedUser,     setLoggedUser]    = useState('')
+  const isAdminRef    = useRef(false)
+  const adminTokenRef = useRef('')
+  const usernameRef   = useRef<HTMLInputElement>(null)
+  const adminPassRef  = useRef<HTMLInputElement>(null)
 
   // ── Multi-window sessions ─────────────────────────────────────────────
   const [sessions,     setSessions]     = useState<Session[]>([])
@@ -245,6 +255,9 @@ export default function SecretTerminal() {
     sessIdCtr.current = 2
     maxZOrder.current = 1
     setPin('')
+    setUsernameInput(''); setAdminPassInput(''); setAuthError('')
+    setIsAdmin(false); setAdminToken(''); setLoggedUser('')
+    isAdminRef.current = false; adminTokenRef.current = ''
     setSDead(false); setSPause(false); setSScore(0)
   }
 
@@ -293,15 +306,80 @@ export default function SecretTerminal() {
     if (pin.length === 4 && phase === 'pin') checkPin(pin)
   }, [pin]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // ── Username submission ────────────────────────────────────────────────
+  async function submitUsername() {
+    const u = usernameInput.trim()
+    if (!u) return
+    setAuthError('')
+    try {
+      const res = await fetch('/api/terminal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'login', username: u, password: '', ua: navigator.userAgent }),
+      })
+      const data = await res.json()
+      if (data.requiresPassword) {
+        setPhase('adminpass')
+      } else {
+        setLoggedUser(u)
+        setPhase('pin')
+      }
+    } catch {
+      // If API fails (local dev without server), just continue
+      setLoggedUser(u)
+      setPhase('pin')
+    }
+  }
+
+  // ── Admin password submission ──────────────────────────────────────────
+  async function submitAdminPass() {
+    const u = usernameInput.trim()
+    const p = adminPassInput
+    if (!p) return
+    setAuthError('')
+    try {
+      const res = await fetch('/api/terminal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'login', username: u, password: p, ua: navigator.userAgent }),
+      })
+      const data = await res.json()
+      if (data.ok) {
+        isAdminRef.current = true
+        adminTokenRef.current = data.token ?? ''
+        setIsAdmin(true)
+        setAdminToken(data.token ?? '')
+        setLoggedUser(u)
+        setAdminPassInput('')
+        setPhase('pin')
+      } else {
+        setAuthError('ACCESS_DENIED — invalid credentials')
+        setAdminPassInput('')
+      }
+    } catch {
+      setAuthError('CONNECTION_ERROR — try again')
+      setAdminPassInput('')
+    }
+  }
+
   function checkPin(code: string) {
     if (code === ACCESS_CODE) {
       setPhase('granted')
       setTimeout(() => {
         const cx = Math.max(20, window.innerWidth / 2 - WIN_W / 2)
         const cy = Math.max(20, window.innerHeight / 2 - 200)
+        const user = loggedUser || 'OPERATOR'
+        const adminLine = isAdminRef.current
+          ? mkL('sys', '  ADMIN_MODE_ACTIVE — type /logs to view access log')
+          : mkL('sys', `  Welcome, ${user.toUpperCase()}.`)
         setSessions([{
           id: 1, name: 'main',
-          lines: [mkL('sys', '  CLASSIFIED_ACCESS_TERMINAL v2.0'), mkL('sys', '  Type /help to see all commands.'), mkL('sys', '')],
+          lines: [
+            mkL('sys', '  CLASSIFIED_ACCESS_TERMINAL v2.0'),
+            adminLine,
+            mkL('sys', '  Type /help to see all commands.'),
+            mkL('sys', ''),
+          ],
           sub: null, input: '',
           pos: { x: cx, y: cy }, zOrder: 1,
         }])
@@ -324,6 +402,12 @@ export default function SecretTerminal() {
     window.addEventListener('keydown', h)
     return () => window.removeEventListener('keydown', h)
   }, [phase]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Focus inputs when phases appear
+  useEffect(() => {
+    if (phase === 'username')  setTimeout(() => usernameRef.current?.focus(), 80)
+    if (phase === 'adminpass') setTimeout(() => adminPassRef.current?.focus(), 80)
+  }, [phase])
 
   // ── Drag logic ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -388,6 +472,45 @@ export default function SecretTerminal() {
         mkL('out', `  │  built   : ${time.slice(0, 33).padEnd(33)}│`),
         mkL('sys', '  └─────────────────────────────────────────────┘'),
       )
+
+    } else if (c === '/logs') {
+      if (!isAdminRef.current) {
+        addLines(mkL('err', '  ACCESS_DENIED — insufficient clearance'))
+      } else {
+        addLines(mkL('sys', '  Fetching access log...'))
+        fetch('/api/terminal', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'logs', token: adminTokenRef.current }),
+        })
+          .then(r => r.json())
+          .then(data => {
+            if (!data.ok) {
+              setSessions(prev => prev.map(s => s.id === sessId ? { ...s, lines: [...s.lines, { id: lid.current++, type: 'err', text: `  ERROR: ${data.error}` }] } : s))
+              return
+            }
+            const entries = data.logs as Array<{ username: string; timestamp: string; ip: string; ua: string; success: boolean; admin: boolean }>
+            const newLines: Line[] = [
+              { id: lid.current++, type: 'sys', text: `  ┌── ACCESS LOG (${entries.length} entries) ──────────────────────` },
+            ]
+            if (entries.length === 0) {
+              newLines.push({ id: lid.current++, type: 'out', text: '  │  No entries yet.' })
+            } else {
+              for (const e of entries) {
+                const ts = new Date(e.timestamp).toLocaleString()
+                const status = e.success ? '✓' : '✗'
+                const tag = e.admin ? ' [ADMIN]' : ''
+                newLines.push({ id: lid.current++, type: e.success ? 'out' : 'err', text: `  │  ${status} ${e.username}${tag}  ${ts}  ${e.ip}` })
+                newLines.push({ id: lid.current++, type: 'sys', text: `  │     UA: ${e.ua.slice(0, 60)}` })
+              }
+            }
+            newLines.push({ id: lid.current++, type: 'sys', text: '  └──────────────────────────────────────────────────────────' })
+            setSessions(prev => prev.map(s => s.id === sessId ? { ...s, lines: [...s.lines, ...newLines] } : s))
+          })
+          .catch(() => {
+            setSessions(prev => prev.map(s => s.id === sessId ? { ...s, lines: [...s.lines, { id: lid.current++, type: 'err', text: '  NETWORK_ERROR — could not fetch logs' }] } : s))
+          })
+      }
 
     } else if (c === '/clear') {
       setSessions(prev => prev.map(s => s.id === sessId ? { ...s, lines: [] } : s))
@@ -692,7 +815,7 @@ export default function SecretTerminal() {
     <>
       {/* ── Trigger button ──────────────────────────────────────────────── */}
       <button
-        onClick={() => { tries.current = 0; setPin(''); setPhase('pin') }}
+        onClick={() => { tries.current = 0; setPin(''); setUsernameInput(''); setAdminPassInput(''); setAuthError(''); setPhase('username') }}
         aria-hidden="true"
         style={{
           position: 'fixed', bottom: 14, right: 14,
@@ -721,6 +844,101 @@ export default function SecretTerminal() {
             }}
             onClick={e => { if (e.target === e.currentTarget && phase !== 'terminal') close() }}
           >
+
+            {/* ── Username phase ───────────────────────────────────────────── */}
+            {phase === 'username' && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                <motion.div
+                  key="username-modal"
+                  initial={{ opacity: 0, scale: 0.97, y: 14 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.97, y: 14 }}
+                  transition={{ duration: 0.2 }}
+                  style={{ background: '#050905', border: '1px solid rgba(34,197,94,0.2)', boxShadow: '0 0 80px rgba(34,197,94,0.06)', width: WIN_W, ...MONO }}
+                >
+                  <div style={{ padding: '9px 14px', borderBottom: '1px solid rgba(34,197,94,0.1)', background: 'rgba(34,197,94,0.025)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ display: 'flex', gap: '5px' }}>
+                      {[0,1,2].map(i => <div key={i} onClick={i === 0 ? close : undefined} style={{ width: 8, height: 8, borderRadius: '50%', background: i === 0 ? '#ff5f57' : 'rgba(34,197,94,0.14)', cursor: i === 0 ? 'pointer' : 'default' }} />)}
+                    </div>
+                    <span style={{ fontSize: '9px', color: 'rgba(34,197,94,0.35)', letterSpacing: '0.14em', marginLeft: 10 }}>CLASSIFIED_ACCESS_TERMINAL v2.0</span>
+                  </div>
+                  <div style={{ padding: '36px 46px' }}>
+                    <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.3)', letterSpacing: '0.12em', marginBottom: '24px' }}>{'>'} IDENTIFICATION_REQUIRED</div>
+                    <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.55)', letterSpacing: '0.1em', marginBottom: '14px' }}>ENTER_USERNAME:</div>
+                    <input
+                      ref={usernameRef}
+                      value={usernameInput}
+                      onChange={e => setUsernameInput(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter') submitUsername(); if (e.key === 'Escape') close() }}
+                      autoComplete="off"
+                      spellCheck={false}
+                      style={{
+                        width: '100%', boxSizing: 'border-box',
+                        background: 'rgba(34,197,94,0.04)', border: '1px solid rgba(34,197,94,0.3)',
+                        color: '#22C55E', ...MONO, fontSize: '14px', padding: '10px 14px',
+                        outline: 'none', letterSpacing: '0.05em',
+                      }}
+                    />
+                    <div style={{ marginTop: '18px', display: 'flex', gap: 10 }}>
+                      <button onClick={submitUsername} style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.35)', color: '#22C55E', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>CONFIRM</button>
+                      <button onClick={close} style={{ background: 'transparent', border: '1px solid rgba(34,197,94,0.15)', color: 'rgba(34,197,94,0.35)', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>ABORT</button>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+
+            {/* ── Admin password phase ─────────────────────────────────────── */}
+            {phase === 'adminpass' && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                <motion.div
+                  key="adminpass-modal"
+                  initial={{ opacity: 0, scale: 0.97, y: 14 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.97, y: 14 }}
+                  transition={{ duration: 0.2 }}
+                  style={{ background: '#050905', border: '1px solid rgba(34,197,94,0.2)', boxShadow: '0 0 80px rgba(34,197,94,0.06)', width: WIN_W, ...MONO }}
+                >
+                  <div style={{ padding: '9px 14px', borderBottom: '1px solid rgba(34,197,94,0.1)', background: 'rgba(34,197,94,0.025)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ display: 'flex', gap: '5px' }}>
+                      {[0,1,2].map(i => <div key={i} onClick={i === 0 ? close : undefined} style={{ width: 8, height: 8, borderRadius: '50%', background: i === 0 ? '#ff5f57' : 'rgba(34,197,94,0.14)', cursor: i === 0 ? 'pointer' : 'default' }} />)}
+                    </div>
+                    <span style={{ fontSize: '9px', color: 'rgba(34,197,94,0.35)', letterSpacing: '0.14em', marginLeft: 10 }}>CLASSIFIED_ACCESS_TERMINAL v2.0</span>
+                  </div>
+                  <div style={{ padding: '36px 46px' }}>
+                    <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.3)', letterSpacing: '0.12em', marginBottom: '24px' }}>{'>'} ELEVATED_CLEARANCE_REQUIRED</div>
+                    <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.55)', letterSpacing: '0.1em', marginBottom: '4px' }}>USER: <span style={{ color: '#22C55E' }}>{usernameInput}</span></div>
+                    <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.55)', letterSpacing: '0.1em', marginBottom: '14px', marginTop: '14px' }}>ENTER_PASSWORD:</div>
+                    <input
+                      ref={adminPassRef}
+                      type="password"
+                      value={adminPassInput}
+                      onChange={e => setAdminPassInput(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter') submitAdminPass(); if (e.key === 'Escape') close() }}
+                      autoComplete="off"
+                      style={{
+                        width: '100%', boxSizing: 'border-box',
+                        background: 'rgba(34,197,94,0.04)', border: '1px solid rgba(34,197,94,0.3)',
+                        color: '#22C55E', ...MONO, fontSize: '14px', padding: '10px 14px',
+                        outline: 'none', letterSpacing: '0.2em',
+                      }}
+                    />
+                    <AnimatePresence>
+                      {authError && (
+                        <motion.div initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
+                          style={{ marginTop: 10, fontSize: '10px', color: '#ef4444', letterSpacing: '0.1em' }}>
+                          {authError}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <div style={{ marginTop: '18px', display: 'flex', gap: 10 }}>
+                      <button onClick={submitAdminPass} style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.35)', color: '#22C55E', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>AUTHENTICATE</button>
+                      <button onClick={close} style={{ background: 'transparent', border: '1px solid rgba(34,197,94,0.15)', color: 'rgba(34,197,94,0.35)', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>ABORT</button>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            )}
 
             {/* ── PIN / boot phases (centered) ────────────────────────────── */}
             {(phase === 'pin' || phase === 'denied' || phase === 'granted') && (
