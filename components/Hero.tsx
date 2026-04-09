@@ -292,6 +292,57 @@ export default function Hero() {
         </motion.div>
       </div>
 
+      {/* Contact card — bottom-right */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.6, duration: 0.7, ease: 'easeOut' }}
+        style={{
+          position: 'absolute',
+          bottom: '72px',
+          right: 'clamp(24px, 6vw, 96px)',
+          zIndex: 2,
+          fontFamily: 'DM Mono, monospace',
+          fontSize: '10px',
+          letterSpacing: '0.1em',
+          border: '1px solid rgba(34,197,94,0.15)',
+          background: 'rgba(34,197,94,0.03)',
+          padding: '14px 18px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '7px',
+        }}
+      >
+        <div style={{ color: 'var(--accent-coral)', letterSpacing: '0.16em', marginBottom: '4px', fontSize: '9px' }}>
+          {'>'} CONTACT
+        </div>
+        {([
+          ['EMAIL', 'ianmarco302@gmail.com'],
+          ['LOC',   'Paramus, NJ'],
+          ['LINK',  'linkedin.com/in/ian-andujar'],
+        ] as [string, string][]).map(([label, value]) => (
+          <div key={label} style={{ display: 'flex', gap: '10px', alignItems: 'baseline' }}>
+            <span style={{ color: 'var(--muted)', minWidth: '44px' }}>{label}</span>
+            <span style={{ color: 'rgba(34,197,94,0.55)' }}>·</span>
+            {label === 'LINK' ? (
+              <a href="https://linkedin.com/in/ian-andujar" target="_blank" rel="noopener noreferrer"
+                style={{ color: 'var(--ink)', textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-coral)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--ink)')}
+              >{value}</a>
+            ) : label === 'EMAIL' ? (
+              <a href="mailto:ianmarco302@gmail.com"
+                style={{ color: 'var(--ink)', textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-coral)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--ink)')}
+              >{value}</a>
+            ) : (
+              <span style={{ color: 'var(--ink)' }}>{value}</span>
+            )}
+          </div>
+        ))}
+      </motion.div>
+
       {/* Marquee strip */}
       <motion.div
         initial={{ opacity: 0 }}

@@ -39,7 +39,6 @@ export default function Home() {
         <Cursor />
         <Nav />
         <main>
-          <Contact />
           <Hero />
           <Work />
 
