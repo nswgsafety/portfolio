@@ -85,6 +85,7 @@ const HELP_LINES = [
   '  │  /hacknet      network hacking simulation        │',
   '  ├─────────────────────────────────────────────────┤',
   '  │  /new          open new window                   │',
+  '  │  /version      show deployed build info          │',
   '  │  /clear        clear terminal                    │',
   '  │  /exit         close this window                 │',
   '  └─────────────────────────────────────────────────┘',
@@ -372,6 +373,21 @@ export default function SecretTerminal() {
 
     if (c === '/help') {
       addLines(...HELP_LINES.map(t => mkL('out', t)))
+
+    } else if (c === '/version') {
+      const sha  = process.env.NEXT_PUBLIC_BUILD_SHA  ?? 'local'
+      const msg  = process.env.NEXT_PUBLIC_BUILD_MSG  ?? 'dev build'
+      const time = process.env.NEXT_PUBLIC_BUILD_TIME ?? 'unknown'
+      const short = sha === 'local' ? 'local' : sha.slice(0, 7)
+      addLines(
+        mkL('sys', '  ┌─────────────────────────────────────────────┐'),
+        mkL('out', '  │  BUILD INFO                                  │'),
+        mkL('sys', '  ├─────────────────────────────────────────────┤'),
+        mkL('out', `  │  commit  : ${short.padEnd(33)}│`),
+        mkL('out', `  │  message : ${msg.slice(0, 33).padEnd(33)}│`),
+        mkL('out', `  │  built   : ${time.slice(0, 33).padEnd(33)}│`),
+        mkL('sys', '  └─────────────────────────────────────────────┘'),
+      )
 
     } else if (c === '/clear') {
       setSessions(prev => prev.map(s => s.id === sessId ? { ...s, lines: [] } : s))
