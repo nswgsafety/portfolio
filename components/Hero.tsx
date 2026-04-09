@@ -317,7 +317,7 @@ export default function Hero() {
           {'>'} CONTACT
         </div>
         {([
-          ['EMAIL', 'ianmarco302@gmail.com'],
+          ['EMAIL', 'ianmarcoandujar9@gmail.com'],
           ['LOC',   'Paramus, NJ'],
           ['LINK',  'linkedin.com/in/ian-andujar'],
         ] as [string, string][]).map(([label, value]) => (
@@ -331,7 +331,7 @@ export default function Hero() {
                 onMouseLeave={e => (e.currentTarget.style.color = 'var(--ink)')}
               >{value}</a>
             ) : label === 'EMAIL' ? (
-              <a href="mailto:ianmarco302@gmail.com"
+              <a href="mailto:ianmarcoandujar9@gmail.com"
                 style={{ color: 'var(--ink)', textDecoration: 'none', transition: 'color 0.2s' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-coral)')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'var(--ink)')}
