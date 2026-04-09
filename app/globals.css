@@ -36,11 +36,19 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Override any light-mode UA stylesheet or Tailwind defaults */
+/* Override forced light mode (school Chromebooks, managed accounts, etc.) */
 @media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: dark;
+    --white: #0D0B09;
+    --black: #090807;
+    --ink: #EDEAE5;
+    --muted: #5C5955;
+    --border: #1E1B18;
+  }
   html, body {
-    background: var(--white) !important;
-    color: var(--ink) !important;
+    background-color: #0D0B09 !important;
+    color: #EDEAE5 !important;
   }
 }
 
