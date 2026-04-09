@@ -83,12 +83,25 @@ interface MiniGame {
 const UPGRADES: Record<string, { id: string; name: string; desc: string; cost: number; requires?: string }> = {
   exploit_boost:  { id: 'exploit_boost',  name: 'EXPLOIT_MODULE v2', desc: '+20% exploit success rate',           cost: 500 },
   exploit_boost2: { id: 'exploit_boost2', name: 'EXPLOIT_MODULE v3', desc: '+40% exploit success rate (total)',   cost: 1200, requires: 'exploit_boost' },
+  exploit_boost3: { id: 'exploit_boost3', name: 'EXPLOIT_MODULE v4', desc: '+60% exploit success (total), instant', cost: 2000, requires: 'exploit_boost2' },
   deep_probe:     { id: 'deep_probe',     name: 'DEEP_SCAN',         desc: 'Probe reveals all vulns + honeypot',  cost: 300 },
   wide_scan:      { id: 'wide_scan',      name: 'SCANNER_PRO',       desc: 'Scan reaches 2 hops',                cost: 450 },
   ghost_protocol: { id: 'ghost_protocol', name: 'GHOST_PROTOCOL',    desc: 'Honeypots do not trigger alerts',     cost: 700 },
   fast_exfil:     { id: 'fast_exfil',     name: 'FAST_EXFIL',        desc: 'Exfiltration is instant',             cost: 400 },
   market_access:  { id: 'market_access',  name: 'MARKET_ACCESS',     desc: 'Sell files for +50% value',           cost: 600 },
   vault_breaker:  { id: 'vault_breaker',  name: 'VAULT_BREAKER',     desc: 'Skip vault decryption puzzles',       cost: 800 },
+  neural_mapper:  { id: 'neural_mapper',  name: 'NEURAL_MAPPER',     desc: 'Probe reveals partial file listing',  cost: 650 },
+  tracer_sense:   { id: 'tracer_sense',   name: 'TRACER_SENSE',      desc: 'See tracer position on the map',      cost: 350 },
+  signal_jammer:  { id: 'signal_jammer',  name: 'SIGNAL_JAMMER',     desc: 'Alert drops 1 level after 60s idle',  cost: 900 },
+}
+
+// ── Base (defensive) upgrades ─────────────────────────────────────────────────
+const BASE_UPGRADES: Record<string, { id: string; name: string; desc: string; cost: number }> = {
+  vpn_hop:     { id: 'vpn_hop',     name: 'VPN_HOP',      desc: 'Tracer moves 35% slower',                  cost: 400 },
+  decoy_nodes: { id: 'decoy_nodes', name: 'DECOY_NODES',  desc: '30% chance tracer hits dead end per hop',  cost: 600 },
+  firewall_v2: { id: 'firewall_v2', name: 'FIREWALL_v2',  desc: 'Exploits never raise alert on success',    cost: 500 },
+  proxy_chain: { id: 'proxy_chain', name: 'PROXY_CHAIN',  desc: 'Tracer resets to start when you reboot',   cost: 750 },
+  kill_switch: { id: 'kill_switch', name: 'KILL_SWITCH',  desc: 'One-time instant remote tracer kill',      cost: 900 },
 }
 
 // ── Mini-game pools ──────────────────────────────────────────────────────────
@@ -98,36 +111,55 @@ const DECRYPT_POOL = [
   { encoded: 'RkxBR3tiNjRfaXNfZnVufQ==', hint: 'Base64 decode', answer: 'FLAG{b64_is_fun}', reward: 380 },
   { encoded: '01000110 01001100 01000001 01000111 01111011 01100010 01101001 01101110 01111101', hint: 'Binary → ASCII (8-bit groups)', answer: 'FLAG{bin}', reward: 420 },
   { encoded: '}terces_eht_dnif{GALF', hint: 'Something is reversed here...', answer: 'FLAG{find_the_secret}', reward: 300 },
+  { encoded: '&#71;&#72;&#79;&#83;&#84;&#78;&#69;&#84;', hint: 'Decode HTML character entities', answer: 'GHOSTNET', reward: 460 },
+  { encoded: '0x47 0x52 0x45 0x45 0x4e 0x48 0x41 0x54', hint: 'Hex values → ASCII (0x prefix, space separated)', answer: 'GREENHAT', reward: 440 },
+  { encoded: 'Ymxhel9pdF9pcw==', hint: 'Base64 → plain text', answer: 'blaz_it_is', reward: 390 },
 ]
 
 const CRACK_POOL = [
-  { hash: '5f4dcc3b5aa765d61d8327deb882cf99', algorithm: 'MD5', hashHint: '8 chars, extremely common', choices: ['password', 'letmein', 'qwerty123', 'hunter2'], correctIdx: 0, reward: 450 },
-  { hash: 'e10adc3949ba59abbe56e057f20f883e', algorithm: 'MD5', hashHint: '6 digits', choices: ['111111', '123456', '654321', '000000'], correctIdx: 1, reward: 350 },
-  { hash: '7c4a8d09ca3762af61e59520943dc26494f8941b', algorithm: 'SHA-1', hashHint: 'keyboard pattern', choices: ['qwerty', '12345678', 'abc123', 'iloveyou'], correctIdx: 0, reward: 500 },
-  { hash: 'd-3ad-b33f-hunter2-md5', algorithm: 'MD5', hashHint: 'famous IRC password', choices: ['hunter2', 'correcthorsebatterystaple', 'Tr0ub4dor&3', 'solarwinds123'], correctIdx: 0, reward: 400 },
+  { hash: '5f4dcc3b5aa765d61d8327deb882cf99', algorithm: 'MD5', hashHint: '8 chars, extremely common password', choices: ['password', 'letmein', 'qwerty123', 'hunter2'], correctIdx: 0, reward: 450 },
+  { hash: 'e10adc3949ba59abbe56e057f20f883e', algorithm: 'MD5', hashHint: '6 digits, most common numeric pin', choices: ['111111', '123456', '654321', '000000'], correctIdx: 1, reward: 350 },
+  { hash: '7c4a8d09ca3762af61e59520943dc26494f8941b', algorithm: 'SHA-1', hashHint: 'top-row keyboard pattern', choices: ['qwerty', '12345678', 'abc123', 'iloveyou'], correctIdx: 0, reward: 500 },
+  { hash: 'd-3ad-b33f-hunter2-md5', algorithm: 'MD5', hashHint: 'famous IRC password — obscured by *s', choices: ['hunter2', 'correcthorsebatterystaple', 'Tr0ub4dor&3', 'solarwinds123'], correctIdx: 0, reward: 400 },
+  { hash: 'aab3238922bcc25a6f606eb525ffdc56', algorithm: 'MD5', hashHint: 'single digit number above 1', choices: ['1', '2', '3', '0'], correctIdx: 2, reward: 300 },
+  { hash: '21232f297a57a5a743894a0e4a801fc3', algorithm: 'MD5', hashHint: '5 chars — classic default credential', choices: ['admin', 'root', 'guest', 'user'], correctIdx: 0, reward: 480 },
 ]
 
 const INJECT_POOL = [
   {
     queryTemplate: "SELECT * FROM users WHERE username='[?]' AND password='...'",
-    injectHint: "Terminate the string, comment out the rest. Login as 'admin' without the password.",
+    injectHint: "Terminate the username string and comment out the password check. Goal: log in as admin.",
     injectChoices: ["admin'--", "' OR '1'='1", "admin; DROP TABLE users--", "1 UNION SELECT * FROM users"],
     injectCorrect: 0,
     reward: 550,
   },
   {
     queryTemplate: "SELECT id FROM accounts WHERE pin=[?] AND user_id=42",
-    injectHint: "No string delimiters needed — it's an integer field.",
+    injectHint: "No quotes needed — it's an integer field. Make the WHERE clause always true.",
     injectChoices: ["1 OR 1=1", "'; DELETE FROM accounts--", "NULL", "1; EXEC xp_cmdshell('whoami')"],
     injectCorrect: 0,
     reward: 500,
   },
   {
     queryTemplate: "UPDATE users SET role='user' WHERE id=[?]",
-    injectHint: "Escalate ALL users to admin in one query.",
+    injectHint: "Escalate ALL users to admin in a single injected statement.",
     injectChoices: ["1 OR 1=1", "0; UPDATE users SET role='admin' WHERE 1=1--", "42", "NULL OR role='admin'"],
     injectCorrect: 1,
     reward: 600,
+  },
+  {
+    queryTemplate: "SELECT notes FROM diary WHERE owner='[?]' ORDER BY date",
+    injectHint: "Use UNION to read a different table's contents instead.",
+    injectChoices: ["' UNION SELECT passwd FROM shadow--", "' OR 1=1--", "admin'#", "' AND sleep(5)--"],
+    injectCorrect: 0,
+    reward: 650,
+  },
+  {
+    queryTemplate: "DELETE FROM sessions WHERE token='[?]'",
+    injectHint: "Don't delete one session — delete ALL sessions for maximum disruption.",
+    injectChoices: ["x' OR '1'='1", "' OR 1=1--", "NULL", "x'; DELETE FROM sessions WHERE '1'='1"],
+    injectCorrect: 3,
+    reward: 700,
   },
 ]
 
@@ -148,7 +180,8 @@ function effectiveChance(sec: number, ups: Set<string>): number {
   let base = [100, 78, 52, 28, 10][Math.min(sec - 1, 4)]
   if (ups.has('exploit_boost'))  base += 20
   if (ups.has('exploit_boost2')) base += 20
-  return Math.min(98, base)
+  if (ups.has('exploit_boost3')) base += 20
+  return Math.min(99, base)
 }
 
 function alertColor(level: number): string {
@@ -417,7 +450,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
   const [net,          setNet]          = useState<HNet>(() => genNetwork())
   const [log,          setLog]          = useState<HLine[]>([])
   const [input,        setInput]        = useState('')
-  const [panel,        setPanel]        = useState<'map' | 'files' | 'shop'>('map')
+  const [panel,        setPanel]        = useState<'map' | 'files' | 'shop' | 'base'>('map')
   const [won,          setWon]          = useState(false)
   const [history,      setHistory]      = useState<string[]>([])
   const [histIdx,      setHistIdx]      = useState(-1)
@@ -432,12 +465,20 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
   const [alertCountdown, setAlertCountdown] = useState<number | null>(null)
   const [soldFiles,    setSoldFiles]    = useState<Set<string>>(new Set())
   const [mgInput,      setMgInput]      = useState('')  // mini-game text input
+  const [tracerActive, setTracerActive] = useState(false)
+  const [tracerNode,   setTracerNode]   = useState<string | null>(null)
+  const [tracerPct,    setTracerPct]    = useState(0)   // 0-100 progress to next hop
+  const [baseUpgrades, setBaseUpgrades] = useState<Set<string>>(new Set())
+  const [killSwitchUsed, setKillSwitchUsed] = useState(false)
 
-  const logRef      = useRef<HTMLDivElement>(null)
-  const inputRef    = useRef<HTMLInputElement>(null)
-  const mgInputRef  = useRef<HTMLInputElement>(null)
-  const lid         = useRef(0)
+  const logRef       = useRef<HTMLDivElement>(null)
+  const inputRef     = useRef<HTMLInputElement>(null)
+  const mgInputRef   = useRef<HTMLInputElement>(null)
+  const lid          = useRef(0)
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const tracerRef    = useRef<ReturnType<typeof setInterval> | null>(null)
+  const tracerNodeRef = useRef<string | null>(null)
+  const netRef        = useRef<HNet | null>(null)
 
   const mkL = (type: HLine['type'], text: string): HLine => ({ id: lid.current++, type, text })
 
@@ -499,6 +540,133 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
       }
     }
   }, [alertLevel]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Keep netRef in sync so tracer interval can read latest net
+  useEffect(() => { netRef.current = net }, [net])
+
+  // Tracer bot — activates at alert 2+ or 4+ nodes cracked
+  useEffect(() => {
+    const crackedCount = net.order.filter(id => net.nodes[id].state === 'cracked').length
+    if ((alertLevel >= 2 || crackedCount >= 4) && !tracerActive && !won) {
+      const candidates = net.order.filter(id => id !== net.current && id !== net.order[0])
+      if (candidates.length === 0) return
+      const startId = candidates[rand(candidates.length)]
+      setTracerNode(startId)
+      tracerNodeRef.current = startId
+      setTracerActive(true)
+      setTracerPct(0)
+      setTimeout(() => {
+        setLog(p => [...p,
+          { id: lid.current++, type: 'err', text: '◉ COUNTER-INTEL BOT DETECTED — tracing your signal...' },
+          { id: lid.current++, type: 'warn', text: '  Navigate to its node and run: kill tracer' },
+          { id: lid.current++, type: 'warn', text: '  Or buy BASE defenses to slow it down.' },
+        ])
+      }, 0)
+    }
+  }, [alertLevel, net.order.length, won]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Tracer tick interval
+  useEffect(() => {
+    if (!tracerActive) {
+      if (tracerRef.current) { clearInterval(tracerRef.current); tracerRef.current = null }
+      return
+    }
+    const baseDelay = baseUpgrades.has('vpn_hop') ? 2800 : 1800
+    tracerRef.current = setInterval(() => {
+      setTracerPct(prev => {
+        const next = prev + (baseUpgrades.has('vpn_hop') ? 8 : 14)
+        if (next < 100) return next
+
+        // Advance tracer one hop toward player
+        const currentNet = netRef.current
+        if (!currentNet) return 0
+        const tNode = tracerNodeRef.current
+        if (!tNode) return 0
+
+        // Decoy: 30% chance to skip
+        if (baseUpgrades.has('decoy_nodes') && Math.random() < 0.30) {
+          setTimeout(() => setLog(p => [...p, { id: lid.current++, type: 'sys', text: '  [tracer] Hit decoy node — rerouting...' }]), 0)
+          return 0
+        }
+
+        // BFS from tracer toward player's current node
+        const target = currentNet.current
+        const parent: Record<string, string | null> = { [tNode]: null }
+        const q = [tNode]
+        while (q.length) {
+          const n = q.shift()!
+          if (n === target) break
+          for (const nb of currentNet.nodes[n]?.linked ?? []) {
+            if (parent[nb] === undefined) {
+              parent[nb] = n
+              q.push(nb)
+            }
+          }
+        }
+        // Reconstruct first step
+        let step = target
+        while (parent[step] && parent[parent[step]!] !== null && parent[step] !== tNode) {
+          step = parent[step]!
+        }
+        const nextNode = (parent[step] === null || step === tNode) ? step : step
+
+        // Actually just walk one step from tNode toward target
+        let firstStep = tNode
+        const visited = new Set<string>([tNode])
+        const bfsQ: string[] = [tNode]
+        const prev2: Record<string, string> = {}
+        outer: while (bfsQ.length) {
+          const n = bfsQ.shift()!
+          for (const nb of currentNet.nodes[n]?.linked ?? []) {
+            if (!visited.has(nb)) {
+              visited.add(nb)
+              prev2[nb] = n
+              if (nb === target) break outer
+              bfsQ.push(nb)
+            }
+          }
+        }
+        // Walk back from target to find step after tNode
+        let cur2 = target
+        while (prev2[cur2] && prev2[cur2] !== tNode) cur2 = prev2[cur2]
+        firstStep = prev2[cur2] === tNode ? cur2 : tNode
+
+        tracerNodeRef.current = firstStep
+        setTracerNode(firstStep)
+
+        if (firstStep === target) {
+          // Tracer reached player
+          clearInterval(tracerRef.current!)
+          tracerRef.current = null
+          setTimeout(() => {
+            setLog(p => [...p,
+              { id: lid.current++, type: 'err', text: '████ TRACED — COUNTER-INTEL BOT FOUND YOU ████' },
+              { id: lid.current++, type: 'err', text: '  Your IP has been logged. Connection terminated.' },
+              { id: lid.current++, type: 'sys', text: '  Reinitializing network...' },
+            ])
+            setTimeout(() => {
+              setNet(genNetwork())
+              setAlertLevel(0)
+              setAlertCountdown(null)
+              setSoldFiles(new Set())
+              setCTFMode(false)
+              setCTFFlag('')
+              setCTFSolved(false)
+              setMinigame(null)
+              setTracerActive(false)
+              setTracerNode(null)
+              tracerNodeRef.current = null
+              setTracerPct(0)
+            }, 1200)
+          }, 100)
+        } else {
+          setTimeout(() => setLog(p => [...p, { id: lid.current++, type: 'warn', text: `  [tracer] Moving through network... (${firstStep})` }]), 0)
+        }
+        return 0
+      })
+    }, baseDelay)
+    return () => { if (tracerRef.current) { clearInterval(tracerRef.current); tracerRef.current = null } }
+  }, [tracerActive, baseUpgrades]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Boot message
   useEffect(() => {
@@ -711,6 +879,8 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
         mkL('out', '  ║  backdoor            install persistence       ║'),
         mkL('out', '  ║  ctf                 start CTF mission         ║'),
         mkL('out', '  ║  submit <flag>       submit CTF flag           ║'),
+        mkL('out', '  ║  kill tracer         destroy the tracer bot    ║'),
+        mkL('out', '  ║  base                view/buy base defenses    ║'),
         mkL('out', '  ║  reboot              reset network             ║'),
         mkL('out', '  ║  exit / quit         leave hacknet             ║'),
         mkL('sys', '  ╚═══════════════════════════════════════════════╝'),
@@ -780,6 +950,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
         ...(deepScan && t.isHoneypot ? [['    ⚠ WARNING: HONEYPOT DETECTED', 'err', 500 + vulnsToShow.length * 80] as [string, HLine['type'], number]] : []),
         ...(deepScan && t.isVault    ? [['    ◈ NOTE: VAULT NODE — files are encrypted', 'warn', 550 + vulnsToShow.length * 80] as [string, HLine['type'], number]] : []),
         ...(deepScan && t.isPivot    ? [['    ◈ NOTE: PIVOT NODE — may reveal subnet', 'warn', 600 + vulnsToShow.length * 80] as [string, HLine['type'], number]] : []),
+        ...(upgrades.has('neural_mapper') ? t.files.map((f, i): [string, HLine['type'], number] => [`    [NM] ${f.name}${f.classified ? ' [CLASSIFIED]' : ''}${f.encrypted ? ' [ENC]' : ''}`, 'sys', 700 + vulnsToShow.length * 80 + i * 60]) : []),
       ])
 
       setNet(prev => ({
@@ -807,6 +978,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
         ['[*] Launching payload sequence...', 'out', 200],
       ])
 
+      const delay = upgrades.has('exploit_boost3') ? 0 : 700
       setTimeout(() => {
         const roll = rand(100)
         const success = roll < chance
@@ -836,9 +1008,10 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
             ['[-] EXPLOIT FAILED — intrusion detected', 'err', 0],
             [`[-] ${t.hostname} logged connection attempt`, 'err', 150],
           ])
+          // firewall_v2: no alert on success (already handled), but still alert on fail
           if (t.sec >= 4) raiseAlert(1, `Failed exploit on high-sec node ${t.hostname}`)
         }
-      }, 700)
+      }, delay)
       return
     }
 
@@ -1159,6 +1332,81 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
       return
     }
 
+    // ── kill tracer ───────────────────────────────────────────────────────
+    if (cmd === 'kill' && arg === 'tracer') {
+      if (!tracerActive) { addLog(mkL('out', 'kill: no active tracer bot')); return }
+
+      // Kill switch: remote kill anywhere (one-time)
+      if (baseUpgrades.has('kill_switch') && !killSwitchUsed) {
+        setKillSwitchUsed(true)
+        setTracerActive(false)
+        setTracerNode(null)
+        tracerNodeRef.current = null
+        setTracerPct(0)
+        setAlertLevel(a => Math.max(0, a - 1))
+        laterLog([
+          ['[+] KILL_SWITCH activated — tracer destroyed remotely!', 'ok', 0],
+          ['[+] Alert level reduced.', 'ok', 100],
+        ])
+        return
+      }
+
+      if (cur.id !== tracerNode) {
+        addLog(mkL('err', `kill: tracer is not on this node (it's at ${tracerNode ? net.nodes[tracerNode]?.hostname ?? tracerNode : '?'})`))
+        addLog(mkL('warn', '  Navigate to its node first, then run: kill tracer'))
+        return
+      }
+      setTracerActive(false)
+      setTracerNode(null)
+      tracerNodeRef.current = null
+      setTracerPct(0)
+      setAlertLevel(0)
+      setAlertCountdown(null)
+      laterLog([
+        ['', 'sys', 0],
+        ['╔════════════════════════════════════════════════╗', 'ok', 50],
+        ['║  ◉ TRACER BOT NEUTRALIZED — SIGNAL CLEARED     ║', 'ok', 100],
+        ['║  Alert level reset to CLEAR.                    ║', 'ok', 180],
+        ['╚════════════════════════════════════════════════╝', 'ok', 240],
+      ])
+      return
+    }
+
+    // ── base buy ──────────────────────────────────────────────────────────
+    if (cmd === 'base') {
+      if (arg === '') {
+        addLog(
+          mkL('sys', '  ╔═══════════════════════════════════════════════╗'),
+          mkL('sys', '  ║  BASE DEFENSE UPGRADES                         ║'),
+          mkL('sys', '  ╠═══════════════════════════════════════════════╣'),
+          mkL('out', `  ║  Credits: ${credits}cr`.padEnd(48) + '║'),
+          mkL('sys', '  ╠═══════════════════════════════════════════════╣'),
+        )
+        for (const upg of Object.values(BASE_UPGRADES)) {
+          const owned = baseUpgrades.has(upg.id)
+          const status = owned ? '[OWNED]' : `[${upg.cost}cr]`
+          const t: HLine['type'] = owned ? 'ok' : credits >= upg.cost ? 'out' : 'warn'
+          addLog(mkL(t, `  ║  ${status.padEnd(8)} ${upg.name.padEnd(16)} — ${upg.desc}`))
+        }
+        addLog(mkL('sys', '  ╚═══════════════════════════════════════════════╝'))
+        addLog(mkL('sys', '  Use: base buy <id>  (e.g. base buy vpn_hop)'))
+        return
+      }
+      if (arg.startsWith('buy ')) {
+        const bid = arg.slice(4).trim()
+        const upg = BASE_UPGRADES[bid]
+        if (!upg) { addLog(mkL('err', `base buy: unknown upgrade: ${bid}`)); return }
+        if (baseUpgrades.has(bid)) { addLog(mkL('warn', `base buy: ${upg.name} already owned`)); return }
+        if (credits < upg.cost) { addLog(mkL('err', `base buy: need ${upg.cost}cr, have ${credits}cr`)); return }
+        setCredits(c => c - upg.cost)
+        setBaseUpgrades(s => new Set([...s, bid]))
+        addLog(mkL('ok', `[+] BASE UPGRADE: ${upg.name} — ${upg.desc}`))
+        return
+      }
+      addLog(mkL('err', 'base: unknown subcommand. Try: base  or  base buy <id>'))
+      return
+    }
+
     // ── reboot ────────────────────────────────────────────────────────────
     if (cmd === 'reboot') {
       laterLog([
@@ -1177,6 +1425,10 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
         setCTFSolved(false)
         setMinigame(null)
         setWon(false)
+        setTracerActive(false)
+        setTracerNode(null)
+        tracerNodeRef.current = null
+        setTracerPct(0)
         addLog(mkL('ok', '[+] Network reinitialized.'))
       }, 600)
       return
@@ -1247,6 +1499,12 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
         </span>
         {ctfMode && !ctfSolved && <span style={{ color: '#eab308' }}>[CTF MODE]</span>}
         {ctfSolved && <span style={{ color: '#22C55E' }}>[CTF ✓]</span>}
+        {tracerActive && (
+          <span style={{ color: '#ef4444', fontWeight: 700, animation: 'pulse 0.6s infinite' }}>
+            ◉ TRACER {tracerPct}%
+            {upgrades.has('tracer_sense') && tracerNode && net.nodes[tracerNode] && ` @${net.nodes[tracerNode].hostname}`}
+          </span>
+        )}
         <span style={{ marginLeft: 'auto', cursor: 'pointer', color: 'rgba(34,197,94,0.4)' }} onClick={e => { e.stopPropagation(); onExit() }}>✕</span>
       </div>
 
@@ -1257,18 +1515,19 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
         <div style={{ width: MAP_W, borderRight: '1px solid rgba(34,197,94,0.15)', display: 'flex', flexDirection: 'column' }}>
           {/* Tabs */}
           <div style={{ display: 'flex', borderBottom: '1px solid rgba(34,197,94,0.15)' }}>
-            {(['map', 'files', 'shop'] as const).map(p => (
+            {(['map', 'files', 'shop', 'base'] as const).map(p => (
               <button
                 key={p}
                 onClick={e => { e.stopPropagation(); setPanel(p) }}
                 style={{
                   flex: 1, background: panel === p ? 'rgba(34,197,94,0.12)' : 'transparent',
                   border: 'none', borderRight: '1px solid rgba(34,197,94,0.1)',
-                  color: panel === p ? '#22C55E' : 'rgba(34,197,94,0.4)',
-                  ...MONO, fontSize: 10, padding: '4px 0', cursor: 'pointer', letterSpacing: 1,
+                  color: p === 'base' && tracerActive ? '#ef4444'
+                       : panel === p ? '#22C55E' : 'rgba(34,197,94,0.4)',
+                  ...MONO, fontSize: 9, padding: '4px 0', cursor: 'pointer', letterSpacing: 1,
                 }}
               >
-                {p.toUpperCase()}
+                {p === 'base' && tracerActive ? '⚠BASE' : p.toUpperCase()}
               </button>
             ))}
           </div>
@@ -1340,6 +1599,18 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                     </g>
                   )
                 })}
+                {/* Tracer overlay */}
+                {tracerActive && tracerNode && positions[tracerNode] && (upgrades.has('tracer_sense') || tracerNode === net.current) && (() => {
+                  const tp = positions[tracerNode]
+                  return (
+                    <g>
+                      <circle cx={tp.x} cy={tp.y} r={16} fill="none" stroke="#ef4444" strokeWidth={1.5} opacity={0.5} strokeDasharray="2,3" />
+                      <circle cx={tp.x} cy={tp.y} r={10} fill="rgba(239,68,68,0.18)" stroke="#ef4444" strokeWidth={1.5} />
+                      <text x={tp.x} y={tp.y + 4} textAnchor="middle" fontSize={9} fill="#ef4444" style={{ userSelect: 'none' }}>◉</text>
+                      <text x={tp.x} y={tp.y - 17} textAnchor="middle" fontSize={7} fill="#ef4444" style={{ userSelect: 'none' }}>BOT</text>
+                    </g>
+                  )
+                })()}
                 {/* Legend */}
                 <text x={4} y={SVG_H - 22} fontSize={7} fill="rgba(34,197,94,0.3)">◉=cracked ◈=known ○=hidden</text>
                 <text x={4} y={SVG_H - 12} fontSize={7} fill="rgba(34,197,94,0.3)">⚠=honeypot ◈purple=vault ◈blue=pivot</text>
@@ -1383,6 +1654,53 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                     </button>
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* BASE */}
+            {panel === 'base' && (
+              <div style={{ padding: 8, overflowY: 'auto', height: '100%', boxSizing: 'border-box' }}>
+                <div style={{ color: 'rgba(34,197,94,0.5)', fontSize: 9, marginBottom: 4 }}>BASE DEFENSES</div>
+                <div style={{ color: '#4ade80', fontSize: 10, marginBottom: 6 }}>Credits: {credits}cr</div>
+
+                {/* Tracer status */}
+                {tracerActive ? (
+                  <div style={{ marginBottom: 8, padding: '5px 7px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.4)', fontSize: 9 }}>
+                    <div style={{ color: '#ef4444', fontWeight: 700, marginBottom: 2 }}>◉ TRACER BOT ACTIVE</div>
+                    <div style={{ color: 'rgba(239,68,68,0.7)' }}>Progress to next hop: {tracerPct}%</div>
+                    {upgrades.has('tracer_sense') && tracerNode && net.nodes[tracerNode] && (
+                      <div style={{ color: 'rgba(239,68,68,0.7)' }}>Location: {net.nodes[tracerNode].hostname}</div>
+                    )}
+                    <div style={{ color: 'rgba(34,197,94,0.5)', marginTop: 3 }}>Run: kill tracer (when on its node)</div>
+                  </div>
+                ) : (
+                  <div style={{ marginBottom: 8, padding: '4px 7px', background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.15)', fontSize: 9, color: 'rgba(34,197,94,0.4)' }}>
+                    No active tracer. Appears at alert≥2 or 4+ cracked nodes.
+                  </div>
+                )}
+
+                {/* Base upgrade tiles */}
+                {Object.values(BASE_UPGRADES).map(upg => {
+                  const owned = baseUpgrades.has(upg.id)
+                  const canAfford = credits >= upg.cost
+                  const isKillSwitch = upg.id === 'kill_switch'
+                  const used = isKillSwitch && killSwitchUsed
+                  const bg = owned ? 'rgba(34,197,94,0.12)' : canAfford ? 'rgba(34,197,94,0.07)' : 'rgba(34,197,94,0.03)'
+                  const borderColor = owned ? 'rgba(34,197,94,0.3)' : 'rgba(34,197,94,0.15)'
+                  return (
+                    <div key={upg.id} style={{ marginBottom: 5, padding: '5px 7px', background: bg, border: `1px solid ${borderColor}`, cursor: (!owned && canAfford) ? 'pointer' : 'default' }}
+                      onClick={e => { e.stopPropagation(); if (!owned && canAfford) runCmd(`base buy ${upg.id}`) }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
+                        <span style={{ color: used ? '#ef4444' : owned ? '#4ade80' : '#22C55E', fontSize: 10 }}>{upg.name}</span>
+                        <span style={{ fontSize: 9, color: used ? '#ef4444' : owned ? '#4ade80' : canAfford ? '#eab308' : '#ef4444' }}>
+                          {used ? 'USED' : owned ? 'ACTIVE' : `${upg.cost}cr`}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 9, color: 'rgba(34,197,94,0.45)' }}>{upg.desc}</div>
+                    </div>
+                  )
+                })}
               </div>
             )}
 
@@ -1455,7 +1773,9 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
               position: 'absolute', inset: 0, zIndex: 10,
               background: 'rgba(5,9,5,0.97)', border: '1px solid rgba(34,197,94,0.3)',
               display: 'flex', flexDirection: 'column', padding: 16, overflowY: 'auto',
-            }}>
+            }}
+              onClick={e => e.stopPropagation()}
+            >
               <div style={{ color: '#22C55E', fontSize: 12, marginBottom: 10, letterSpacing: 2 }}>
                 ◈ {minigame.title}
               </div>
@@ -1478,13 +1798,15 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                   <div style={{ display: 'flex', gap: 6 }}>
                     <input
                       ref={mgInputRef}
+                      autoFocus
                       value={mgInput}
                       onChange={e => setMgInput(e.target.value)}
-                      onKeyDown={e => { if (e.key === 'Enter') handleMgSubmit() }}
+                      onKeyDown={e => { e.stopPropagation(); if (e.key === 'Enter') handleMgSubmit() }}
+                      onClick={e => e.stopPropagation()}
                       placeholder="Enter decoded answer..."
                       style={{
                         flex: 1, background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.3)',
-                        color: '#22C55E', ...MONO, fontSize: 11, padding: '4px 8px', outline: 'none',
+                        color: '#22C55E', ...MONO, fontSize: 11, padding: '6px 10px', outline: 'none',
                       }}
                     />
                     <button onClick={handleMgSubmit} style={mgBtnStyle('#22C55E')}>SUBMIT</button>
@@ -1559,7 +1881,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                 Crown jewel exfiltrated. Network compromised.
               </div>
               <div style={{ display: 'flex', gap: 10 }}>
-                <button onClick={e => { e.stopPropagation(); setWon(false); const n = genNetwork(); setNet(n); setAlertLevel(0); setAlertCountdown(null); setSoldFiles(new Set()); setCTFMode(false); setCTFSolved(false); setCredits(50); setUpgrades(new Set()) }}
+                <button onClick={e => { e.stopPropagation(); setWon(false); const n = genNetwork(); setNet(n); setAlertLevel(0); setAlertCountdown(null); setSoldFiles(new Set()); setCTFMode(false); setCTFSolved(false); setCredits(50); setUpgrades(new Set()); setTracerActive(false); setTracerNode(null); tracerNodeRef.current = null; setTracerPct(0); setBaseUpgrades(new Set()); setKillSwitchUsed(false) }}
                   style={mgBtnStyle('#22C55E')}>NEW NETWORK</button>
                 <button onClick={e => { e.stopPropagation(); onExit() }} style={mgBtnStyle('#ef4444')}>EXIT</button>
               </div>
@@ -1608,8 +1930,9 @@ function mgBtnStyle(color: string): React.CSSProperties {
 
 function mgChoiceStyle(): React.CSSProperties {
   return {
-    background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)',
-    color: '#22C55E', fontFamily: '"DM Mono", monospace', fontSize: 10,
-    padding: '6px 10px', cursor: 'pointer', textAlign: 'left',
+    background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.25)',
+    color: '#22C55E', fontFamily: '"DM Mono", monospace', fontSize: 11,
+    padding: '10px 14px', cursor: 'pointer', textAlign: 'left',
+    transition: 'background 0.1s',
   }
 }
