@@ -4,6 +4,7 @@ import BackgroundParticles from '@/components/BackgroundParticles'
 import SecretTerminal from '@/components/SecretTerminal'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://ianandujar.com'),
   title: 'Ian Andujar — Engineering Student',
   description: 'Portfolio of Ian Andujar, engineering student, builder, and creative technologist.',
   openGraph: {

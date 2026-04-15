@@ -136,12 +136,159 @@ function ScanLine() {
 }
 
 
+// ── Boot Screen ────────────────────────────────────────────────────────────
+const BOOT_LINES = [
+  { text: 'IRONVEIL SECURE TERMINAL v2.4.1',          delay: 0,    color: '#4A7FA5' },
+  { text: '─────────────────────────────────────────', delay: 120,  color: '#1C2433' },
+  { text: 'INITIALIZING CORE SYSTEMS...',              delay: 340,  color: '#5A6A7E' },
+  { text: '  [OK] CRYPTOGRAPHIC MODULE LOADED',        delay: 640,  color: '#2D6A3F' },
+  { text: '  [OK] NETWORK INTERFACE ESTABLISHED',      delay: 880,  color: '#2D6A3F' },
+  { text: '  [OK] RESEARCH DATABASE MOUNTED',          delay: 1100, color: '#2D6A3F' },
+  { text: 'VERIFYING SYSTEM INTEGRITY...',             delay: 1360, color: '#5A6A7E' },
+  { text: '  [OK] CHECKSUM VERIFIED — CLEAN',          delay: 1600, color: '#2D6A3F' },
+  { text: '  [OK] ACCESS CLEARANCE GRANTED',           delay: 1820, color: '#2D6A3F' },
+  { text: 'ESTABLISHING SECURE CHANNEL...',            delay: 2060, color: '#5A6A7E' },
+  { text: '  [OK] TLS 1.3 HANDSHAKE COMPLETE',         delay: 2280, color: '#2D6A3F' },
+  { text: '─────────────────────────────────────────', delay: 2440, color: '#1C2433' },
+  { text: 'IRONVEIL RESEARCH — SYSTEMS OPERATIONAL',   delay: 2600, color: '#4A7FA5' },
+]
+const BOOT_TOTAL = 3200
+
+function BootScreen({ onDone }: { onDone: () => void }) {
+  const [lines, setLines]       = useState<number[]>([])
+  const [progress, setProgress] = useState(0)
+  const [exiting, setExiting]   = useState(false)
+
+  useEffect(() => {
+    BOOT_LINES.forEach((l, i) => {
+      setTimeout(() => setLines(v => [...v, i]), l.delay)
+    })
+    const start = Date.now()
+    const tick = setInterval(() => {
+      const p = Math.min((Date.now() - start) / BOOT_TOTAL, 1)
+      setProgress(p)
+      if (p >= 1) clearInterval(tick)
+    }, 16)
+    setTimeout(() => {
+      setExiting(true)
+      setTimeout(onDone, 600)
+    }, BOOT_TOTAL)
+    return () => clearInterval(tick)
+  }, [onDone])
+
+  return (
+    <motion.div
+      animate={exiting ? { opacity: 0, scale: 1.015 } : { opacity: 1 }}
+      transition={{ duration: 0.55, ease: [0.4, 0, 1, 1] }}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        background: '#020406', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: '"DM Mono", monospace',
+      }}
+    >
+      {/* scanline overlay */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)',
+      }} />
+
+      <div style={{ width: '100%', maxWidth: 640, padding: '0 32px' }}>
+        {/* header logo */}
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            width: 64, height: 64, border: '1px solid #1C2433', marginBottom: 20,
+            position: 'relative',
+          }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, width: 8, height: 8, borderTop: '1px solid #4A7FA5', borderLeft: '1px solid #4A7FA5' }} />
+            <div style={{ position: 'absolute', top: 0, right: 0, width: 8, height: 8, borderTop: '1px solid #4A7FA5', borderRight: '1px solid #4A7FA5' }} />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, width: 8, height: 8, borderBottom: '1px solid #4A7FA5', borderLeft: '1px solid #4A7FA5' }} />
+            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 8, height: 8, borderBottom: '1px solid #4A7FA5', borderRight: '1px solid #4A7FA5' }} />
+            <motion.span
+              animate={{ opacity: [0.6, 1, 0.6] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              style={{ fontSize: 26, color: '#4A7FA5' }}
+            >⬡</motion.span>
+          </div>
+        </div>
+
+        {/* terminal window */}
+        <div style={{
+          border: '1px solid #1C2433', background: 'rgba(13,16,23,0.9)',
+          minHeight: 320, padding: '20px 24px', position: 'relative',
+        }}>
+          {/* title bar */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0, right: 0,
+            borderBottom: '1px solid #1C2433', padding: '6px 16px',
+            display: 'flex', alignItems: 'center', gap: 8,
+            background: 'rgba(7,9,12,0.8)',
+          }}>
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#8B2020', opacity: 0.8 }} />
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#B8741A', opacity: 0.8 }} />
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#2D6A3F', opacity: 0.8 }} />
+            <span style={{ marginLeft: 8, fontSize: '8px', letterSpacing: '0.2em', color: '#3A4A5C' }}>
+              IRONVEIL-TERMINAL — SECURE SESSION
+            </span>
+          </div>
+
+          <div style={{ marginTop: 28, fontSize: '11px', letterSpacing: '0.06em', lineHeight: 1.9 }}>
+            {BOOT_LINES.map((l, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0 }}
+                animate={lines.includes(i) ? { opacity: 1 } : {}}
+                transition={{ duration: 0.15 }}
+                style={{ color: l.color }}
+              >
+                {l.text}
+              </motion.div>
+            ))}
+            {/* blinking cursor */}
+            {lines.length > 0 && !exiting && (
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.5, repeat: Infinity }}
+                style={{ color: '#4A7FA5' }}
+              >▌</motion.span>
+            )}
+          </div>
+        </div>
+
+        {/* progress bar */}
+        <div style={{ marginTop: 16, height: 2, background: '#0D1017', position: 'relative', overflow: 'hidden' }}>
+          <motion.div
+            style={{
+              position: 'absolute', left: 0, top: 0, bottom: 0,
+              background: 'linear-gradient(90deg, #1C3A52, #4A7FA5, #6BA0C8)',
+              width: `${progress * 100}%`,
+              boxShadow: '0 0 12px rgba(74,127,165,0.6)',
+            }}
+          />
+        </div>
+        <div style={{
+          display: 'flex', justifyContent: 'space-between',
+          marginTop: 8, fontSize: '8px', letterSpacing: '0.16em', color: '#3A4A5C',
+        }}>
+          <span>LOADING SYSTEMS</span>
+          <span>{Math.round(progress * 100)}%</span>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 // ── Page ───────────────────────────────────────────────────────────────────
 export default function IronVeilPage() {
+  const [booted, setBooted]           = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
-  const [form, setForm]               = useState({ name: '', org: '', msg: '' })
+  const [form, setForm]               = useState({ name: '', email: '', org: '', msg: '' })
+  const [emailTouched, setEmailTouched] = useState(false)
   const [sending, setSending]         = useState(false)
   const [sent, setSent]               = useState(false)
+
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
+  const formReady  = !!(form.name && emailValid && form.msg)
   const [glitch, setGlitch]           = useState(false)
 
   const heroRef = useRef<HTMLDivElement>(null)
@@ -158,13 +305,13 @@ export default function IronVeilPage() {
   }, [])
 
   async function sendContact() {
-    if (!form.name || !form.msg) return
+    if (!formReady) return
     setSending(true)
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, timestamp: new Date().toISOString() }),
+        body: JSON.stringify({ name: form.name, email: form.email, org: form.org, msg: form.msg, timestamp: new Date().toISOString() }),
       })
       const data = await res.json()
 
@@ -174,14 +321,14 @@ export default function IronVeilPage() {
         // Fallback: open mailto with everything pre-filled
         const subject = encodeURIComponent(`IronVeil Research — Inquiry from ${form.name}${form.org ? ` (${form.org})` : ''}`)
         const body    = encodeURIComponent(
-          `Name: ${form.name}\nOrganization: ${form.org || 'N/A'}\nTimestamp: ${new Date().toLocaleString()}\n\n─────────────────\n\n${form.msg}`
+          `Name: ${form.name}\nEmail: ${form.email}\nOrganization: ${form.org || 'N/A'}\nTimestamp: ${new Date().toLocaleString()}\n\n─────────────────\n\n${form.msg}`
         )
         window.open(`mailto:ianmarcoandujar9@gmail.com?subject=${subject}&body=${body}`)
         setSent(true)
       }
     } catch {
       const subject = encodeURIComponent(`IronVeil Research — Inquiry from ${form.name}`)
-      const body    = encodeURIComponent(`Name: ${form.name}\nOrg: ${form.org || 'N/A'}\n\n${form.msg}`)
+      const body    = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\nOrg: ${form.org || 'N/A'}\n\n${form.msg}`)
       window.open(`mailto:ianmarcoandujar9@gmail.com?subject=${subject}&body=${body}`)
       setSent(true)
     } finally {
@@ -191,12 +338,20 @@ export default function IronVeilPage() {
 
   function resetContact() {
     setContactOpen(false)
-    setForm({ name: '', org: '', msg: '' })
+    setForm({ name: '', email: '', org: '', msg: '' })
+    setEmailTouched(false)
     setSent(false)
   }
 
   return (
-    <div style={{ background: C.bg, color: C.text, minHeight: '100vh', overflowX: 'hidden', ...MONO }}>
+    <>
+    {!booted && <BootScreen onDone={() => setBooted(true)} />}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={booted ? { opacity: 1 } : { opacity: 0 }}
+      transition={{ duration: 0.4 }}
+      style={{ background: C.bg, color: C.text, minHeight: '100vh', overflowX: 'hidden', ...MONO }}
+    >
 
       {/* ── Classification bar ── */}
       <div style={{
@@ -746,45 +901,137 @@ export default function IronVeilPage() {
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ color: C.steel }}>⬡</span>
+                  <motion.span
+                    animate={{ opacity: [1, 0.4, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    style={{ color: C.steel, fontSize: 14 }}
+                  >⬡</motion.span>
                   <span style={{ fontSize: '9px', letterSpacing: '0.2em', color: C.muted }}>CONTACT // IRONVEIL_RESEARCH</span>
                 </div>
-                <button onClick={resetContact} style={{ background: 'none', border: 'none', color: C.muted, cursor: 'pointer', fontSize: 18, lineHeight: 1 }}>×</button>
+                <button onClick={resetContact} style={{ background: 'none', border: 'none', color: C.muted, cursor: 'pointer', fontSize: 18, lineHeight: 1, transition: 'color 0.2s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = C.text)}
+                  onMouseLeave={e => (e.currentTarget.style.color = C.muted)}
+                >×</button>
               </div>
 
-              <div style={{ padding: '28px 28px 32px' }}>
+              {/* Progress bar */}
+              <div style={{ height: 2, background: C.border, position: 'relative', overflow: 'hidden' }}>
+                <motion.div
+                  animate={{ width: `${[form.name, emailValid, form.msg].filter(Boolean).length / 3 * 100}%` }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  style={{ height: '100%', background: `linear-gradient(90deg, ${C.steel}, ${C.steelLt})`, position: 'absolute', left: 0, top: 0 }}
+                />
+              </div>
+
+              <div style={{ padding: '24px 28px 30px' }}>
                 <AnimatePresence mode="wait">
                   {!sent ? (
                     <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                      <div style={{ fontSize: '8px', color: C.dim, letterSpacing: '0.14em', marginBottom: 24, lineHeight: 1.6 }}>
-                        {'>'} INQUIRY SENT TO ianmarcoandujar9@gmail.com
+                      <div style={{ fontSize: '8px', color: C.dim, letterSpacing: '0.14em', marginBottom: 22, lineHeight: 1.6, display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ color: C.steel }}>▶</span>
+                        <span>INQUIRY ROUTED TO ianmarcoandujar9@gmail.com</span>
                       </div>
 
-                      {[
-                        { key: 'name', label: 'NAME *',       placeholder: 'Your full name'          },
-                        { key: 'org',  label: 'ORGANIZATION',  placeholder: 'Company / institution (optional)' },
-                      ].map(f => (
-                        <div key={f.key} style={{ marginBottom: 14 }}>
-                          <label style={{ fontSize: '7px', letterSpacing: '0.24em', color: C.muted, display: 'block', marginBottom: 6 }}>{f.label}</label>
+                      {/* NAME */}
+                      <div style={{ marginBottom: 14 }}>
+                        <label style={{ fontSize: '7px', letterSpacing: '0.24em', color: C.muted, display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                          <span>NAME <span style={{ color: C.forge }}>*</span></span>
+                          {form.name && <span style={{ color: '#2D7A4A' }}>✓ OK</span>}
+                        </label>
+                        <input
+                          value={form.name}
+                          onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                          placeholder="Your full name"
+                          style={{
+                            width: '100%', boxSizing: 'border-box',
+                            background: form.name ? 'rgba(74,127,165,0.06)' : 'rgba(74,127,165,0.03)',
+                            border: `1px solid ${form.name ? C.steel : C.border}`,
+                            color: C.text, ...MONO, fontSize: '12px',
+                            padding: '10px 14px', outline: 'none', letterSpacing: '0.03em', transition: 'all 0.2s',
+                          }}
+                          onFocus={e => (e.target.style.borderColor = C.steel)}
+                          onBlur={e => (e.target.style.borderColor = form.name ? C.steel : C.border)}
+                        />
+                      </div>
+
+                      {/* EMAIL */}
+                      <div style={{ marginBottom: 14 }}>
+                        <label style={{ fontSize: '7px', letterSpacing: '0.24em', color: C.muted, display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                          <span>EMAIL <span style={{ color: C.forge }}>*</span></span>
+                          {emailTouched && form.email && (
+                            <motion.span
+                              initial={{ opacity: 0, x: 6 }} animate={{ opacity: 1, x: 0 }}
+                              style={{ color: emailValid ? '#2D7A4A' : '#8B2020' }}
+                            >
+                              {emailValid ? '✓ VALID' : '✗ INVALID FORMAT'}
+                            </motion.span>
+                          )}
+                        </label>
+                        <div style={{ position: 'relative' }}>
                           <input
-                            value={form[f.key as 'name' | 'org']}
-                            onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
-                            placeholder={f.placeholder}
+                            type="email"
+                            value={form.email}
+                            onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                            onBlur={() => setEmailTouched(true)}
+                            placeholder="your@email.com"
                             style={{
                               width: '100%', boxSizing: 'border-box',
-                              background: 'rgba(74,127,165,0.04)', border: `1px solid ${C.border}`,
+                              background: emailTouched && form.email
+                                ? emailValid ? 'rgba(45,122,74,0.06)' : 'rgba(139,32,32,0.06)'
+                                : 'rgba(74,127,165,0.03)',
+                              border: `1px solid ${
+                                emailTouched && form.email
+                                  ? emailValid ? '#2D7A4A' : '#8B2020'
+                                  : C.border
+                              }`,
                               color: C.text, ...MONO, fontSize: '12px',
-                              padding: '10px 14px', outline: 'none', letterSpacing: '0.03em',
-                              transition: 'border-color 0.2s',
+                              padding: '10px 36px 10px 14px', outline: 'none',
+                              letterSpacing: '0.03em', transition: 'all 0.25s',
                             }}
-                            onFocus={e => (e.target.style.borderColor = C.steel)}
-                            onBlur={e => (e.target.style.borderColor = C.border)}
+                            onFocus={e => { if (!emailTouched || !form.email) e.target.style.borderColor = C.steel }}
+                            onBlurCapture={e => { if (!emailValid && form.email) e.target.style.borderColor = '#8B2020' }}
                           />
+                          {/* Live icon */}
+                          {emailTouched && form.email && (
+                            <motion.span
+                              initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }}
+                              style={{
+                                position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                                fontSize: 12, color: emailValid ? '#2D7A4A' : '#8B2020',
+                              }}
+                            >
+                              {emailValid ? '✓' : '✗'}
+                            </motion.span>
+                          )}
                         </div>
-                      ))}
+                      </div>
 
-                      <div style={{ marginBottom: 22 }}>
-                        <label style={{ fontSize: '7px', letterSpacing: '0.24em', color: C.muted, display: 'block', marginBottom: 6 }}>MESSAGE *</label>
+                      {/* ORG */}
+                      <div style={{ marginBottom: 14 }}>
+                        <label style={{ fontSize: '7px', letterSpacing: '0.24em', color: C.muted, display: 'block', marginBottom: 6 }}>
+                          ORGANIZATION <span style={{ color: C.dim }}>(optional)</span>
+                        </label>
+                        <input
+                          value={form.org}
+                          onChange={e => setForm(p => ({ ...p, org: e.target.value }))}
+                          placeholder="Company / institution"
+                          style={{
+                            width: '100%', boxSizing: 'border-box',
+                            background: 'rgba(74,127,165,0.03)', border: `1px solid ${C.border}`,
+                            color: C.text, ...MONO, fontSize: '12px',
+                            padding: '10px 14px', outline: 'none', letterSpacing: '0.03em', transition: 'all 0.2s',
+                          }}
+                          onFocus={e => (e.target.style.borderColor = C.steel)}
+                          onBlur={e => (e.target.style.borderColor = C.border)}
+                        />
+                      </div>
+
+                      {/* MESSAGE */}
+                      <div style={{ marginBottom: 20 }}>
+                        <label style={{ fontSize: '7px', letterSpacing: '0.24em', color: C.muted, display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                          <span>MESSAGE <span style={{ color: C.forge }}>*</span></span>
+                          {form.msg && <span style={{ color: C.dim }}>{form.msg.length} chars</span>}
+                        </label>
                         <textarea
                           value={form.msg}
                           onChange={e => setForm(p => ({ ...p, msg: e.target.value }))}
@@ -792,33 +1039,53 @@ export default function IronVeilPage() {
                           placeholder="Research interest, collaboration proposal, or general inquiry..."
                           style={{
                             width: '100%', boxSizing: 'border-box',
-                            background: 'rgba(74,127,165,0.04)', border: `1px solid ${C.border}`,
+                            background: form.msg ? 'rgba(74,127,165,0.06)' : 'rgba(74,127,165,0.03)',
+                            border: `1px solid ${form.msg ? C.steel : C.border}`,
                             color: C.text, ...MONO, fontSize: '11px',
                             padding: '10px 14px', outline: 'none', resize: 'vertical',
-                            letterSpacing: '0.03em', lineHeight: 1.65, transition: 'border-color 0.2s',
+                            letterSpacing: '0.03em', lineHeight: 1.65, transition: 'all 0.2s',
                           }}
                           onFocus={e => (e.target.style.borderColor = C.steel)}
-                          onBlur={e => (e.target.style.borderColor = C.border)}
+                          onBlur={e => (e.target.style.borderColor = form.msg ? C.steel : C.border)}
                         />
                       </div>
 
-                      <button
+                      {/* Submit */}
+                      <motion.button
                         onClick={sendContact}
-                        disabled={!form.name || !form.msg || sending}
+                        disabled={!formReady || sending}
+                        whileHover={formReady ? { scale: 1.01 } : {}}
+                        whileTap={formReady ? { scale: 0.99 } : {}}
                         style={{
                           width: '100%',
-                          background: form.name && form.msg ? 'rgba(74,127,165,0.12)' : 'rgba(74,127,165,0.03)',
-                          border: `1px solid ${form.name && form.msg ? C.steel : C.border}`,
-                          color: form.name && form.msg ? C.steelLt : C.dim,
-                          ...MONO, fontSize: '10px', letterSpacing: '0.22em',
-                          padding: '13px', cursor: form.name && form.msg ? 'pointer' : 'default',
-                          transition: 'all 0.2s',
+                          background: formReady ? 'rgba(74,127,165,0.14)' : 'rgba(74,127,165,0.03)',
+                          border: `1px solid ${formReady ? C.steel : C.border}`,
+                          color: formReady ? C.steelLt : C.dim,
+                          ...MONO, fontSize: '10px', letterSpacing: '0.24em',
+                          padding: '14px', cursor: formReady ? 'pointer' : 'default',
+                          transition: 'all 0.2s', position: 'relative', overflow: 'hidden',
                         }}
-                        onMouseEnter={e => { if (form.name && form.msg) e.currentTarget.style.background = 'rgba(74,127,165,0.22)' }}
-                        onMouseLeave={e => { if (form.name && form.msg) e.currentTarget.style.background = 'rgba(74,127,165,0.12)' }}
                       >
-                        {sending ? 'SENDING...' : 'SEND INQUIRY ↗'}
-                      </button>
+                        {sending ? (
+                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                            <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} style={{ display: 'inline-block' }}>◈</motion.span>
+                            TRANSMITTING...
+                          </span>
+                        ) : (
+                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                            {formReady
+                              ? <><motion.span animate={{ x: [0, 3, 0] }} transition={{ duration: 1.4, repeat: Infinity }}>▶</motion.span> SEND INQUIRY</>
+                              : <>◈ COMPLETE REQUIRED FIELDS</>
+                            }
+                          </span>
+                        )}
+                      </motion.button>
+
+                      {!formReady && (
+                        <div style={{ marginTop: 10, fontSize: '7px', letterSpacing: '0.14em', color: C.dim, textAlign: 'center' }}>
+                          {[!form.name && 'NAME', !emailValid && 'VALID EMAIL', !form.msg && 'MESSAGE'].filter(Boolean).join(' · ')} REQUIRED
+                        </div>
+                      )}
                     </motion.div>
                   ) : (
                     <motion.div
@@ -826,13 +1093,19 @@ export default function IronVeilPage() {
                       initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                       style={{ textAlign: 'center', padding: '28px 0' }}
                     >
-                      <div style={{ fontSize: 32, color: C.steel, marginBottom: 18 }}>⬡</div>
+                      <motion.div
+                        initial={{ scale: 0 }} animate={{ scale: 1 }}
+                        transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
+                        style={{ fontSize: 36, color: C.steel, marginBottom: 18 }}
+                      >⬡</motion.div>
                       <div style={{ fontSize: '11px', letterSpacing: '0.2em', color: C.steelLt, marginBottom: 12 }}>
                         INQUIRY TRANSMITTED
                       </div>
-                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 13, color: C.muted, lineHeight: 1.75, marginBottom: 24 }}>
+                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 13, color: C.muted, lineHeight: 1.75, marginBottom: 8 }}>
                         Your message has been sent to IronVeil Research.
-                        Expect a response within 48 hours.
+                      </p>
+                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 12, color: C.dim, lineHeight: 1.75, marginBottom: 28 }}>
+                        We&apos;ll respond to <span style={{ color: C.steelLt }}>{form.email}</span> within 48 hours.
                       </p>
                       <button
                         onClick={resetContact}
@@ -853,6 +1126,7 @@ export default function IronVeilPage() {
         )}
       </AnimatePresence>
 
-    </div>
+    </motion.div>
+    </>
   )
 }

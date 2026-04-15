@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const FORMSPREE_URL = 'https://formspree.io/f/xlgadwje'
+const FORMSPREE_URL = process.env.FORMSPREE_URL ?? 'https://formspree.io/f/xlgadwje'
 
 export async function POST(req: NextRequest) {
-  const { name, org, msg, timestamp } = await req.json()
+  const { name, email, org, msg, timestamp } = await req.json()
 
-  if (!name || !msg) {
+  if (!name || !email || !msg) {
     return NextResponse.json({ ok: false, error: 'Missing required fields' }, { status: 400 })
   }
 
@@ -15,9 +15,11 @@ export async function POST(req: NextRequest) {
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({
         name,
+        email,
         organization: org || 'Not provided',
         message:      msg,
         timestamp:    timestamp || new Date().toISOString(),
+        _replyto:     email,
         _subject:     `IronVeil Research — Inquiry from ${name}${org ? ` (${org})` : ''}`,
       }),
     })
