@@ -51,11 +51,11 @@ export default function Contact() {
             <TypewriterText text="// OPEN_CHANNEL" speed={55} style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--muted)' }} />
           </div>
           <h2 className="font-display" style={{ fontSize: 'clamp(38px, 6vw, 80px)', color: '#EDE9E4', letterSpacing: '-0.03em', lineHeight: 1, marginBottom: '20px', fontWeight: 400 }}>
-            Let's build<br />
+            Let&apos;s build<br />
             <em style={{ color: 'var(--accent-coral)' }}>something together.</em>
           </h2>
           <p style={{ fontSize: '16px', color: 'rgba(250,250,248,0.5)', maxWidth: '440px', margin: '0 auto 44px', lineHeight: 1.75 }}>
-            Whether it's a path toward Anduril, an engineering collaboration, an internship opportunity, or just a conversation — the door is open.
+            Whether it&apos;s a path toward Anduril, an engineering collaboration, an internship opportunity, or just a conversation — the door is open.
           </p>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
@@ -144,7 +144,7 @@ export default function Contact() {
           }}
         >
           <div style={{ fontSize: '8px', color: 'rgba(34,197,94,0.35)', letterSpacing: '0.18em', marginBottom: '10px' }}>
-            // ANOMALOUS_SIGNAL_DETECTED
+            {`// ANOMALOUS_SIGNAL_DETECTED`}
           </div>
           {[
             '> somewhere on every page, a terminal sleeps.',

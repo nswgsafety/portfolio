@@ -213,7 +213,7 @@ export default function Hero() {
             }}
           >
             {/* Regular stats */}
-            {stats.map((s, i) => (
+            {stats.map((s) => (
               <div
                 key={s.label}
                 style={{
