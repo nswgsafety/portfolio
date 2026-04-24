@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" width="1400" height="900" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="heroGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0A1628"/>
+      <stop offset="100%" stop-color="#0D2040"/>
+    </linearGradient>
+    <linearGradient id="navGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#08121E"/>
+      <stop offset="100%" stop-color="#0F1F35"/>
+    </linearGradient>
+    <filter id="cardShadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.18)"/>
+    </filter>
+  </defs>
+
+  <!-- Page background -->
+  <rect width="1400" height="900" fill="#F8FAFC"/>
+
+  <!-- ── NAV ── -->
+  <rect x="0" y="0" width="1400" height="70" fill="url(#navGrad)"/>
+  <!-- Logo box -->
+  <rect x="48" y="14" width="44" height="44" rx="6" fill="#1E4B8B"/>
+  <text x="70" y="44" text-anchor="middle" font-size="22" font-weight="900" fill="white" font-family="system-ui, sans-serif">T</text>
+  <!-- Brand text -->
+  <text x="104" y="32" font-size="16" font-weight="800" fill="white" font-family="system-ui, sans-serif">ATHS</text>
+  <text x="104" y="50" font-size="10" fill="#6BA0D8" font-family="system-ui, sans-serif" letter-spacing="3">TSA CLUB</text>
+  <!-- Nav links -->
+  <text x="360" y="41" font-size="14" fill="#B0CCE8" font-family="system-ui, sans-serif">About</text>
+  <text x="460" y="41" font-size="14" fill="#B0CCE8" font-family="system-ui, sans-serif">Projects</text>
+  <text x="580" y="41" font-size="14" fill="#B0CCE8" font-family="system-ui, sans-serif">Competitions</text>
+  <text x="740" y="41" font-size="14" fill="#B0CCE8" font-family="system-ui, sans-serif">Team</text>
+  <text x="830" y="41" font-size="14" fill="#B0CCE8" font-family="system-ui, sans-serif">Sponsors</text>
+  <text x="950" y="41" font-size="14" fill="#B0CCE8" font-family="system-ui, sans-serif">Contact</text>
+  <!-- CTA -->
+  <rect x="1260" y="18" width="110" height="36" rx="5" fill="#3DBBFF"/>
+  <text x="1315" y="41" text-anchor="middle" font-size="13" font-weight="700" fill="white" font-family="system-ui, sans-serif">Join TSA →</text>
+
+  <!-- ── HERO ── -->
+  <rect x="0" y="70" width="1400" height="380" fill="url(#heroGrad)"/>
+  <!-- Grid lines -->
+  <line x1="0" y1="140" x2="1400" y2="140" stroke="rgba(61,187,255,0.05)" stroke-width="1"/>
+  <line x1="0" y1="210" x2="1400" y2="210" stroke="rgba(61,187,255,0.05)" stroke-width="1"/>
+  <line x1="0" y1="280" x2="1400" y2="280" stroke="rgba(61,187,255,0.05)" stroke-width="1"/>
+  <line x1="0" y1="350" x2="1400" y2="350" stroke="rgba(61,187,255,0.05)" stroke-width="1"/>
+  <line x1="700" y1="70" x2="700" y2="450" stroke="rgba(61,187,255,0.05)" stroke-width="1"/>
+  <!-- Accent circles -->
+  <circle cx="1150" cy="230" r="180" fill="rgba(61,187,255,0.04)"/>
+  <circle cx="1280" cy="120" r="80" fill="rgba(61,187,255,0.03)"/>
+  <!-- Season badge -->
+  <rect x="48" y="100" width="246" height="28" rx="14" fill="rgba(61,187,255,0.15)"/>
+  <circle cx="64" cy="114" r="5" fill="#3DBBFF"/>
+  <text x="74" y="119" font-size="11" fill="#3DBBFF" font-family="system-ui, sans-serif" font-weight="600">2025–26 COMPETITION SEASON</text>
+  <!-- Main headline -->
+  <text x="48" y="200" font-size="58" font-weight="900" fill="white" font-family="system-ui, sans-serif">Academy for the</text>
+  <text x="48" y="268" font-size="58" font-weight="900" fill="white" font-family="system-ui, sans-serif">Talented &amp; Highly</text>
+  <text x="48" y="336" font-size="58" font-weight="900" fill="#3DBBFF" font-family="system-ui, sans-serif">Skilled</text>
+  <!-- Sub -->
+  <text x="48" y="376" font-size="16" fill="#7EB6D4" font-family="system-ui, sans-serif">Technology Student Association  ·  Northern New Jersey  ·  Est. 2019</text>
+  <!-- CTA Buttons -->
+  <rect x="48" y="398" width="178" height="46" rx="6" fill="#3DBBFF"/>
+  <text x="137" y="426" text-anchor="middle" font-size="15" font-weight="700" fill="white" font-family="system-ui, sans-serif">View Projects</text>
+  <rect x="242" y="398" width="178" height="46" rx="6" fill="transparent" stroke="#3DBBFF" stroke-width="1.5"/>
+  <text x="331" y="426" text-anchor="middle" font-size="15" fill="#3DBBFF" font-family="system-ui, sans-serif">Meet the Team →</text>
+
+  <!-- ── STATS STRIPE ── -->
+  <rect x="0" y="450" width="1400" height="84" fill="#F1F5F9"/>
+  <line x1="0" y1="450" x2="1400" y2="450" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="0" y1="534" x2="1400" y2="534" stroke="#E2E8F0" stroke-width="1"/>
+  <!-- Stat 1 -->
+  <text x="200" y="490" text-anchor="middle" font-size="34" font-weight="900" fill="#1E4B8B" font-family="system-ui, sans-serif">20+</text>
+  <text x="200" y="516" text-anchor="middle" font-size="10" fill="#94A3B8" font-family="system-ui, sans-serif" letter-spacing="2">ACTIVE MEMBERS</text>
+  <line x1="400" y1="466" x2="400" y2="518" stroke="#E2E8F0" stroke-width="1"/>
+  <!-- Stat 2 -->
+  <text x="600" y="490" text-anchor="middle" font-size="34" font-weight="900" fill="#1E4B8B" font-family="system-ui, sans-serif">7</text>
+  <text x="600" y="516" text-anchor="middle" font-size="10" fill="#94A3B8" font-family="system-ui, sans-serif" letter-spacing="2">EVENTS THIS SEASON</text>
+  <line x1="800" y1="466" x2="800" y2="518" stroke="#E2E8F0" stroke-width="1"/>
+  <!-- Stat 3 -->
+  <text x="1000" y="490" text-anchor="middle" font-size="34" font-weight="900" fill="#1E4B8B" font-family="system-ui, sans-serif">3rd</text>
+  <text x="1000" y="516" text-anchor="middle" font-size="10" fill="#94A3B8" font-family="system-ui, sans-serif" letter-spacing="2">STATE RANKING</text>
+  <line x1="1200" y1="466" x2="1200" y2="518" stroke="#E2E8F0" stroke-width="1"/>
+  <!-- Stat 4 -->
+  <text x="1300" y="490" text-anchor="middle" font-size="28" font-weight="900" fill="#3DBBFF" font-family="system-ui, sans-serif">↑ NATS</text>
+  <text x="1300" y="516" text-anchor="middle" font-size="10" fill="#94A3B8" font-family="system-ui, sans-serif" letter-spacing="2">NATIONALS 2026</text>
+
+  <!-- ── PROJECTS SECTION ── -->
+  <rect x="0" y="534" width="1400" height="366" fill="#FFFFFF"/>
+  <!-- Section header -->
+  <text x="48" y="598" font-size="26" font-weight="900" fill="#0F172A" font-family="system-ui, sans-serif">Featured Projects</text>
+  <text x="48" y="624" font-size="14" fill="#94A3B8" font-family="system-ui, sans-serif">What our members are building this season</text>
+
+  <!-- Card 1 — UAV -->
+  <rect x="48" y="648" width="400" height="200" rx="12" fill="#EFF6FF" filter="url(#cardShadow)"/>
+  <rect x="48" y="648" width="400" height="6" rx="6" fill="#1D4ED8"/>
+  <text x="72" y="686" font-size="10" fill="#2563EB" font-family="system-ui, sans-serif" font-weight="700" letter-spacing="2">UAV SYSTEMS</text>
+  <text x="72" y="712" font-size="20" font-weight="800" fill="#0F172A" font-family="system-ui, sans-serif">FPV Safari Rescue Drone</text>
+  <text x="72" y="736" font-size="13" fill="#64748B" font-family="system-ui, sans-serif">TBS Source One V5 · T-Motor F7 FC</text>
+  <text x="72" y="756" font-size="13" fill="#64748B" font-family="system-ui, sans-serif">Dual-build redundancy · Betaflight 4.4</text>
+  <text x="72" y="776" font-size="13" fill="#64748B" font-family="system-ui, sans-serif">Custom claw retrieval mechanism</text>
+  <rect x="72" y="796" width="100" height="30" rx="6" fill="#1D4ED8"/>
+  <text x="122" y="816" text-anchor="middle" font-size="12" font-weight="600" fill="white" font-family="system-ui, sans-serif">View Project</text>
+
+  <!-- Card 2 — Notebook -->
+  <rect x="500" y="648" width="400" height="200" rx="12" fill="#FFFBEB" filter="url(#cardShadow)"/>
+  <rect x="500" y="648" width="400" height="6" rx="6" fill="#D97706"/>
+  <text x="524" y="686" font-size="10" fill="#D97706" font-family="system-ui, sans-serif" font-weight="700" letter-spacing="2">DOCUMENTATION</text>
+  <text x="524" y="712" font-size="20" font-weight="800" fill="#0F172A" font-family="system-ui, sans-serif">Engineering Notebook (ESN)</text>
+  <text x="524" y="736" font-size="13" fill="#64748B" font-family="system-ui, sans-serif">32-page full-semester design record</text>
+  <text x="524" y="756" font-size="13" fill="#64748B" font-family="system-ui, sans-serif">Slingshot · Conveyor · Speed Multiplier</text>
+  <text x="524" y="776" font-size="13" fill="#64748B" font-family="system-ui, sans-serif">Full calculations + CAD integration</text>
+  <rect x="524" y="796" width="100" height="30" rx="6" fill="#D97706"/>
+  <text x="574" y="816" text-anchor="middle" font-size="12" font-weight="600" fill="white" font-family="system-ui, sans-serif">View Project</text>
+
+  <!-- Card 3 — CAD -->
+  <rect x="952" y="648" width="400" height="200" rx="12" fill="#F0FDF4" filter="url(#cardShadow)"/>
+  <rect x="952" y="648" width="400" height="6" rx="6" fill="#16A34A"/>
+  <text x="976" y="686" font-size="10" fill="#16A34A" font-family="system-ui, sans-serif" font-weight="700" letter-spacing="2">CAD &amp; FABRICATION</text>
+  <text x="976" y="712" font-size="20" font-weight="800" fill="#0F172A" font-family="system-ui, sans-serif">CAD Design Portfolio</text>
+  <text x="976" y="736" font-size="13" fill="#64748B" font-family="system-ui, sans-serif">Fusion 360 · Onshape · AutoCAD</text>
+  <text x="976" y="756" font-size="13" fill="#64748B" font-family="system-ui, sans-serif">Drone frames · Wrist module · Brackets</text>
+  <text x="976" y="776" font-size="13" fill="#64748B" font-family="system-ui, sans-serif">Parametric + generative design workflows</text>
+  <rect x="976" y="796" width="100" height="30" rx="6" fill="#16A34A"/>
+  <text x="1026" y="816" text-anchor="middle" font-size="12" font-weight="600" fill="white" font-family="system-ui, sans-serif">View Project</text>
+
+  <!-- Footer -->
+  <rect x="0" y="868" width="1400" height="32" fill="#0D1B2A"/>
+  <text x="48" y="889" font-size="12" fill="#3A5A7A" font-family="system-ui, sans-serif">© 2025–26 ATHS Technology Student Association · Northern New Jersey</text>
+  <text x="1352" y="889" text-anchor="end" font-size="12" fill="#3A5A7A" font-family="system-ui, sans-serif">athstsa.club</text>
+</svg>

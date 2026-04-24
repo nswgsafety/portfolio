@@ -53,9 +53,10 @@ export default function Hero() {
       {/* Scan line — slow beam from top to bottom */}
       <div aria-hidden className="hero-scanline" />
 
-      {/* Targeting reticle — top-right corner */}
+      {/* Targeting reticle — top-right corner, hidden on mobile */}
       <svg
         aria-hidden
+        className="hero-reticle"
         style={{
           position: 'absolute',
           top: 72,
@@ -105,7 +106,7 @@ export default function Hero() {
       {/* Main content */}
       <div
         className="section-inner flex-1 flex flex-col justify-center w-full"
-        style={{ paddingTop: '140px', paddingBottom: '40px', position: 'relative', zIndex: 2 }}
+        style={{ paddingTop: 'clamp(96px, 18svh, 140px)', paddingBottom: '40px', position: 'relative', zIndex: 2 }}
       >
         <motion.div variants={stagger} initial="hidden" animate="show">
 
@@ -202,6 +203,7 @@ export default function Hero() {
           {/* Engineering specs strip */}
           <motion.div
             variants={item}
+            className="hero-stats-strip"
             style={{
               display: 'flex',
               gap: '0',
@@ -216,6 +218,7 @@ export default function Hero() {
             {stats.map((s) => (
               <div
                 key={s.label}
+                className="hero-stat-item"
                 style={{
                   paddingRight: '28px',
                   marginRight: '28px',
@@ -264,6 +267,7 @@ export default function Hero() {
             {/* CTA */}
             <a
               href="#work"
+              className="hero-cta-btn"
               style={{
                 marginLeft: 'auto',
                 display: 'inline-flex', alignItems: 'center', gap: '8px',
@@ -292,11 +296,12 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Contact card — top-right, below reticle */}
+      {/* Contact card — top-right, hidden on mobile */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.6, duration: 0.7, ease: 'easeOut' }}
+        className="hero-contact-card"
         style={{
           position: 'absolute',
           top: 'clamp(180px, 22vw, 220px)',

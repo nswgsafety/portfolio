@@ -310,4 +310,19 @@ body::after {
   }
   .work-row-category { display: none; }
   .passion-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
+
+  /* Hero: hide floating card + reticle on small screens */
+  .hero-contact-card { display: none !important; }
+  .hero-reticle       { display: none !important; }
+
+  /* Hero: stats strip wraps cleanly */
+  .hero-stats-strip { row-gap: 20px !important; }
+  .hero-stat-item   { padding-right: 16px !important; margin-right: 16px !important; }
+  .hero-cta-btn     { margin-left: 0 !important; width: 100%; justify-content: center !important; }
+
+  /* Project page: gallery stacks */
+  .gallery-pair { grid-template-columns: 1fr !important; }
+
+  /* Project page: info grid stacks */
+  .project-info-grid { grid-template-columns: 1fr !important; }
 }

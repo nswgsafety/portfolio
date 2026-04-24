@@ -33,7 +33,16 @@ export const projects: ProjectDetail[] = [
     status: 'Completed',
     role: 'Team Lead · Primary Pilot · Systems Engineer',
     timeline: 'Sept 2023 — March 2024',
-    images: [],
+    images: [
+      '/source-material/fpv-competition-drone/drone-portfolio-page-01.png',
+      'https://images.unsplash.com/photo-1774553988130-ccda57774818?w=1200&h=800&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1577533870320-2c31e7e41028?w=1200&h=800&fit=crop&q=85',
+      '/source-material/fpv-competition-drone/drone-portfolio-page-06.png',
+      '/source-material/fpv-competition-drone/drone-portfolio-page-10.png',
+      'https://images.unsplash.com/photo-1699084582699-dfa7a31ad041?w=1200&h=800&fit=crop&q=85',
+      '/source-material/fpv-competition-drone/drone-portfolio-page-15.png',
+      '/source-material/fpv-competition-drone/drone-portfolio-page-20.png',
+    ],
     highlights: [
       '2026 TSA Safari Rescue competition',
       'Built two identical quadcopters for redundancy',
@@ -114,7 +123,9 @@ export const projects: ProjectDetail[] = [
     status: 'Ongoing',
     role: 'Project Lead · President',
     timeline: 'Jan 2025 — Present',
-    images: [],
+    images: [
+      '/project-images/tsa-website-mockup.svg',
+    ],
     highlights: [
       'First official web presence for the ATHS TSA chapter',
       'Supports corporate sponsorship outreach program',
@@ -148,7 +159,13 @@ export const projects: ProjectDetail[] = [
     status: 'Ongoing',
     role: 'Designer',
     timeline: '2023 — Present',
-    images: [],
+    images: [
+      'https://img.youtube.com/vi/DoC8GQmAyYM/maxresdefault.jpg',
+      'https://img.youtube.com/vi/hwo0R2_2_nI/maxresdefault.jpg',
+      'https://img.youtube.com/vi/jeBfLHX1kos/maxresdefault.jpg',
+      'https://img.youtube.com/vi/BM-IX82N-C0/maxresdefault.jpg',
+      'https://img.youtube.com/vi/jcLnD-itif8/maxresdefault.jpg',
+    ],
     highlights: [
       'Drone frames optimized for aerodynamics and weight',
       'Custom motor mounts and brackets for competition hardware',
@@ -182,7 +199,13 @@ export const projects: ProjectDetail[] = [
     status: 'Ongoing',
     role: 'Fabricator · Designer',
     timeline: '2023 — Present',
-    images: [],
+    images: [
+      'https://images.unsplash.com/photo-1642969164999-979483e21601?w=1200&h=800&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1702863361902-93c51bfbd923?w=1200&h=800&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1549563316-5384a923453e?w=1200&h=800&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1611505908502-5b67e53e3a76?w=1200&h=800&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1611505982706-9ebc79e5d3f1?w=1200&h=800&fit=crop&q=85',
+    ],
     highlights: [
       'Custom drone components in PETG for impact resistance',
       'Tolerance-fit mechanical joints for robotic assemblies',
@@ -216,7 +239,13 @@ export const projects: ProjectDetail[] = [
     status: 'Ongoing',
     role: 'Embedded Engineer',
     timeline: '2023 — Present',
-    images: [],
+    images: [
+      'https://images.unsplash.com/photo-1562976540-78c559c80296?w=1200&h=800&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1586920740099-f3ceb65bc51e?w=1200&h=800&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1631376178637-392efc9e356b?w=1200&h=800&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1553408226-42ecf81a214c?w=1200&h=800&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1603732551658-5fabbafa84eb?w=1200&h=800&fit=crop&q=85',
+    ],
     highlights: [
       'Flight controller tuning and firmware configuration (Betaflight)',
       'ESC calibration and motor control via PWM',
@@ -252,8 +281,16 @@ export const projects: ProjectDetail[] = [
     timeline: 'Sept 2024 — Present',
     images: [
       '/source-material/engineering-notebooks/esn-notebook-page-01.png',
+      '/source-material/engineering-notebooks/esn-notebook-page-02.png',
       '/source-material/engineering-notebooks/esn-notebook-page-03.png',
+      '/source-material/engineering-notebooks/esn-notebook-page-05.png',
+      '/source-material/engineering-notebooks/esn-notebook-page-08.png',
       '/source-material/engineering-notebooks/esn-notebook-page-10.png',
+      '/source-material/engineering-notebooks/esn-notebook-page-14.png',
+      '/source-material/engineering-notebooks/esn-notebook-page-18.png',
+      '/source-material/engineering-notebooks/esn-notebook-page-22.png',
+      '/source-material/engineering-notebooks/esn-notebook-page-26.png',
+      '/source-material/engineering-notebooks/esn-notebook-page-30.png',
     ],
     highlights: [
       'Full design-build-test documentation cycle',

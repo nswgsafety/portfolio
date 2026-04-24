@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" width="640" height="200">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&amp;display=swap');
+    </style>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0D0B09"/>
+      <stop offset="100%" stop-color="#111"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="640" height="200" fill="url(#bgGrad)"/>
+
+  <!-- Corner marks -->
+  <line x1="16" y1="16" x2="36" y2="16" stroke="#22C55E" stroke-width="1.5"/>
+  <line x1="16" y1="16" x2="16" y2="36" stroke="#22C55E" stroke-width="1.5"/>
+  <line x1="624" y1="16" x2="604" y2="16" stroke="#22C55E" stroke-width="1.5"/>
+  <line x1="624" y1="16" x2="624" y2="36" stroke="#22C55E" stroke-width="1.5"/>
+  <line x1="16" y1="184" x2="36" y2="184" stroke="#22C55E" stroke-width="1.5"/>
+  <line x1="16" y1="184" x2="16" y2="164" stroke="#22C55E" stroke-width="1.5"/>
+  <line x1="624" y1="184" x2="604" y2="184" stroke="#22C55E" stroke-width="1.5"/>
+  <line x1="624" y1="184" x2="624" y2="164" stroke="#22C55E" stroke-width="1.5"/>
+
+  <!-- Thin top rule -->
+  <line x1="36" y1="16" x2="604" y2="16" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+  <line x1="36" y1="184" x2="604" y2="184" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+
+  <!-- Logotype: IA. -->
+  <text
+    x="320" y="142"
+    text-anchor="middle"
+    font-family="'Playfair Display', Georgia, serif"
+    font-size="110"
+    font-weight="900"
+    font-style="italic"
+    letter-spacing="-4"
+    fill="#EDEAE5"
+  >IA<tspan fill="#22C55E">.</tspan></text>
+
+  <!-- Tagline -->
+  <text
+    x="320" y="172"
+    text-anchor="middle"
+    font-family="'DM Mono', 'Courier New', monospace"
+    font-size="10"
+    letter-spacing="5"
+    fill="rgba(255,255,255,0.25)"
+  >IAN ANDUJAR · ENGINEERING STUDENT</text>
+</svg>

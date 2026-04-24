@@ -40,12 +40,17 @@ export default function ProjectPage({ project }: { project: ProjectDetail }) {
             initial={{ opacity: 0, scale: 1.03 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, ease: [0.25, 1, 0.5, 1] }}
-            style={{ width: '100%', maxHeight: '70vh', overflow: 'hidden', background: '#111' }}
+            style={{ width: '100%', height: 'clamp(200px, 45vw, 70vh)', overflow: 'hidden', background: '#111' }}
           >
             <img
               src={coverImage}
               alt={project.title}
-              style={{ width: '100%', height: '70vh', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
+              style={{
+                width: '100%', height: '100%',
+                objectFit: coverImage.endsWith('.svg') ? 'contain' : 'cover',
+                objectPosition: 'center', display: 'block',
+                background: coverImage.endsWith('.svg') ? '#0D0D0D' : undefined,
+              }}
             />
           </motion.div>
         ) : (
@@ -97,7 +102,7 @@ export default function ProjectPage({ project }: { project: ProjectDetail }) {
         </motion.p>
 
         {/* Content grid: highlights + meta */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '48px' }}>
+        <div className="project-info-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '48px' }}>
 
           {/* Key Highlights */}
           <motion.div
@@ -162,32 +167,78 @@ export default function ProjectPage({ project }: { project: ProjectDetail }) {
           </motion.div>
         </div>
 
-        {/* Additional images strip (remaining images after cover) */}
+        {/* Sections */}
+        {project.sections.map((s, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: i * 0.07 }}
+            style={{ marginBottom: '40px', paddingBottom: '40px', borderBottom: i < project.sections.length - 1 ? '1px solid var(--border)' : 'none' }}
+          >
+            <h2 style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: project.color, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '14px' }}>
+              {s.heading}
+            </h2>
+            <p style={{ fontSize: 'clamp(15px, 1.6vw, 17px)', lineHeight: 1.85, color: 'var(--muted)', fontWeight: 300, maxWidth: '740px' }}>
+              {s.body}
+            </p>
+          </motion.div>
+        ))}
+
+        {/* Image gallery */}
         {project.images.length > 1 && (
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            style={{ marginBottom: '48px' }}
+            style={{ marginTop: '64px', marginBottom: '48px' }}
           >
-            <p style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px' }}>
-              More from this project →
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '12px' }}>
-              {project.images.slice(1).map((src, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.97 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.06 }}
-                  style={{ borderRadius: '10px', overflow: 'hidden', aspectRatio: '4/3', border: '1px solid var(--border)' }}
-                >
-                  <img src={src} alt={`${project.title} ${i + 2}`} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
-                </motion.div>
-              ))}
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '20px' }}>
+              <p style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                Project Gallery
+              </p>
+              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: project.color }}>
+                {project.images.length - 1} images
+              </span>
             </div>
+
+            {/* First featured pair full-width */}
+            {project.images.length >= 3 && (
+              <div className="gallery-pair" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                {project.images.slice(1, 3).map((src, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.55, delay: i * 0.08 }}
+                    style={{ borderRadius: '12px', overflow: 'hidden', aspectRatio: '16/10', border: '1px solid var(--border)', background: '#111' }}
+                  >
+                    <img src={src} alt={`${project.title} ${i + 2}`} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
+
+            {/* Remaining images in 3-col grid */}
+            {project.images.length > 3 && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '10px' }}>
+                {project.images.slice(3).map((src, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.97 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: i * 0.05 }}
+                    style={{ borderRadius: '10px', overflow: 'hidden', aspectRatio: '4/3', border: '1px solid var(--border)', background: '#111' }}
+                  >
+                    <img src={src} alt={`${project.title} ${i + 4}`} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </motion.div>
         )}
       </div>
