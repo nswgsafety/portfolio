@@ -35,7 +35,7 @@ export default function Contact() {
           style={{
             borderRadius: '3px',
             padding: 'clamp(48px, 6vw, 88px)',
-            background: '#0A0807',
+            background: 'var(--black)',
             border: '1px solid var(--border)',
             borderTop: '2px solid var(--accent-gold)',
             marginBottom: '72px',
@@ -66,9 +66,9 @@ export default function Contact() {
               style={{
                 display: 'flex', alignItems: 'center', gap: '10px',
                 background: copied ? 'rgba(201,164,85,0.15)' : 'var(--accent-gold)',
-                color: copied ? 'var(--accent-gold)' : '#0D0B09',
+                color: copied ? 'var(--accent-gold)' : 'var(--black)',
                 padding: '14px 28px', borderRadius: '2px',
-                fontFamily: 'DM Mono, monospace', fontSize: '11px', letterSpacing: '0.1em',
+                fontFamily: 'DM Sans, sans-serif', fontSize: '11px', letterSpacing: '0.1em',
                 border: copied ? '1px solid rgba(201,164,85,0.5)' : 'none',
                 cursor: 'pointer',
                 transition: 'background 0.3s ease, color 0.3s ease',
@@ -120,7 +120,7 @@ export default function Contact() {
                 display: 'flex', alignItems: 'center', gap: '10px',
                 border: '1px solid rgba(255,248,240,0.14)', color: '#EDE9E4',
                 padding: '14px 28px', borderRadius: '2px',
-                fontFamily: 'DM Mono, monospace', fontSize: '11px', letterSpacing: '0.1em',
+                fontFamily: 'DM Sans, sans-serif', fontSize: '11px', letterSpacing: '0.1em',
                 textDecoration: 'none', textTransform: 'uppercase',
                 transition: 'border-color 0.2s ease, color 0.2s ease',
               }}
@@ -141,7 +141,7 @@ export default function Contact() {
             padding: '16px 20px',
             borderLeft: '2px solid rgba(201,164,85,0.28)',
             background: 'rgba(201,164,85,0.015)',
-            fontFamily: 'DM Mono, monospace',
+            fontFamily: 'DM Sans, sans-serif',
           }}
         >
           <div style={{ fontSize: '8px', color: 'rgba(201,164,85,0.35)', letterSpacing: '0.18em', marginBottom: '10px' }}>
@@ -174,7 +174,7 @@ export default function Contact() {
             <span className="font-display font-bold" style={{ fontSize: '20px', color: 'var(--ink)' }}>
               Ian Andujar<span style={{ color: 'var(--accent-gold)' }}>.</span>
             </span>
-            <p style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'var(--muted)', marginTop: '4px' }}>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', color: 'var(--muted)', marginTop: '4px' }}>
               Mechatronics & Aerospace · Paramus, NJ
             </p>
           </div>
@@ -197,7 +197,7 @@ export default function Contact() {
             ))}
           </div>
 
-          <p style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'var(--muted)' }}>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', color: 'var(--muted)' }}>
             © {new Date().getFullYear()} Ian Andujar
           </p>
         </div>

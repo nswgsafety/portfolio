@@ -36,11 +36,11 @@ export default function Nav() {
           paddingTop: scrolled ? '14px' : '24px',
           paddingBottom: scrolled ? '14px' : '24px',
           transition: 'padding 0.4s ease, background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease',
-          background: scrolled ? 'rgba(8, 8, 8, 0.88)' : 'transparent',
+          background: scrolled ? 'rgba(244, 234, 214, 0.88)' : 'transparent',
           backdropFilter: scrolled ? 'blur(20px) saturate(1.2)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(1.2)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
-          boxShadow: scrolled ? '0 1px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(42,32,24,0.08)' : '1px solid transparent',
+          boxShadow: scrolled ? '0 1px 24px rgba(42,32,24,0.08)' : 'none',
         }}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -59,7 +59,7 @@ export default function Nav() {
                 key={l.label}
                 href={l.href}
                 className="link-underline text-sm font-medium"
-                style={{ color: 'var(--muted)', fontFamily: 'DM Mono, monospace', fontSize: '12px', letterSpacing: '0.06em' }}
+                style={{ color: 'var(--muted)', fontFamily: 'DM Sans, sans-serif', fontSize: '12px', letterSpacing: '0.06em' }}
               >
                 {l.label}
               </a>
@@ -67,12 +67,12 @@ export default function Nav() {
             <a
               href="#contact"
               style={{
-                border: '1px solid rgba(255,255,255,0.15)',
+                border: '1px solid rgba(42,32,24,0.2)',
                 color: 'var(--ink)',
                 padding: '7px 16px',
                 borderRadius: '2px',
                 fontSize: '11px',
-                fontFamily: 'DM Mono, monospace',
+                fontFamily: 'DM Sans, sans-serif',
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 transition: 'border-color 0.2s ease, color 0.2s ease',
@@ -85,7 +85,7 @@ export default function Nav() {
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget
-                el.style.borderColor = 'rgba(255,255,255,0.15)'
+                el.style.borderColor = 'rgba(42,32,24,0.2)'
                 el.style.color = 'var(--ink)'
               }}
             >
@@ -113,7 +113,7 @@ export default function Nav() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="fixed inset-0 z-40 flex flex-col justify-center items-center gap-8 md:hidden"
-            style={{ background: '#0D0D0D' }}
+            style={{ background: 'var(--white)' }}
           >
             {links.map((l, i) => (
               <motion.a

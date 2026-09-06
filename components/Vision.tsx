@@ -34,7 +34,7 @@ export default function Vision() {
       id="vision"
       style={{
         padding: 'clamp(100px, 12vw, 160px) 0',
-        background: 'linear-gradient(to bottom, #0A0A0A 0%, transparent 14%, transparent 86%, #0A0A0A 100%)',
+        background: 'linear-gradient(to bottom, var(--white) 0%, transparent 14%, transparent 86%, var(--white) 100%)',
       }}
     >
       <div className="section-inner">
@@ -71,7 +71,7 @@ export default function Vision() {
         >
           <p
             className="font-display"
-            style={{ fontSize: 'clamp(17px, 2.4vw, 26px)', color: 'rgba(237,234,229,0.8)', lineHeight: 1.6, fontStyle: 'italic', fontWeight: 400 }}
+            style={{ fontSize: 'clamp(17px, 2.4vw, 26px)', color: 'rgba(42,32,24,0.82)', lineHeight: 1.6, fontStyle: 'italic', fontWeight: 400 }}
           >
             &ldquo;Defense contractors are where the most important engineering in the world happens. That&apos;s where I want to start.&rdquo;
           </p>
@@ -104,7 +104,7 @@ export default function Vision() {
                 className="font-display"
                 style={{
                   fontSize: '32px', fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 1,
-                  color: hovered === g.number ? 'var(--accent-gold)' : 'rgba(237,234,229,0.15)',
+                  color: hovered === g.number ? 'var(--accent-gold)' : 'rgba(42,32,24,0.14)',
                   transition: 'color 0.25s ease',
                 }}
               >

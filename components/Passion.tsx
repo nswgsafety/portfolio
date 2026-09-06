@@ -90,7 +90,7 @@ export default function Passion() {
                   top: '20px',
                   fontSize: 'clamp(80px, 12vw, 140px)',
                   fontWeight: 900,
-                  color: 'rgba(255,248,240,0.025)',
+                  color: 'rgba(42,32,24,0.04)',
                   letterSpacing: '-0.05em',
                   lineHeight: 1,
                   pointerEvents: 'none',
@@ -119,7 +119,7 @@ export default function Passion() {
                   style={{
                     fontSize: 'clamp(28px, 3.5vw, 48px)',
                     fontWeight: 400,
-                    color: hovered === p.index ? 'var(--ink)' : 'rgba(237,234,229,0.85)',
+                    color: hovered === p.index ? 'var(--ink)' : 'rgba(42,32,24,0.75)',
                     letterSpacing: '-0.03em',
                     lineHeight: 1.05,
                     transition: 'color 0.2s ease',

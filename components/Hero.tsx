@@ -6,7 +6,12 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      style={{ minHeight: '100svh', background: 'transparent', position: 'relative', overflow: 'hidden' }}
+      style={{
+        minHeight: '100svh',
+        background: 'linear-gradient(180deg, var(--dusk-deep) 0%, var(--dusk-mid) 45%, var(--dusk-warm) 78%, var(--dusk-glow) 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
       className="flex flex-col items-center justify-center"
     >
       <motion.div
@@ -20,12 +25,13 @@ export default function Hero() {
           style={{
             fontSize: 'clamp(52px, 11vw, 148px)',
             fontWeight: 400,
-            color: 'var(--ink)',
+            color: '#F8EFE0',
             letterSpacing: '-0.03em',
             lineHeight: 0.95,
+            textShadow: '0 4px 40px rgba(42,20,8,0.35)',
           }}
         >
-          Ian Andujar<span style={{ color: 'var(--accent-gold)' }}>.</span>
+          Ian Andujar<span style={{ color: 'var(--dusk-warm)' }}>.</span>
         </h1>
 
         <motion.div
@@ -40,41 +46,56 @@ export default function Hero() {
             marginTop: '22px',
           }}
         >
-          <span className="diamond-divider" />
+          <span style={{ width: '6px', height: '6px', background: 'var(--dusk-warm)', transform: 'rotate(45deg)' }} />
           <span
             style={{
               fontFamily: 'DM Sans, sans-serif',
               fontSize: '11px',
               letterSpacing: '0.32em',
               textTransform: 'uppercase',
-              color: 'var(--muted)',
+              color: 'rgba(248,239,224,0.75)',
             }}
           >
             Engineer &middot; Builder
           </span>
-          <span className="diamond-divider" />
+          <span style={{ width: '6px', height: '6px', background: 'var(--dusk-warm)', transform: 'rotate(45deg)' }} />
         </motion.div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4, duration: 1 }}
+      <motion.a
+        href="#work"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.3, duration: 0.9 }}
+        whileHover={{ scale: 1.05 }}
         style={{
           position: 'absolute',
-          bottom: '48px',
+          bottom: '56px',
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 2,
+          width: '64px',
+          height: '64px',
+          borderRadius: '50%',
+          border: '1px solid rgba(248,239,224,0.4)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textDecoration: 'none',
         }}
-        aria-hidden
       >
-        <motion.div
-          animate={{ y: [0, 10, 0], opacity: [0.7, 0.25, 0.7] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-          style={{ width: '1px', height: '40px', background: 'var(--accent-gold)' }}
-        />
-      </motion.div>
+        <span
+          style={{
+            fontFamily: 'DM Sans, sans-serif',
+            fontSize: '9px',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: 'rgba(248,239,224,0.85)',
+          }}
+        >
+          Scroll
+        </span>
+      </motion.a>
     </section>
   )
 }

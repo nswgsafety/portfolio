@@ -9,98 +9,98 @@ const aphorisms = [
   "Power over yourself is the only kind that doesn't require someone else to lose.",
 ]
 
-const pullQuote = 'Fear just is. What you do with it is the only question that matters.'
-
 export default function Philosophy() {
   return (
-    <section
-      id="philosophy"
-      style={{ padding: 'clamp(100px, 12vw, 160px) 0', background: 'var(--white)', position: 'relative', overflow: 'hidden' }}
-    >
+    <section id="philosophy" style={{ padding: 'clamp(100px, 14vw, 200px) 0', background: 'var(--white)', position: 'relative', overflow: 'hidden' }}>
       <div
         aria-hidden
         style={{
           position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 70% 55% at 50% 0%, rgba(201,164,85,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 70% 55% at 50% 0%, rgba(181,80,46,0.06) 0%, transparent 70%)',
         }}
       />
 
       <div className="section-inner" style={{ position: 'relative', zIndex: 1 }}>
 
-        {/* Header */}
+        {/* Eyebrow */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          style={{ marginBottom: '56px' }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '32px' }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-            <span className="diamond-divider" />
-            <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--muted)' }}>
-              Philosophy
-            </span>
-          </div>
-          <h2 className="font-display" style={{ fontSize: 'clamp(48px, 8vw, 100px)', fontWeight: 400, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 0.95 }}>
-            Fear <span style={{ color: 'var(--accent-gold)' }}>&amp; Power.</span>
-          </h2>
+          <span className="diamond-divider" />
+          <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+            Philosophy
+          </span>
+          <span className="diamond-divider" />
         </motion.div>
 
-        {/* Pull quote */}
-        <motion.div
+        {/* Dominant serif quote */}
+        <motion.p
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="corner-frame"
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="font-display"
           style={{
-            marginBottom: '48px',
-            padding: 'clamp(28px, 4vw, 48px)',
-            border: '1px solid var(--accent-gold-dim)',
-            borderRadius: '3px',
-            background: 'rgba(201,164,85,0.03)',
+            fontSize: 'clamp(30px, 5.4vw, 76px)',
+            color: 'var(--ink)',
+            lineHeight: 1.15,
+            fontStyle: 'italic',
+            fontWeight: 400,
+            textAlign: 'center',
+            maxWidth: '920px',
+            margin: '0 auto 56px',
           }}
         >
-          <p className="font-display" style={{ fontSize: 'clamp(20px, 3vw, 34px)', color: 'var(--ink)', lineHeight: 1.5, fontStyle: 'italic', fontWeight: 400 }}>
-            &ldquo;{pullQuote}&rdquo;
-          </p>
-        </motion.div>
+          &ldquo;Fear just is. What you do with it is the{' '}
+          <span style={{ color: 'var(--accent-terracotta)' }}>only question</span> that matters.&rdquo;
+        </motion.p>
 
         {/* Aphorisms */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '2px', marginBottom: '40px', background: 'var(--border)' }}>
+        <div style={{ maxWidth: '640px', margin: '0 auto 48px' }}>
           {aphorisms.map((a, i) => (
-            <motion.div
+            <motion.p
               key={a}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
-              style={{ padding: '26px', background: 'var(--white)' }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              style={{
+                fontSize: '15px', lineHeight: 1.9, color: 'var(--muted)', fontWeight: 300,
+                textAlign: 'center', padding: '18px 0',
+                borderTop: i > 0 ? '1px solid var(--border)' : 'none',
+              }}
             >
-              <p style={{ fontSize: '14px', lineHeight: 1.8, color: 'var(--muted)', fontWeight: 300 }}>{a}</p>
-            </motion.div>
+              {a}
+            </motion.p>
           ))}
         </div>
 
-        <motion.a
-          href="/fear-and-power.html"
-          download="Fear-and-Power-Ian-Andujar.html"
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: '10px',
-            fontFamily: 'DM Sans, sans-serif', fontSize: '12px', letterSpacing: '0.1em', textTransform: 'uppercase',
-            color: 'var(--accent-gold)', border: '1px solid var(--accent-gold-dim)',
-            borderRadius: '2px', padding: '12px 24px', textDecoration: 'none',
-            transition: 'all 0.25s ease',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,164,85,0.08)' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+          style={{ display: 'flex', justifyContent: 'center' }}
         >
-          Read the Full Framework
-        </motion.a>
+          <a
+            href="/fear-and-power.html"
+            download="Fear-and-Power-Ian-Andujar.html"
+            className="corner-frame"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '10px',
+              fontFamily: 'DM Sans, sans-serif', fontSize: '12px', letterSpacing: '0.1em', textTransform: 'uppercase',
+              color: 'var(--accent-gold)', border: '1px solid var(--accent-gold-dim)',
+              borderRadius: '2px', padding: '12px 24px', textDecoration: 'none',
+              transition: 'all 0.25s ease',
+            }}
+          >
+            Read the Full Framework
+          </a>
+        </motion.div>
 
       </div>
     </section>

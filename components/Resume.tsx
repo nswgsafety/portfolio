@@ -43,7 +43,7 @@ const skillGroups = [
 
 export default function Resume() {
   return (
-    <section id="resume" style={{ padding: 'clamp(80px, 10vw, 140px) 0', background: '#0D0D0D' }}>
+    <section id="resume" style={{ padding: 'clamp(80px, 10vw, 140px) 0', background: 'var(--white)' }}>
       <div className="section-inner">
 
         {/* Header */}

@@ -27,7 +27,7 @@ export default function Building() {
       id="building"
       style={{
         padding: 'clamp(100px, 12vw, 160px) 0',
-        background: 'linear-gradient(to bottom, #0A0807 0%, transparent 14%, transparent 86%, #0A0807 100%)',
+        background: 'linear-gradient(to bottom, var(--white) 0%, transparent 14%, transparent 86%, var(--white) 100%)',
       }}
     >
       <div className="section-inner">
@@ -66,8 +66,8 @@ export default function Building() {
               whileHover={{ y: -4 }}
               className="corner-frame"
               style={{
-                background: 'rgba(255, 248, 240, 0.025)',
-                border: '1px solid rgba(255, 248, 240, 0.07)',
+                background: 'rgba(42, 32, 24, 0.03)',
+                border: '1px solid rgba(42, 32, 24, 0.1)',
                 borderRadius: '3px',
                 padding: '28px 26px 30px',
               }}

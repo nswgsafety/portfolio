@@ -48,7 +48,7 @@ export default function Home() {
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.9 }}
             style={{
-              background: '#0A0807',
+              background: 'var(--white)',
               padding: 'clamp(80px, 12vw, 140px) clamp(24px, 6vw, 96px)',
               display: 'flex',
               alignItems: 'center',

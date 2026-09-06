@@ -16,12 +16,7 @@ interface WorkItem {
 const GOLD = 'var(--accent-gold)'
 
 const projects: WorkItem[] = [
-  { slug: 'fpv-competition-drone',   title: 'FPV Competition Drone',    category: 'UAV / Hardware',          year: '2024' },
-  { slug: 'robotic-wrist-module',    title: 'Robotic Wrist Module',     category: 'Robotics / Research',     year: '2025–' },
-  { slug: 'aths-tsa-website',        title: 'ATHS TSA Club Website',    category: 'Web / Leadership',        year: '2025' },
-  { slug: 'cad-portfolio',           title: 'CAD Design Portfolio',     category: 'Mechanical Design',       year: '2023–' },
-  { slug: '3d-print-experiments',    title: '3D Print Lab',             category: 'Fabrication / Materials', year: '2023–' },
-  { slug: 'arduino-projects',        title: 'Arduino & Embedded',       category: 'Embedded Systems',        year: '2023–' },
+  { slug: 'fpv-competition-drone', title: 'FPV Competition Drone', category: 'UAV / Hardware', year: '2024' },
 ]
 
 export default function Work() {
@@ -72,7 +67,7 @@ export default function Work() {
               <div
                 style={{
                   width: '100%', height: '100%',
-                  background: 'linear-gradient(145deg, rgba(201,164,85,0.14) 0%, rgba(13,11,9,0.95) 100%)',
+                  background: 'linear-gradient(145deg, rgba(201,164,85,0.14) 0%, rgba(42,32,24,0.9) 100%)',
                   borderLeft: `2px solid ${GOLD}`,
                   display: 'flex', flexDirection: 'column',
                   alignItems: 'flex-start', justifyContent: 'flex-end',
