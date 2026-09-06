@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import AmbientOrbs from './AmbientOrbs'
 
 const aphorisms = [
   'Fear is the ground state of being — not a reaction, but the foundation everything else is built on.',
@@ -19,6 +20,7 @@ export default function Philosophy() {
           background: 'radial-gradient(ellipse 70% 55% at 50% 0%, rgba(181,80,46,0.06) 0%, transparent 70%)',
         }}
       />
+      <AmbientOrbs variant="terracotta" />
 
       <div className="section-inner" style={{ position: 'relative', zIndex: 1 }}>
 

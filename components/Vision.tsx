@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import AmbientOrbs from './AmbientOrbs'
 
 const goals = [
   {
@@ -35,8 +36,11 @@ export default function Vision() {
       style={{
         padding: 'clamp(100px, 12vw, 160px) 0',
         background: 'linear-gradient(to bottom, var(--white) 0%, transparent 14%, transparent 86%, var(--white) 100%)',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
+      <AmbientOrbs variant="gold" />
       <div className="section-inner">
 
         {/* Header */}

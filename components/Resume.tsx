@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Download } from 'lucide-react'
+import AmbientOrbs from './AmbientOrbs'
 
 const education = [
   {
@@ -43,7 +44,8 @@ const skillGroups = [
 
 export default function Resume() {
   return (
-    <section id="resume" style={{ padding: 'clamp(80px, 10vw, 140px) 0', background: 'var(--white)' }}>
+    <section id="resume" style={{ padding: 'clamp(80px, 10vw, 140px) 0', background: 'var(--white)', position: 'relative', overflow: 'hidden' }}>
+      <AmbientOrbs variant="olive" />
       <div className="section-inner">
 
         {/* Header */}

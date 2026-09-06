@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Linkedin, Mail, Phone, ArrowUpRight, Check } from 'lucide-react'
+import AmbientOrbs from './AmbientOrbs'
 
 const EMAIL = 'ianmarcoandujar9@gmail.com'
 
@@ -23,7 +24,8 @@ export default function Contact() {
   }
 
   return (
-    <footer id="contact" style={{ padding: 'clamp(80px, 10vw, 140px) 0 48px', background: 'var(--white)' }}>
+    <footer id="contact" style={{ padding: 'clamp(80px, 10vw, 140px) 0 48px', background: 'var(--white)', position: 'relative', overflow: 'hidden' }}>
+      <AmbientOrbs variant="terracotta" />
       <div className="section-inner">
 
         {/* Big CTA block */}
@@ -44,7 +46,9 @@ export default function Contact() {
             textAlign: 'center',
           }}
         >
+          <AmbientOrbs variant="gold" />
 
+          <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
             <span className="diamond-divider" />
             <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--muted)' }}>
@@ -127,6 +131,7 @@ export default function Contact() {
             >
               LinkedIn <ArrowUpRight size={13} />
             </motion.a>
+          </div>
           </div>
         </motion.div>
 

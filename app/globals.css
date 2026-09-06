@@ -44,8 +44,8 @@ body {
 
 /* Faint gold hairline grid — ambient texture */
 @keyframes grid-breathe {
-  0%, 100% { opacity: 0.25; }
-  50%       { opacity: 0.45; }
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 0.85; }
 }
 
 body::before {
@@ -55,9 +55,11 @@ body::before {
   pointer-events: none;
   z-index: 1;
   background-image:
-    linear-gradient(rgba(168, 117, 46, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(168, 117, 46, 0.05) 1px, transparent 1px);
-  background-size: 44px 44px;
+    linear-gradient(rgba(168, 117, 46, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 117, 46, 0.09) 1px, transparent 1px),
+    linear-gradient(rgba(181, 80, 46, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(181, 80, 46, 0.1) 1px, transparent 1px);
+  background-size: 44px 44px, 44px 44px, 220px 220px, 220px 220px;
   background-position: -1px -1px;
   animation: grid-breathe 8s ease-in-out infinite;
 }
@@ -75,8 +77,11 @@ body::after {
   mix-blend-mode: multiply;
 }
 
-/* Section layout */
+/* Section layout — relative+z-index so ambient background orbs (z-index:0)
+   never paint over real content */
 .section-inner {
+  position: relative;
+  z-index: 1;
   max-width: 1280px;
   margin: 0 auto;
   padding-left: clamp(24px, 6vw, 96px);

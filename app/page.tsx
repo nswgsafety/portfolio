@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 const Loader = dynamic(() => import('@/components/Loader'), { ssr: false })
 const Scene3D = dynamic(() => import('@/components/Scene3D'), { ssr: false })
+import Scene3DBoundary from '@/components/Scene3DBoundary'
+import AmbientOrbs from '@/components/AmbientOrbs'
 import Cursor from '@/components/Cursor'
 import Nav from '@/components/Nav'
 import Hero from '@/components/Hero'
@@ -34,8 +36,12 @@ export default function Home() {
       >
         {/* Persistent 3D layer — must be a sibling of <main> inside the SAME
             stacking context, or main's z-index has nothing valid to compare
-            against and the canvas can end up painting over everything. */}
-        <Scene3D />
+            against and the canvas can end up painting over everything.
+            Wrapped in an error boundary: a WebGL/GLTF failure here must
+            never be able to take down the entire page. */}
+        <Scene3DBoundary>
+          <Scene3D />
+        </Scene3DBoundary>
         <Cursor />
         <Nav />
         <main style={{ position: 'relative', zIndex: 2 }}>
@@ -56,9 +62,12 @@ export default function Home() {
               justifyContent: 'center',
               borderTop: '1px solid var(--border)',
               borderBottom: '1px solid var(--border)',
+              position: 'relative',
+              overflow: 'hidden',
             }}
           >
-            <blockquote style={{ maxWidth: '720px', textAlign: 'center' }}>
+            <AmbientOrbs variant="olive" />
+            <blockquote style={{ maxWidth: '720px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
               <span className="diamond-divider" style={{ margin: '0 auto 28px', display: 'block' }} />
               <p
                 className="font-display"

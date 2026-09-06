@@ -42,7 +42,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
 
   useEffect(() => {
     if (hasPlayed) {
-      setVisible(false)
+      // visible already defaults to false — nothing to update locally
       onComplete()
       return
     }

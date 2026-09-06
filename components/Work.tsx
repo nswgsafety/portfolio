@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
+import AmbientOrbs from './AmbientOrbs'
 
 interface WorkItem {
   slug: string
@@ -33,8 +34,10 @@ export default function Work() {
     <section
       id="work"
       onMouseMove={handleMouseMove}
-      style={{ padding: 'clamp(80px, 10vw, 140px) 0', background: 'var(--white)', position: 'relative' }}
+      style={{ padding: 'clamp(80px, 10vw, 140px) 0', background: 'var(--white)', position: 'relative', overflow: 'hidden' }}
     >
+      <AmbientOrbs variant="olive" />
+
       {/* Cursor-following preview */}
       <AnimatePresence>
         {active && (

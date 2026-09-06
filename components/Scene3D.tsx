@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, useGLTF } from '@react-three/drei'
+import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
 function clamp01(x: number) {
@@ -105,12 +105,15 @@ function DockedModel({ id, url, side, targetSize }: DockedModelProps) {
   )
 }
 
+/** Manual 3-point rig instead of an HDR Environment — no external fetch, no
+ *  single point of failure, and it's tuned to the same warm dusk palette. */
 function Rig() {
   return (
     <>
-      <Environment preset="sunset" background={false} />
-      <ambientLight intensity={0.35} />
-      <directionalLight position={[6, 8, 5]} color="#F3D9A8" intensity={1.4} />
+      <ambientLight intensity={0.45} color="#D8B98C" />
+      <directionalLight position={[6, 8, 5]} color="#F8DFAE" intensity={2.2} />
+      <directionalLight position={[-5, 2, 4]} color="#E8A468" intensity={0.9} />
+      <directionalLight position={[-2, -4, -6]} color="#7A5A3C" intensity={0.6} />
       <Suspense fallback={null}>
         <FalconHeavy />
       </Suspense>
@@ -131,10 +134,40 @@ useGLTF.preload('/models/satelite.glb')
 const SKY_GRADIENT = 'linear-gradient(180deg, var(--dusk-deep) 0%, var(--dusk-mid) 45%, var(--dusk-warm) 78%, var(--dusk-glow) 100%)'
 const HAZE_GRADIENT = 'linear-gradient(to top, var(--dusk-deep) 0%, rgba(60,42,30,0.55) 35%, transparent 100%)'
 
+interface Star { x: number; y: number; size: number; opacity: number }
+
+// Generated once at module load, not during render — a fixed starfield is
+// exactly as good as a random one here, and this keeps render pure.
+const STARS: Star[] = Array.from({ length: 70 }, () => ({
+  x: Math.random() * 100,
+  y: Math.random() * 55,
+  size: Math.random() * 1.6 + 0.6,
+  opacity: Math.random() * 0.6 + 0.2,
+}))
+
+function Horizon() {
+  return (
+    <svg
+      viewBox="0 0 1200 200"
+      preserveAspectRatio="none"
+      style={{ position: 'absolute', left: 0, right: 0, bottom: '18%', width: '100%', height: '22%' }}
+    >
+      <path
+        d="M0,160 L80,120 L180,140 L260,90 L340,130 L430,70 L520,110 L610,60 L700,100 L800,75 L900,115 L1000,85 L1100,120 L1200,95 L1200,200 L0,200 Z"
+        fill="var(--dusk-deep)"
+        opacity="0.85"
+      />
+    </svg>
+  )
+}
+
 export default function Scene3D() {
   const [enabled, setEnabled] = useState(true)
   const skyRef = useRef<HTMLDivElement>(null)
+  const starsRef = useRef<HTMLDivElement>(null)
+  const horizonRef = useRef<HTMLDivElement>(null)
   const hazeRef = useRef<HTMLDivElement>(null)
+  const stars = STARS
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 640px)')
@@ -144,15 +177,17 @@ export default function Scene3D() {
     return () => mq.removeEventListener('change', update)
   }, [])
 
-  // Background sky + foreground haze are DOM layers (not WebGL) so they only
-  // ever apply to the hero — they fade out well before Building/Vision, whose
-  // own opaque backgrounds mask the canvas the rest of the time.
+  // Background sky/stars/horizon + foreground haze are DOM layers (not
+  // WebGL) so they only ever apply to the hero — they fade out well before
+  // Building/Vision, whose own opaque backgrounds mask the canvas otherwise.
   useEffect(() => {
     let raf: number
     function tick() {
       const t = heroScrollT()
       const fade = 1 - smoothstep(0.15, 1.05, t)
       if (skyRef.current) skyRef.current.style.opacity = String(fade)
+      if (starsRef.current) starsRef.current.style.opacity = String(fade)
+      if (horizonRef.current) horizonRef.current.style.opacity = String(fade)
       if (hazeRef.current) hazeRef.current.style.opacity = String(fade)
       raf = requestAnimationFrame(tick)
     }
@@ -164,8 +199,32 @@ export default function Scene3D() {
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none' }} aria-hidden>
-      {/* Background */}
+      {/* Background: sky */}
       <div ref={skyRef} style={{ position: 'absolute', inset: 0, background: SKY_GRADIENT }} />
+
+      {/* Background: stars */}
+      <div ref={starsRef} style={{ position: 'absolute', inset: 0 }}>
+        {stars.map((s, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: `${s.x}%`,
+              top: `${s.y}%`,
+              width: s.size,
+              height: s.size,
+              borderRadius: '50%',
+              background: '#F8EFE0',
+              opacity: s.opacity,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Background: distant horizon */}
+      <div ref={horizonRef}>
+        <Horizon />
+      </div>
 
       {/* Model */}
       <Canvas
