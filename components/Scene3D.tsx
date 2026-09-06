@@ -145,26 +145,53 @@ const STARS: Star[] = Array.from({ length: 70 }, () => ({
   opacity: Math.random() * 0.6 + 0.2,
 }))
 
-function Horizon() {
+/** Three parallax layers with atmospheric perspective — far ranges are
+ *  lighter/hazier and lower-contrast, the near range is dark, sharp, and
+ *  overlaps into the foreground haze. This is what actually reads as "real"
+ *  mountains instead of one flat jagged line. */
+function MountainRange() {
   return (
-    <svg
-      viewBox="0 0 1200 200"
-      preserveAspectRatio="none"
-      style={{ position: 'absolute', left: 0, right: 0, bottom: '18%', width: '100%', height: '22%' }}
-    >
-      <path
-        d="M0,160 L80,120 L180,140 L260,90 L340,130 L430,70 L520,110 L610,60 L700,100 L800,75 L900,115 L1000,85 L1100,120 L1200,95 L1200,200 L0,200 Z"
-        fill="var(--dusk-deep)"
-        opacity="0.85"
-      />
-    </svg>
+    <>
+      <svg viewBox="0 0 1440 200" preserveAspectRatio="none" style={{ position: 'absolute', left: 0, right: 0, bottom: '30%', width: '100%', height: '16%' }}>
+        <path
+          d="M0,120 L90,105 L170,118 L260,95 L350,112 L430,88 L520,108 L610,92 L700,115 L790,98 L880,110 L970,85 L1060,105 L1150,95 L1250,112 L1350,100 L1440,115 L1440,200 L0,200 Z"
+          fill="#9C8468"
+          opacity="0.4"
+        />
+      </svg>
+      <svg viewBox="0 0 1440 220" preserveAspectRatio="none" style={{ position: 'absolute', left: 0, right: 0, bottom: '23%', width: '100%', height: '19%' }}>
+        <path
+          d="M0,150 L70,110 L150,135 L230,80 L320,125 L400,65 L490,105 L580,60 L670,100 L760,55 L850,95 L940,70 L1030,110 L1120,75 L1210,120 L1300,90 L1440,130 L1440,220 L0,220 Z"
+          fill="var(--dusk-mid)"
+          opacity="0.65"
+        />
+      </svg>
+      <svg viewBox="0 0 1440 240" preserveAspectRatio="none" style={{ position: 'absolute', left: 0, right: 0, bottom: '15%', width: '100%', height: '24%' }}>
+        <path
+          d="M0,190 L60,140 L110,170 L180,100 L240,155 L300,75 L360,130 L420,55 L480,120 L540,45 L610,110 L680,60 L740,125 L810,70 L880,140 L940,90 L1010,150 L1080,85 L1150,135 L1220,65 L1290,115 L1360,95 L1440,145 L1440,240 L0,240 Z"
+          fill="var(--dusk-deep)"
+          opacity="0.94"
+        />
+      </svg>
+    </>
   )
 }
+
+interface Cloud { x: number; y: number; w: number; h: number; opacity: number }
+
+const CLOUDS: Cloud[] = [
+  { x: 6,  y: 14, w: 220, h: 60, opacity: 0.35 },
+  { x: 22, y: 8,  w: 140, h: 40, opacity: 0.25 },
+  { x: 78, y: 12, w: 240, h: 65, opacity: 0.3 },
+  { x: 90, y: 22, w: 150, h: 42, opacity: 0.22 },
+  { x: 48, y: 6,  w: 170, h: 45, opacity: 0.2 },
+]
 
 export default function Scene3D() {
   const [enabled, setEnabled] = useState(true)
   const skyRef = useRef<HTMLDivElement>(null)
   const starsRef = useRef<HTMLDivElement>(null)
+  const cloudsRef = useRef<HTMLDivElement>(null)
   const horizonRef = useRef<HTMLDivElement>(null)
   const hazeRef = useRef<HTMLDivElement>(null)
   const stars = STARS
@@ -187,6 +214,7 @@ export default function Scene3D() {
       const fade = 1 - smoothstep(0.15, 1.05, t)
       if (skyRef.current) skyRef.current.style.opacity = String(fade)
       if (starsRef.current) starsRef.current.style.opacity = String(fade)
+      if (cloudsRef.current) cloudsRef.current.style.opacity = String(fade)
       if (horizonRef.current) horizonRef.current.style.opacity = String(fade)
       if (hazeRef.current) hazeRef.current.style.opacity = String(fade)
       raf = requestAnimationFrame(tick)
@@ -221,9 +249,29 @@ export default function Scene3D() {
         ))}
       </div>
 
-      {/* Background: distant horizon */}
+      {/* Background: clouds, scattered across the full width */}
+      <div ref={cloudsRef} style={{ position: 'absolute', inset: 0 }}>
+        {CLOUDS.map((c, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: `${c.x}%`,
+              top: `${c.y}%`,
+              width: c.w,
+              height: c.h,
+              borderRadius: '50%',
+              background: '#F8EFE0',
+              filter: 'blur(18px)',
+              opacity: c.opacity,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Background: distant mountain ranges */}
       <div ref={horizonRef}>
-        <Horizon />
+        <MountainRange />
       </div>
 
       {/* Model */}

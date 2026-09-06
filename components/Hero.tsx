@@ -14,6 +14,73 @@ export default function Hero() {
       }}
       className="flex flex-col items-center justify-center"
     >
+      {/* Corner frame — echoes the logo's frame motif at the scale of the viewport */}
+      {([
+        { top: 'clamp(24px, 4vw, 48px)', left: 'clamp(24px, 4vw, 48px)', borderWidth: '1px 0 0 1px' },
+        { top: 'clamp(24px, 4vw, 48px)', right: 'clamp(24px, 4vw, 48px)', borderWidth: '1px 1px 0 0' },
+        { bottom: 'clamp(24px, 4vw, 48px)', left: 'clamp(24px, 4vw, 48px)', borderWidth: '0 0 1px 1px' },
+        { bottom: 'clamp(24px, 4vw, 48px)', right: 'clamp(24px, 4vw, 48px)', borderWidth: '0 1px 1px 0' },
+      ] as const).map((pos, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 + i * 0.1, duration: 0.8 }}
+          style={{
+            position: 'absolute',
+            ...pos,
+            width: '32px',
+            height: '32px',
+            borderStyle: 'solid',
+            borderColor: 'rgba(248,239,224,0.55)',
+            zIndex: 2,
+            pointerEvents: 'none',
+          }}
+        />
+      ))}
+
+      {/* Side details — coordinates + mission tag, echoing an aerospace plaque */}
+      <motion.div
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.1, duration: 0.9 }}
+        style={{
+          position: 'absolute',
+          left: 'clamp(24px, 4vw, 48px)',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          zIndex: 2,
+          writingMode: 'vertical-rl',
+          fontFamily: 'DM Sans, sans-serif',
+          fontSize: '10px',
+          letterSpacing: '0.28em',
+          color: 'rgba(248,239,224,0.55)',
+          textTransform: 'uppercase',
+        }}
+      >
+        40.9274&deg;N &middot; 74.0762&deg;W
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, x: 10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.1, duration: 0.9 }}
+        style={{
+          position: 'absolute',
+          right: 'clamp(24px, 4vw, 48px)',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          zIndex: 2,
+          writingMode: 'vertical-rl',
+          fontFamily: 'DM Sans, sans-serif',
+          fontSize: '10px',
+          letterSpacing: '0.28em',
+          color: 'rgba(248,239,224,0.55)',
+          textTransform: 'uppercase',
+        }}
+      >
+        Mechatronics &middot; Aerospace
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
