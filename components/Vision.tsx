@@ -43,7 +43,7 @@ export default function Vision() {
           style={{ marginBottom: '72px' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.12em', color: 'var(--accent-coral)' }}>[05]</span>
+            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.12em', color: 'var(--accent-coral)' }}>[06]</span>
             <TypewriterText text="// MISSION_OBJECTIVES" speed={55} style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--muted)' }} />
           </div>
           <h2

@@ -47,7 +47,7 @@ export default function Contact() {
         >
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
-            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.12em', color: 'var(--accent-coral)' }}>[06]</span>
+            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.12em', color: 'var(--accent-coral)' }}>[07]</span>
             <TypewriterText text="// OPEN_CHANNEL" speed={55} style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--muted)' }} />
           </div>
           <h2 className="font-display" style={{ fontSize: 'clamp(38px, 6vw, 80px)', color: '#EDE9E4', letterSpacing: '-0.03em', lineHeight: 1, marginBottom: '20px', fontWeight: 400 }}>

@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         message:      msg,
         timestamp:    timestamp || new Date().toISOString(),
         _replyto:     email,
-        _subject:     `IronVeil Research — Inquiry from ${name}${org ? ` (${org})` : ''}`,
+        _subject:     `Portfolio Contact — Inquiry from ${name}${org ? ` (${org})` : ''}`,
       }),
     })
 

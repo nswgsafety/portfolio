@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import TypewriterText from '@/components/TypewriterText'
 import dynamic from 'next/dynamic'
 const Loader = dynamic(() => import('@/components/Loader'), { ssr: false })
+const HardwareViewer = dynamic(() => import('@/components/HardwareViewer'), { ssr: false })
 import Cursor from '@/components/Cursor'
 import Nav from '@/components/Nav'
 import Hero from '@/components/Hero'
@@ -188,6 +189,7 @@ export default function Home() {
           </motion.section>
 
           <Building />
+          <HardwareViewer />
           <Passion />
           <Resume />
           <Vision />

@@ -112,18 +112,6 @@ export default function NotFound() {
           >
             ← RETURN TO PORTFOLIO
           </Link>
-          <Link
-            href="/ironveil"
-            style={{
-              border: '1px solid #1C2433', color: '#5A6A7E',
-              padding: '10px 28px', textDecoration: 'none', fontSize: '9px',
-              letterSpacing: '0.2em', transition: 'all 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = '#2A3548'; e.currentTarget.style.color = '#C8D4E0' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = '#1C2433'; e.currentTarget.style.color = '#5A6A7E' }}
-          >
-            ⬡ IRONVEIL
-          </Link>
         </motion.div>
 
       </div>

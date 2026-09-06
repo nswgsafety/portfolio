@@ -107,7 +107,7 @@ export default function Philosophy() {
               transition={{ duration: 0.6 }}
               style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}
             >
-              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.12em', color: '#8B0000' }}>[07]</span>
+              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.12em', color: '#8B0000' }}>[08]</span>
               <TypewriterText text="// CLASSIFIED_FRAMEWORK" speed={55} style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.14em', color: 'rgba(139,0,0,0.5)' }} />
             </motion.div>
 

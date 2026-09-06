@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Link from 'next/link'
 
 const links = [
   { label: 'Work', href: '#work' },
   { label: 'Building', href: '#building' },
+  { label: 'Hardware', href: '#hardware' },
   { label: 'Passion', href: '#passion' },
   { label: 'Resume', href: '#resume' },
   { label: 'Vision', href: '#vision' },
@@ -61,31 +61,6 @@ export default function Nav() {
                 {l.label}
               </a>
             ))}
-            <Link
-              href="/ironveil"
-              style={{
-                fontFamily: 'DM Mono, monospace',
-                fontSize: '10px',
-                letterSpacing: '0.14em',
-                color: '#4A7FA5',
-                textDecoration: 'none',
-                border: '1px solid rgba(74,127,165,0.25)',
-                padding: '5px 12px',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget
-                el.style.borderColor = '#4A7FA5'
-                el.style.background = 'rgba(74,127,165,0.08)'
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget
-                el.style.borderColor = 'rgba(74,127,165,0.25)'
-                el.style.background = 'transparent'
-              }}
-            >
-              ⬡ IRONVEIL
-            </Link>
             <a
               href="#contact"
               style={{

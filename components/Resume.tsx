@@ -66,7 +66,7 @@ export default function Resume() {
         >
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-              <span style={{ ...MONO, fontSize: '10px', letterSpacing: '0.12em', color: 'var(--accent-coral)' }}>[04]</span>
+              <span style={{ ...MONO, fontSize: '10px', letterSpacing: '0.12em', color: 'var(--accent-coral)' }}>[05]</span>
               <TypewriterText text="// DOSSIER" speed={55} style={{ ...MONO, fontSize: '10px', letterSpacing: '0.14em', color: 'var(--muted)' }} />
             </div>
             <h2 className="font-display" style={{ fontSize: 'clamp(36px, 5vw, 64px)', color: 'var(--ink)', letterSpacing: '-0.02em', lineHeight: 1, fontWeight: 400 }}>
