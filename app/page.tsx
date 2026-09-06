@@ -25,9 +25,6 @@ export default function Home() {
       {/* Loader always mounts first; sessionStorage skips it on repeat visits */}
       <Loader onComplete={handleComplete} />
 
-      {/* Persistent 3D layer — sits behind all content, driven by scroll */}
-      <Scene3D />
-
       {/* Site fades in once loader calls onComplete */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -35,6 +32,10 @@ export default function Home() {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         style={{ pointerEvents: loaded ? 'all' : 'none' }}
       >
+        {/* Persistent 3D layer — must be a sibling of <main> inside the SAME
+            stacking context, or main's z-index has nothing valid to compare
+            against and the canvas can end up painting over everything. */}
+        <Scene3D />
         <Cursor />
         <Nav />
         <main style={{ position: 'relative', zIndex: 2 }}>

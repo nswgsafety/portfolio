@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF } from '@react-three/drei'
+import { Environment, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
 function clamp01(x: number) {
@@ -21,6 +21,12 @@ function sectionProgress(id: string): number | null {
   const rect = el.getBoundingClientRect()
   const vh = window.innerHeight
   return (vh - rect.top) / (rect.height + vh)
+}
+
+function heroScrollT(): number {
+  const heroEl = document.getElementById('hero')
+  const heroHeight = heroEl?.offsetHeight || window.innerHeight
+  return THREE.MathUtils.clamp(window.scrollY / heroHeight, 0, 1.6)
 }
 
 /**
@@ -43,18 +49,16 @@ function useFittedScene(url: string, targetSize: number) {
 }
 
 function FalconHeavy() {
-  const { scene, scale } = useFittedScene('/models/falcon_heavy.glb', 4.6)
+  const { scene, scale } = useFittedScene('/models/falcon_heavy.glb', 4.8)
   const ref = useRef<THREE.Group>(null!)
 
   useFrame(() => {
     if (!ref.current) return
-    const heroEl = document.getElementById('hero')
-    const heroHeight = heroEl?.offsetHeight || window.innerHeight
-    const t = THREE.MathUtils.clamp(window.scrollY / heroHeight, 0, 1.6)
+    const t = heroScrollT()
     const exit = smoothstep(0.05, 1.15, t)
 
-    ref.current.position.set(0, -0.4 + exit * 6.5, -exit * 4.5)
-    ref.current.rotation.set(0, 0.2 + t * 0.5, exit * 0.4)
+    ref.current.position.set(0, -0.6 + exit * 6.5, -exit * 4.5)
+    ref.current.rotation.set(-0.03, 0.65 + t * 0.5, exit * 0.4)
     ref.current.scale.setScalar(scale * THREE.MathUtils.lerp(1, 0.42, exit))
     ref.current.visible = t < 1.55
   })
@@ -104,9 +108,9 @@ function DockedModel({ id, url, side, targetSize }: DockedModelProps) {
 function Rig() {
   return (
     <>
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[6, 8, 5]} intensity={1.3} />
-      <directionalLight position={[-6, -3, -4]} intensity={0.4} />
+      <Environment preset="sunset" background={false} />
+      <ambientLight intensity={0.35} />
+      <directionalLight position={[6, 8, 5]} color="#F3D9A8" intensity={1.4} />
       <Suspense fallback={null}>
         <FalconHeavy />
       </Suspense>
@@ -124,8 +128,13 @@ useGLTF.preload('/models/falcon_heavy.glb')
 useGLTF.preload('/models/anduril_altius_700m.glb')
 useGLTF.preload('/models/satelite.glb')
 
+const SKY_GRADIENT = 'linear-gradient(180deg, var(--dusk-deep) 0%, var(--dusk-mid) 45%, var(--dusk-warm) 78%, var(--dusk-glow) 100%)'
+const HAZE_GRADIENT = 'linear-gradient(to top, var(--dusk-deep) 0%, rgba(60,42,30,0.55) 35%, transparent 100%)'
+
 export default function Scene3D() {
   const [enabled, setEnabled] = useState(true)
+  const skyRef = useRef<HTMLDivElement>(null)
+  const hazeRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 640px)')
@@ -135,13 +144,44 @@ export default function Scene3D() {
     return () => mq.removeEventListener('change', update)
   }, [])
 
+  // Background sky + foreground haze are DOM layers (not WebGL) so they only
+  // ever apply to the hero — they fade out well before Building/Vision, whose
+  // own opaque backgrounds mask the canvas the rest of the time.
+  useEffect(() => {
+    let raf: number
+    function tick() {
+      const t = heroScrollT()
+      const fade = 1 - smoothstep(0.15, 1.05, t)
+      if (skyRef.current) skyRef.current.style.opacity = String(fade)
+      if (hazeRef.current) hazeRef.current.style.opacity = String(fade)
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [])
+
   if (!enabled) return null
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none' }} aria-hidden>
-      <Canvas camera={{ position: [0, 0, 8], fov: 35 }} dpr={[1, 1.6]} gl={{ alpha: true, antialias: true }}>
+      {/* Background */}
+      <div ref={skyRef} style={{ position: 'absolute', inset: 0, background: SKY_GRADIENT }} />
+
+      {/* Model */}
+      <Canvas
+        camera={{ position: [0, 0, 8], fov: 35 }}
+        dpr={[1, 1.6]}
+        gl={{ alpha: true, antialias: true }}
+        style={{ position: 'absolute', inset: 0 }}
+      >
         <Rig />
       </Canvas>
+
+      {/* Foreground — crops the base of the model to sell the depth */}
+      <div
+        ref={hazeRef}
+        style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '38%', background: HAZE_GRADIENT }}
+      />
     </div>
   )
 }

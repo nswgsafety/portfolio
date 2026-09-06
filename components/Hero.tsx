@@ -8,7 +8,7 @@ export default function Hero() {
       id="hero"
       style={{
         minHeight: '100svh',
-        background: 'linear-gradient(180deg, var(--dusk-deep) 0%, var(--dusk-mid) 45%, var(--dusk-warm) 78%, var(--dusk-glow) 100%)',
+        background: 'transparent',
         position: 'relative',
         overflow: 'hidden',
       }}
