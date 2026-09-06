@@ -145,7 +145,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
                 <motion.span
                   animate={isCorrect ? { opacity: 0, y: -16 } : { opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, ease: 'easeIn' }}
-                  style={{ ...FONT, color: 'var(--accent-coral)', display: 'block' }}
+                  style={{ ...FONT, color: 'var(--accent-gold)', display: 'block' }}
                 >1</motion.span>
 
                 <motion.span
@@ -174,7 +174,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
                 <motion.span
                   animate={isCorrect ? { opacity: 0, y: 16, scale: 0.8 } : { opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.28, ease: 'easeIn', delay: 0.06 }}
-                  style={{ ...FONT, color: 'var(--accent-coral)', position: 'absolute', top: 0, left: 0 }}
+                  style={{ ...FONT, color: 'var(--accent-gold)', position: 'absolute', top: 0, left: 0 }}
                 >@</motion.span>
 
                 <motion.span
@@ -204,7 +204,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
               transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
               style={{ ...FONT, fontSize: 'clamp(80px, 15vw, 160px)', letterSpacing: '-0.04em' }}
             >
-              IA<span style={{ color: 'var(--accent-coral)' }}>.</span>
+              IA<span style={{ color: 'var(--accent-gold)' }}>.</span>
             </motion.div>
 
             <motion.p
@@ -234,7 +234,7 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
         style={{
           position: 'absolute', bottom: '52px',
           left: 'calc(50% - 64px)', width: '128px', height: '1px',
-          background: 'var(--accent-coral)', transformOrigin: 'left center',
+          background: 'var(--accent-gold)', transformOrigin: 'left center',
         }}
       />
     </motion.div>

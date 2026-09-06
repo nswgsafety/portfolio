@@ -22,13 +22,13 @@ export default function ProjectPage({ project }: { project: ProjectDetail }) {
           <Link
             href="/#work"
             style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'DM Mono, monospace', fontSize: '12px', letterSpacing: '0.06em', color: 'var(--muted)', textDecoration: 'none', transition: 'color 0.2s ease' }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-coral)')}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-gold)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
           >
             <ArrowLeft size={14} /> Back to Portfolio
           </Link>
           <span className="font-display font-bold" style={{ fontSize: '16px', color: 'var(--ink)' }}>
-            Ian<span style={{ color: 'var(--accent-coral)' }}>.</span>
+            Ian<span style={{ color: 'var(--accent-gold)' }}>.</span>
           </span>
         </div>
       </div>
@@ -249,7 +249,7 @@ export default function ProjectPage({ project }: { project: ProjectDetail }) {
           <Link
             href="/#work"
             style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'DM Mono, monospace', fontSize: '12px', color: 'var(--muted)', textDecoration: 'none', letterSpacing: '0.06em', transition: 'color 0.2s ease' }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-coral)')}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-gold)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
           >
             <ArrowLeft size={13} /> All Projects

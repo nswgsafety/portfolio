@@ -65,9 +65,9 @@ export default function BackgroundParticles() {
         const r     = Math.min(W, H) * (0.52 + pulse * 0.09)
         const a     = 0.038 + pulse * 0.022
         const g     = ctx!.createRadialGradient(W * 0.5, H * 0.44, 0, W * 0.5, H * 0.44, r)
-        g.addColorStop(0,    `rgba(34,197,94,${a.toFixed(4)})`)
-        g.addColorStop(0.45, `rgba(34,197,94,${(a * 0.3).toFixed(4)})`)
-        g.addColorStop(1,    'rgba(34,197,94,0)')
+        g.addColorStop(0,    `rgba(201,164,85,${a.toFixed(4)})`)
+        g.addColorStop(0.45, `rgba(201,164,85,${(a * 0.3).toFixed(4)})`)
+        g.addColorStop(1,    'rgba(201,164,85,0)')
         ctx!.fillStyle = g
         ctx!.fillRect(0, 0, W, H)
       }
@@ -76,9 +76,9 @@ export default function BackgroundParticles() {
       if (hasMouse) {
         const cp = 0.055 + Math.sin(t * 2.1) * 0.018  // subtle pulse
         const cg = ctx!.createRadialGradient(mx, my, 0, mx, my, CURSOR_GLOW)
-        cg.addColorStop(0,   `rgba(34,197,94,${cp.toFixed(4)})`)
-        cg.addColorStop(0.5, `rgba(34,197,94,${(cp * 0.28).toFixed(4)})`)
-        cg.addColorStop(1,   'rgba(34,197,94,0)')
+        cg.addColorStop(0,   `rgba(201,164,85,${cp.toFixed(4)})`)
+        cg.addColorStop(0.5, `rgba(201,164,85,${(cp * 0.28).toFixed(4)})`)
+        cg.addColorStop(1,   'rgba(201,164,85,0)')
         ctx!.fillStyle = cg
         ctx!.fillRect(0, 0, W, H)
       }
@@ -130,7 +130,7 @@ export default function BackgroundParticles() {
             if (cd < 160) alpha += (1 - cd / 160) * 0.22
           }
 
-          ctx!.strokeStyle = `rgba(34,197,94,${Math.min(alpha, 0.38).toFixed(3)})`
+          ctx!.strokeStyle = `rgba(201,164,85,${Math.min(alpha, 0.38).toFixed(3)})`
           ctx!.beginPath()
           ctx!.moveTo(pts[i].x, pts[i].y)
           ctx!.lineTo(pts[j].x, pts[j].y)
@@ -154,7 +154,7 @@ export default function BackgroundParticles() {
           }
         }
 
-        ctx!.fillStyle = `rgba(34,197,94,${Math.min(a, 0.7).toFixed(3)})`
+        ctx!.fillStyle = `rgba(201,164,85,${Math.min(a, 0.7).toFixed(3)})`
         ctx!.beginPath()
         ctx!.arc(p.x, p.y, r, 0, Math.PI * 2)
         ctx!.fill()

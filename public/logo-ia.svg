@@ -13,14 +13,14 @@
   <rect width="640" height="200" fill="url(#bgGrad)"/>
 
   <!-- Corner marks -->
-  <line x1="16" y1="16" x2="36" y2="16" stroke="#22C55E" stroke-width="1.5"/>
-  <line x1="16" y1="16" x2="16" y2="36" stroke="#22C55E" stroke-width="1.5"/>
-  <line x1="624" y1="16" x2="604" y2="16" stroke="#22C55E" stroke-width="1.5"/>
-  <line x1="624" y1="16" x2="624" y2="36" stroke="#22C55E" stroke-width="1.5"/>
-  <line x1="16" y1="184" x2="36" y2="184" stroke="#22C55E" stroke-width="1.5"/>
-  <line x1="16" y1="184" x2="16" y2="164" stroke="#22C55E" stroke-width="1.5"/>
-  <line x1="624" y1="184" x2="604" y2="184" stroke="#22C55E" stroke-width="1.5"/>
-  <line x1="624" y1="184" x2="624" y2="164" stroke="#22C55E" stroke-width="1.5"/>
+  <line x1="16" y1="16" x2="36" y2="16" stroke="#C9A455" stroke-width="1.5"/>
+  <line x1="16" y1="16" x2="16" y2="36" stroke="#C9A455" stroke-width="1.5"/>
+  <line x1="624" y1="16" x2="604" y2="16" stroke="#C9A455" stroke-width="1.5"/>
+  <line x1="624" y1="16" x2="624" y2="36" stroke="#C9A455" stroke-width="1.5"/>
+  <line x1="16" y1="184" x2="36" y2="184" stroke="#C9A455" stroke-width="1.5"/>
+  <line x1="16" y1="184" x2="16" y2="164" stroke="#C9A455" stroke-width="1.5"/>
+  <line x1="624" y1="184" x2="604" y2="184" stroke="#C9A455" stroke-width="1.5"/>
+  <line x1="624" y1="184" x2="624" y2="164" stroke="#C9A455" stroke-width="1.5"/>
 
   <!-- Thin top rule -->
   <line x1="36" y1="16" x2="604" y2="16" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
@@ -36,7 +36,7 @@
     font-style="italic"
     letter-spacing="-4"
     fill="#EDEAE5"
-  >IA<tspan fill="#22C55E">.</tspan></text>
+  >IA<tspan fill="#C9A455">.</tspan></text>
 
   <!-- Tagline -->
   <text

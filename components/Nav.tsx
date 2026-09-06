@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 const links = [
   { label: 'Work', href: '#work' },
   { label: 'Building', href: '#building' },
-  { label: 'Hardware', href: '#hardware' },
   { label: 'Passion', href: '#passion' },
   { label: 'Resume', href: '#resume' },
   { label: 'Vision', href: '#vision' },
@@ -45,8 +44,12 @@ export default function Nav() {
         }}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <a href="#" className="font-display text-xl font-bold tracking-tight" style={{ color: 'var(--ink)' }}>
-            IA<span style={{ color: 'var(--accent-coral)' }}>.</span>
+          <a
+            href="#"
+            className="font-display corner-frame"
+            style={{ color: 'var(--ink)', fontSize: '18px', fontWeight: 700, padding: '6px 12px', letterSpacing: '-0.01em' }}
+          >
+            IA<span style={{ color: 'var(--accent-gold)' }}>.</span>
           </a>
 
           {/* Desktop nav */}
@@ -77,8 +80,8 @@ export default function Nav() {
               }}
               onMouseEnter={e => {
                 const el = e.currentTarget
-                el.style.borderColor = 'var(--accent-coral)'
-                el.style.color = 'var(--accent-coral)'
+                el.style.borderColor = 'var(--accent-gold)'
+                el.style.color = 'var(--accent-gold)'
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget

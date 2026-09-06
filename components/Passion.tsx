@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import TypewriterText from './TypewriterText'
 
 const passions = [
   {
@@ -43,14 +42,16 @@ export default function Passion() {
           style={{ marginBottom: '72px' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
-            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.12em', color: 'var(--accent-coral)' }}>[04]</span>
-            <TypewriterText text="// CORE_DIRECTIVES" speed={55} style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.14em', color: 'var(--muted)' }} />
+            <span className="diamond-divider" />
+            <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+              Passion
+            </span>
           </div>
           <h2
             className="font-display"
             style={{ fontSize: 'clamp(40px, 6vw, 76px)', fontWeight: 400, color: 'var(--ink)', letterSpacing: '-0.035em', lineHeight: 1 }}
           >
-            What drives <em style={{ color: 'var(--accent-coral)', fontStyle: 'italic' }}>me.</em>
+            What drives <em style={{ color: 'var(--accent-gold)', fontStyle: 'italic' }}>me.</em>
           </h2>
         </motion.div>
 
@@ -103,9 +104,9 @@ export default function Passion() {
               <div>
                 <span style={{
                   display: 'block',
-                  fontFamily: 'DM Mono, monospace',
-                  fontSize: '10px',
-                  color: hovered === p.index ? 'var(--accent-coral)' : 'var(--muted)',
+                  fontFamily: 'DM Sans, sans-serif',
+                  fontSize: '11px',
+                  color: hovered === p.index ? 'var(--accent-gold)' : 'var(--muted)',
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
                   marginBottom: '18px',
@@ -124,7 +125,7 @@ export default function Passion() {
                     transition: 'color 0.2s ease',
                   }}
                 >
-                  <TypewriterText text={p.title} speed={60} delay={120} cursor={false} />
+                  {p.title}
                 </h3>
               </div>
 

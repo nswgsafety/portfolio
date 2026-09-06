@@ -42,3 +42,6 @@ next-env.d.ts
 
 # raw source materials (originals live here; app copies live in /public)
 /ExtraResources
+
+# local agent-harness artifacts
+/.claude

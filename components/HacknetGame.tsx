@@ -185,7 +185,7 @@ function effectiveChance(sec: number, ups: Set<string>): number {
 }
 
 function alertColor(level: number): string {
-  if (level === 0) return 'rgba(34,197,94,0.5)'
+  if (level === 0) return 'rgba(201,164,85,0.5)'
   if (level === 1) return 'rgba(234,179,8,0.8)'
   if (level === 2) return 'rgba(249,115,22,0.9)'
   return '#ef4444'
@@ -209,18 +209,18 @@ function nodeStrokeColor(n: HNode): string {
   if (n.isPivot) return '#38bdf8'
   if (n.state === 'cracked') return '#22C55E'
   if (n.state === 'probed')  return '#eab308'
-  if (n.state === 'discovered') return 'rgba(34,197,94,0.45)'
-  return 'rgba(34,197,94,0.1)'
+  if (n.state === 'discovered') return 'rgba(201,164,85,0.45)'
+  return 'rgba(201,164,85,0.1)'
 }
 
 function nodeFillColor(n: HNode): string {
   if (n.isHoneypot) return 'rgba(249,115,22,0.12)'
   if (n.isVault) return 'rgba(167,139,250,0.10)'
   if (n.isPivot) return 'rgba(56,189,248,0.10)'
-  if (n.state === 'cracked') return 'rgba(34,197,94,0.18)'
+  if (n.state === 'cracked') return 'rgba(201,164,85,0.18)'
   if (n.state === 'probed')  return 'rgba(234,179,8,0.12)'
-  if (n.state === 'discovered') return 'rgba(34,197,94,0.05)'
-  return 'rgba(34,197,94,0.02)'
+  if (n.state === 'discovered') return 'rgba(201,164,85,0.05)'
+  return 'rgba(201,164,85,0.02)'
 }
 
 function secColor(s: number): string {
@@ -438,9 +438,9 @@ function layoutNodes(net: HNet, W: number, H: number): Record<string, { x: numbe
 const MONO: React.CSSProperties = { fontFamily: '"DM Mono", monospace' }
 const LC: Record<string, string> = {
   cmd:  '#22C55E',
-  out:  'rgba(34,197,94,0.7)',
+  out:  'rgba(201,164,85,0.7)',
   err:  '#ef4444',
-  sys:  'rgba(34,197,94,0.38)',
+  sys:  'rgba(201,164,85,0.38)',
   warn: '#eab308',
   ok:   '#4ade80',
 }
@@ -1459,13 +1459,13 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
     >
       {/* ── Status bar ── */}
       <div style={{
-        background: 'rgba(34,197,94,0.07)', borderBottom: '1px solid rgba(34,197,94,0.18)',
+        background: 'rgba(201,164,85,0.07)', borderBottom: '1px solid rgba(201,164,85,0.18)',
         padding: '3px 10px', display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap', fontSize: 10,
       }}>
         <span style={{ color: '#22C55E' }}>◈ {cur.ip}</span>
-        <span style={{ color: 'rgba(34,197,94,0.6)' }}>[{cur.hostname}]</span>
+        <span style={{ color: 'rgba(201,164,85,0.6)' }}>[{cur.hostname}]</span>
         <span>SEC: <span style={{ color: secColor(cur.sec) }}>{secBar}</span></span>
-        <span style={{ color: 'rgba(34,197,94,0.5)' }}>{crackedCount}/{net.order.length} nodes</span>
+        <span style={{ color: 'rgba(201,164,85,0.5)' }}>{crackedCount}/{net.order.length} nodes</span>
         <span>LOOT: <span style={{ color: '#4ade80' }}>{net.loot.length}</span></span>
         <span style={{ color: '#4ade80' }}>{credits}cr</span>
         <span style={{ color: aColor, fontWeight: alertLevel === 3 ? 700 : 400, animation: alertLevel === 3 ? 'pulse 0.8s infinite' : 'none' }}>
@@ -1480,25 +1480,25 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
             {upgrades.has('tracer_sense') && tracerNode && net.nodes[tracerNode] && ` @${net.nodes[tracerNode].hostname}`}
           </span>
         )}
-        <span style={{ marginLeft: 'auto', cursor: 'pointer', color: 'rgba(34,197,94,0.4)' }} onClick={e => { e.stopPropagation(); onExit() }}>✕</span>
+        <span style={{ marginLeft: 'auto', cursor: 'pointer', color: 'rgba(201,164,85,0.4)' }} onClick={e => { e.stopPropagation(); onExit() }}>✕</span>
       </div>
 
       {/* ── Main area ── */}
       <div style={{ display: 'flex', height: CONTENT_H }}>
 
         {/* ── Left panel ── */}
-        <div style={{ width: MAP_W, borderRight: '1px solid rgba(34,197,94,0.15)', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ width: MAP_W, borderRight: '1px solid rgba(201,164,85,0.15)', display: 'flex', flexDirection: 'column' }}>
           {/* Tabs */}
-          <div style={{ display: 'flex', borderBottom: '1px solid rgba(34,197,94,0.15)' }}>
+          <div style={{ display: 'flex', borderBottom: '1px solid rgba(201,164,85,0.15)' }}>
             {(['map', 'files', 'shop', 'base'] as const).map(p => (
               <button
                 key={p}
                 onClick={e => { e.stopPropagation(); setPanel(p) }}
                 style={{
-                  flex: 1, background: panel === p ? 'rgba(34,197,94,0.12)' : 'transparent',
-                  border: 'none', borderRight: '1px solid rgba(34,197,94,0.1)',
+                  flex: 1, background: panel === p ? 'rgba(201,164,85,0.12)' : 'transparent',
+                  border: 'none', borderRight: '1px solid rgba(201,164,85,0.1)',
                   color: p === 'base' && tracerActive ? '#ef4444'
-                       : panel === p ? '#22C55E' : 'rgba(34,197,94,0.4)',
+                       : panel === p ? '#22C55E' : 'rgba(201,164,85,0.4)',
                   ...MONO, fontSize: 9, padding: '4px 0', cursor: 'pointer', letterSpacing: 1,
                 }}
               >
@@ -1522,7 +1522,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                   return (
                     <line key={`${id}-${bid}`}
                       x1={a.x} y1={a.y} x2={bb.x} y2={bb.y}
-                      stroke={vis ? 'rgba(34,197,94,0.22)' : 'rgba(34,197,94,0.05)'}
+                      stroke={vis ? 'rgba(201,164,85,0.22)' : 'rgba(201,164,85,0.05)'}
                       strokeWidth={1} strokeDasharray={vis ? '0' : '3,4'}
                     />
                   )
@@ -1558,12 +1558,12 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                       )}
                       <circle cx={pos.x} cy={pos.y} r={9} fill={fill} stroke={stroke} strokeWidth={isCurrent ? 1.5 : 1} />
                       <text x={pos.x} y={pos.y + 4} textAnchor="middle" fontSize={9}
-                        fill={n.state === 'hidden' ? 'rgba(34,197,94,0.15)' : stroke}
+                        fill={n.state === 'hidden' ? 'rgba(201,164,85,0.15)' : stroke}
                         style={{ userSelect: 'none' }}
                       >{sym}</text>
                       {n.state !== 'hidden' && (
                         <text x={pos.x} y={pos.y + 20} textAnchor="middle" fontSize={7}
-                          fill="rgba(34,197,94,0.5)" style={{ userSelect: 'none' }}
+                          fill="rgba(201,164,85,0.5)" style={{ userSelect: 'none' }}
                         >{n.hostname.slice(0, 10)}</text>
                       )}
                       {n.state !== 'hidden' && (
@@ -1587,19 +1587,19 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                   )
                 })()}
                 {/* Legend */}
-                <text x={4} y={SVG_H - 22} fontSize={7} fill="rgba(34,197,94,0.3)">◉=cracked ◈=known ○=hidden</text>
-                <text x={4} y={SVG_H - 12} fontSize={7} fill="rgba(34,197,94,0.3)">⚠=honeypot ◈purple=vault ◈blue=pivot</text>
+                <text x={4} y={SVG_H - 22} fontSize={7} fill="rgba(201,164,85,0.3)">◉=cracked ◈=known ○=hidden</text>
+                <text x={4} y={SVG_H - 12} fontSize={7} fill="rgba(201,164,85,0.3)">⚠=honeypot ◈purple=vault ◈blue=pivot</text>
               </svg>
             )}
 
             {/* FILES */}
             {panel === 'files' && (
               <div style={{ padding: 8, overflowY: 'auto', height: '100%', boxSizing: 'border-box' }}>
-                <div style={{ color: 'rgba(34,197,94,0.5)', fontSize: 9, marginBottom: 6 }}>
+                <div style={{ color: 'rgba(201,164,85,0.5)', fontSize: 9, marginBottom: 6 }}>
                   LOOT ({net.loot.length} files)
                 </div>
                 {net.loot.length === 0 && (
-                  <div style={{ color: 'rgba(34,197,94,0.3)', fontSize: 10 }}>No files exfiltrated yet.</div>
+                  <div style={{ color: 'rgba(201,164,85,0.3)', fontSize: 10 }}>No files exfiltrated yet.</div>
                 )}
                 {net.loot.map(name => {
                   const file = Object.values(net.nodes).flatMap(n => n.files).find(f => f.name === name)
@@ -1607,9 +1607,9 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                   return (
                     <div key={name} style={{
                       marginBottom: 4, padding: '3px 6px',
-                      background: sold ? 'rgba(34,197,94,0.04)' : 'rgba(34,197,94,0.08)',
-                      border: `1px solid rgba(34,197,94,${sold ? 0.1 : 0.2})`,
-                      color: sold ? 'rgba(34,197,94,0.3)' : '#22C55E',
+                      background: sold ? 'rgba(201,164,85,0.04)' : 'rgba(201,164,85,0.08)',
+                      border: `1px solid rgba(201,164,85,${sold ? 0.1 : 0.2})`,
+                      color: sold ? 'rgba(201,164,85,0.3)' : '#22C55E',
                       fontSize: 10, cursor: sold ? 'default' : 'pointer',
                     }}
                       onClick={e => { e.stopPropagation(); if (!sold) runCmd(`sell ${name}`) }}
@@ -1622,7 +1622,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                   <div style={{ marginTop: 8 }}>
                     <button onClick={e => { e.stopPropagation(); runCmd('sell all') }}
                       style={{
-                        background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.3)',
+                        background: 'rgba(201,164,85,0.12)', border: '1px solid rgba(201,164,85,0.3)',
                         color: '#22C55E', ...MONO, fontSize: 10, padding: '3px 10px', cursor: 'pointer', width: '100%',
                       }}>
                       SELL ALL
@@ -1635,7 +1635,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
             {/* BASE */}
             {panel === 'base' && (
               <div style={{ padding: 8, overflowY: 'auto', height: '100%', boxSizing: 'border-box' }}>
-                <div style={{ color: 'rgba(34,197,94,0.5)', fontSize: 9, marginBottom: 4 }}>BASE DEFENSES</div>
+                <div style={{ color: 'rgba(201,164,85,0.5)', fontSize: 9, marginBottom: 4 }}>BASE DEFENSES</div>
                 <div style={{ color: '#4ade80', fontSize: 10, marginBottom: 6 }}>Credits: {credits}cr</div>
 
                 {/* Tracer status */}
@@ -1646,10 +1646,10 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                     {upgrades.has('tracer_sense') && tracerNode && net.nodes[tracerNode] && (
                       <div style={{ color: 'rgba(239,68,68,0.7)' }}>Location: {net.nodes[tracerNode].hostname}</div>
                     )}
-                    <div style={{ color: 'rgba(34,197,94,0.5)', marginTop: 3 }}>Run: kill tracer (when on its node)</div>
+                    <div style={{ color: 'rgba(201,164,85,0.5)', marginTop: 3 }}>Run: kill tracer (when on its node)</div>
                   </div>
                 ) : (
-                  <div style={{ marginBottom: 8, padding: '4px 7px', background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.15)', fontSize: 9, color: 'rgba(34,197,94,0.4)' }}>
+                  <div style={{ marginBottom: 8, padding: '4px 7px', background: 'rgba(201,164,85,0.06)', border: '1px solid rgba(201,164,85,0.15)', fontSize: 9, color: 'rgba(201,164,85,0.4)' }}>
                     No active tracer. Appears at alert≥2 or 4+ cracked nodes.
                   </div>
                 )}
@@ -1660,8 +1660,8 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                   const canAfford = credits >= upg.cost
                   const isKillSwitch = upg.id === 'kill_switch'
                   const used = isKillSwitch && killSwitchUsed
-                  const bg = owned ? 'rgba(34,197,94,0.12)' : canAfford ? 'rgba(34,197,94,0.07)' : 'rgba(34,197,94,0.03)'
-                  const borderColor = owned ? 'rgba(34,197,94,0.3)' : 'rgba(34,197,94,0.15)'
+                  const bg = owned ? 'rgba(201,164,85,0.12)' : canAfford ? 'rgba(201,164,85,0.07)' : 'rgba(201,164,85,0.03)'
+                  const borderColor = owned ? 'rgba(201,164,85,0.3)' : 'rgba(201,164,85,0.15)'
                   return (
                     <div key={upg.id} style={{ marginBottom: 5, padding: '5px 7px', background: bg, border: `1px solid ${borderColor}`, cursor: (!owned && canAfford) ? 'pointer' : 'default' }}
                       onClick={e => { e.stopPropagation(); if (!owned && canAfford) runCmd(`base buy ${upg.id}`) }}
@@ -1672,7 +1672,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                           {used ? 'USED' : owned ? 'ACTIVE' : `${upg.cost}cr`}
                         </span>
                       </div>
-                      <div style={{ fontSize: 9, color: 'rgba(34,197,94,0.45)' }}>{upg.desc}</div>
+                      <div style={{ fontSize: 9, color: 'rgba(201,164,85,0.45)' }}>{upg.desc}</div>
                     </div>
                   )
                 })}
@@ -1682,17 +1682,17 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
             {/* SHOP */}
             {panel === 'shop' && (
               <div style={{ padding: 8, overflowY: 'auto', height: '100%', boxSizing: 'border-box' }}>
-                <div style={{ color: 'rgba(34,197,94,0.5)', fontSize: 9, marginBottom: 4 }}>OPERATOR MARKET</div>
+                <div style={{ color: 'rgba(201,164,85,0.5)', fontSize: 9, marginBottom: 4 }}>OPERATOR MARKET</div>
                 <div style={{ color: '#4ade80', fontSize: 10, marginBottom: 8 }}>Credits: {credits}cr</div>
                 {Object.values(UPGRADES).map(upg => {
                   const owned = upgrades.has(upg.id)
                   const locked = !!(upg.requires && !upgrades.has(upg.requires))
                   const canAfford = credits >= upg.cost
-                  let bg = 'rgba(34,197,94,0.06)'
-                  let borderColor = 'rgba(34,197,94,0.15)'
-                  let textColor = 'rgba(34,197,94,0.5)'
-                  if (owned) { bg = 'rgba(34,197,94,0.12)'; borderColor = 'rgba(34,197,94,0.3)'; textColor = '#4ade80' }
-                  else if (!locked && canAfford) { bg = 'rgba(34,197,94,0.08)'; borderColor = 'rgba(34,197,94,0.25)'; textColor = '#22C55E' }
+                  let bg = 'rgba(201,164,85,0.06)'
+                  let borderColor = 'rgba(201,164,85,0.15)'
+                  let textColor = 'rgba(201,164,85,0.5)'
+                  if (owned) { bg = 'rgba(201,164,85,0.12)'; borderColor = 'rgba(201,164,85,0.3)'; textColor = '#4ade80' }
+                  else if (!locked && canAfford) { bg = 'rgba(201,164,85,0.08)'; borderColor = 'rgba(201,164,85,0.25)'; textColor = '#22C55E' }
                   return (
                     <div key={upg.id} style={{
                       marginBottom: 5, padding: '5px 7px',
@@ -1703,13 +1703,13 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
                         <span style={{ color: textColor, fontSize: 10 }}>{upg.name}</span>
-                        <span style={{ fontSize: 9, color: owned ? '#4ade80' : locked ? 'rgba(34,197,94,0.3)' : canAfford ? '#eab308' : '#ef4444' }}>
+                        <span style={{ fontSize: 9, color: owned ? '#4ade80' : locked ? 'rgba(201,164,85,0.3)' : canAfford ? '#eab308' : '#ef4444' }}>
                           {owned ? 'OWNED' : locked ? 'LOCKED' : `${upg.cost}cr`}
                         </span>
                       </div>
-                      <div style={{ fontSize: 9, color: 'rgba(34,197,94,0.45)' }}>{upg.desc}</div>
+                      <div style={{ fontSize: 9, color: 'rgba(201,164,85,0.45)' }}>{upg.desc}</div>
                       {locked && upg.requires && (
-                        <div style={{ fontSize: 8, color: 'rgba(34,197,94,0.3)', marginTop: 2 }}>
+                        <div style={{ fontSize: 8, color: 'rgba(201,164,85,0.3)', marginTop: 2 }}>
                           Requires: {UPGRADES[upg.requires]?.name}
                         </div>
                       )}
@@ -1735,7 +1735,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
           )}
           {ctfSolved && (
             <div style={{
-              background: 'rgba(34,197,94,0.1)', borderBottom: '1px solid rgba(34,197,94,0.3)',
+              background: 'rgba(201,164,85,0.1)', borderBottom: '1px solid rgba(201,164,85,0.3)',
               padding: '2px 8px', fontSize: 9, color: '#4ade80',
             }}>
               ★ CTF SOLVED — OPERATOR ELITE. Well played.
@@ -1746,7 +1746,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
           {minigame && (
             <div style={{
               position: 'absolute', inset: 0, zIndex: 10,
-              background: 'rgba(5,9,5,0.97)', border: '1px solid rgba(34,197,94,0.3)',
+              background: 'rgba(5,9,5,0.97)', border: '1px solid rgba(201,164,85,0.3)',
               display: 'flex', flexDirection: 'column', padding: 16, overflowY: 'auto',
             }}
               onClick={e => e.stopPropagation()}
@@ -1754,20 +1754,20 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
               <div style={{ color: '#22C55E', fontSize: 12, marginBottom: 10, letterSpacing: 2 }}>
                 ◈ {minigame.title}
               </div>
-              <div style={{ color: 'rgba(34,197,94,0.5)', fontSize: 9, marginBottom: 8 }}>
+              <div style={{ color: 'rgba(201,164,85,0.5)', fontSize: 9, marginBottom: 8 }}>
                 Reward: <span style={{ color: '#4ade80' }}>{minigame.reward}cr</span>
               </div>
 
               {/* DECRYPT */}
               {minigame.type === 'decrypt' && (
                 <>
-                  <div style={{ background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.2)', padding: 10, marginBottom: 8, fontFamily: 'monospace', fontSize: 11, color: '#eab308', wordBreak: 'break-all' }}>
+                  <div style={{ background: 'rgba(201,164,85,0.07)', border: '1px solid rgba(201,164,85,0.2)', padding: 10, marginBottom: 8, fontFamily: 'monospace', fontSize: 11, color: '#eab308', wordBreak: 'break-all' }}>
                     {minigame.encoded}
                   </div>
-                  <div style={{ color: 'rgba(34,197,94,0.6)', fontSize: 10, marginBottom: 12 }}>
+                  <div style={{ color: 'rgba(201,164,85,0.6)', fontSize: 10, marginBottom: 12 }}>
                     Hint: {minigame.hint}
                   </div>
-                  <div style={{ color: 'rgba(34,197,94,0.4)', fontSize: 9, marginBottom: 8 }}>
+                  <div style={{ color: 'rgba(201,164,85,0.4)', fontSize: 9, marginBottom: 8 }}>
                     Attempts remaining: {minigame.attemptsLeft}
                   </div>
                   <div style={{ display: 'flex', gap: 6 }}>
@@ -1780,7 +1780,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
                       onClick={e => e.stopPropagation()}
                       placeholder="Enter decoded answer..."
                       style={{
-                        flex: 1, background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.3)',
+                        flex: 1, background: 'rgba(201,164,85,0.07)', border: '1px solid rgba(201,164,85,0.3)',
                         color: '#22C55E', ...MONO, fontSize: 11, padding: '6px 10px', outline: 'none',
                       }}
                     />
@@ -1795,16 +1795,16 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
               {/* CRACK */}
               {minigame.type === 'crack' && (
                 <>
-                  <div style={{ marginBottom: 6, fontSize: 9, color: 'rgba(34,197,94,0.5)' }}>
+                  <div style={{ marginBottom: 6, fontSize: 9, color: 'rgba(201,164,85,0.5)' }}>
                     Algorithm: <span style={{ color: '#eab308' }}>{minigame.algorithm}</span>
                   </div>
-                  <div style={{ background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.2)', padding: 10, marginBottom: 8, fontFamily: 'monospace', fontSize: 10, color: '#eab308', wordBreak: 'break-all' }}>
+                  <div style={{ background: 'rgba(201,164,85,0.07)', border: '1px solid rgba(201,164,85,0.2)', padding: 10, marginBottom: 8, fontFamily: 'monospace', fontSize: 10, color: '#eab308', wordBreak: 'break-all' }}>
                     {minigame.hash}
                   </div>
-                  <div style={{ color: 'rgba(34,197,94,0.6)', fontSize: 10, marginBottom: 12 }}>
+                  <div style={{ color: 'rgba(201,164,85,0.6)', fontSize: 10, marginBottom: 12 }}>
                     Hint: {minigame.hashHint}
                   </div>
-                  <div style={{ color: 'rgba(34,197,94,0.4)', fontSize: 9, marginBottom: 8 }}>Select the matching plaintext:</div>
+                  <div style={{ color: 'rgba(201,164,85,0.4)', fontSize: 9, marginBottom: 8 }}>Select the matching plaintext:</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {minigame.choices?.map((choice, i) => (
                       <button key={i} onClick={() => handleMgChoice(i)} style={mgChoiceStyle()}>
@@ -1818,13 +1818,13 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
               {/* INJECT */}
               {minigame.type === 'inject' && (
                 <>
-                  <div style={{ background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.2)', padding: 10, marginBottom: 8, fontFamily: 'monospace', fontSize: 10, color: '#eab308', wordBreak: 'break-all' }}>
+                  <div style={{ background: 'rgba(201,164,85,0.07)', border: '1px solid rgba(201,164,85,0.2)', padding: 10, marginBottom: 8, fontFamily: 'monospace', fontSize: 10, color: '#eab308', wordBreak: 'break-all' }}>
                     {minigame.queryTemplate}
                   </div>
-                  <div style={{ color: 'rgba(34,197,94,0.6)', fontSize: 10, marginBottom: 12 }}>
+                  <div style={{ color: 'rgba(201,164,85,0.6)', fontSize: 10, marginBottom: 12 }}>
                     {minigame.injectHint}
                   </div>
-                  <div style={{ color: 'rgba(34,197,94,0.4)', fontSize: 9, marginBottom: 8 }}>Select your injection payload:</div>
+                  <div style={{ color: 'rgba(201,164,85,0.4)', fontSize: 9, marginBottom: 8 }}>Select your injection payload:</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {minigame.injectChoices?.map((choice, i) => (
                       <button key={i} onClick={() => handleMgChoice(i)} style={mgChoiceStyle()}>
@@ -1836,7 +1836,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
               )}
 
               <button onClick={() => { setMinigame(null); setTimeout(() => inputRef.current?.focus(), 100) }}
-                style={{ marginTop: 14, background: 'transparent', border: '1px solid rgba(34,197,94,0.2)', color: 'rgba(34,197,94,0.4)', ...MONO, fontSize: 10, padding: '3px 10px', cursor: 'pointer', alignSelf: 'flex-start' }}>
+                style={{ marginTop: 14, background: 'transparent', border: '1px solid rgba(201,164,85,0.2)', color: 'rgba(201,164,85,0.4)', ...MONO, fontSize: 10, padding: '3px 10px', cursor: 'pointer', alignSelf: 'flex-start' }}>
                 ABORT
               </button>
             </div>
@@ -1852,7 +1852,7 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
               <div style={{ color: '#22C55E', fontSize: 14, letterSpacing: 3, marginBottom: 8 }}>
                 ██ MISSION ACCOMPLISHED ██
               </div>
-              <div style={{ color: 'rgba(34,197,94,0.6)', fontSize: 10, marginBottom: 16 }}>
+              <div style={{ color: 'rgba(201,164,85,0.6)', fontSize: 10, marginBottom: 16 }}>
                 Crown jewel exfiltrated. Network compromised.
               </div>
               <div style={{ display: 'flex', gap: 10 }}>
@@ -1873,8 +1873,8 @@ export default function HacknetGame({ onExit }: { onExit: () => void }) {
           </div>
 
           {/* Input */}
-          <div style={{ borderTop: '1px solid rgba(34,197,94,0.15)', padding: '4px 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ color: 'rgba(34,197,94,0.5)', fontSize: 10 }}>{cur.hostname}$</span>
+          <div style={{ borderTop: '1px solid rgba(201,164,85,0.15)', padding: '4px 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ color: 'rgba(201,164,85,0.5)', fontSize: 10 }}>{cur.hostname}$</span>
             <input
               ref={inputRef}
               value={input}
@@ -1905,7 +1905,7 @@ function mgBtnStyle(color: string): React.CSSProperties {
 
 function mgChoiceStyle(): React.CSSProperties {
   return {
-    background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.25)',
+    background: 'rgba(201,164,85,0.06)', border: '1px solid rgba(201,164,85,0.25)',
     color: '#22C55E', fontFamily: '"DM Mono", monospace', fontSize: 11,
     padding: '10px 14px', cursor: 'pointer', textAlign: 'left',
     transition: 'background 0.1s',

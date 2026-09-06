@@ -123,9 +123,9 @@ const CREDITS = [
 
 const LINE_COLOR: Record<Line['type'], string> = {
   cmd: '#22C55E',
-  out: 'rgba(34,197,94,0.65)',
+  out: 'rgba(201,164,85,0.65)',
   err: '#ef4444',
-  sys: 'rgba(34,197,94,0.32)',
+  sys: 'rgba(201,164,85,0.32)',
 }
 
 // ── Component ──────────────────────────────────────────────────────────────
@@ -724,18 +724,18 @@ export default function SecretTerminal() {
         }
       }
       ctx.fillStyle = '#050905'; ctx.fillRect(0, 0, SCW, SCH)
-      ctx.strokeStyle = 'rgba(34,197,94,0.06)'; ctx.lineWidth = 0.5
+      ctx.strokeStyle = 'rgba(201,164,85,0.06)'; ctx.lineWidth = 0.5
       for (let x = 0; x <= SC; x++) { ctx.beginPath(); ctx.moveTo(x * SZ, 0); ctx.lineTo(x * SZ, SCH); ctx.stroke() }
       for (let y = 0; y <= SR; y++) { ctx.beginPath(); ctx.moveTo(0, y * SZ); ctx.lineTo(SCW, y * SZ); ctx.stroke() }
       const f = foodRef.current; const pls = Math.sin(ts * 0.003) * 0.3 + 0.7
       const fx = f.x * SZ + SZ / 2, fy = f.y * SZ + SZ / 2
-      ctx.shadowColor = '#22C55E'; ctx.shadowBlur = 10 * pls; ctx.fillStyle = `rgba(34,197,94,${pls.toFixed(2)})`
+      ctx.shadowColor = '#22C55E'; ctx.shadowBlur = 10 * pls; ctx.fillStyle = `rgba(201,164,85,${pls.toFixed(2)})`
       ctx.beginPath(); ctx.arc(fx, fy, SZ * 0.3, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0
       const sn = snakeRef.current
       sn.forEach((seg, i) => {
         const isHead = i === 0; const alpha = isHead ? 1 : Math.max(0.2, 1 - (i / sn.length) * 0.78)
         ctx.shadowBlur = isHead ? 14 : 0; ctx.shadowColor = '#22C55E'
-        ctx.fillStyle = isHead ? '#4ade80' : `rgba(34,197,94,${alpha.toFixed(2)})`
+        ctx.fillStyle = isHead ? '#4ade80' : `rgba(201,164,85,${alpha.toFixed(2)})`
         const m = isHead ? 1 : 2; ctx.fillRect(seg.x * SZ + m, seg.y * SZ + m, SZ - m * 2, SZ - m * 2)
         if (isHead) {
           ctx.shadowBlur = 0; ctx.fillStyle = '#050905'
@@ -750,14 +750,14 @@ export default function SecretTerminal() {
       if (deadRef.current) {
         ctx.fillStyle = 'rgba(5,9,5,0.9)'; ctx.fillRect(0, 0, SCW, SCH); ctx.textAlign = 'center'
         ctx.fillStyle = '#22C55E'; ctx.font = 'bold 14px "DM Mono",monospace'; ctx.fillText('// GAME_OVER', SCW / 2, SCH / 2 - 30)
-        ctx.fillStyle = 'rgba(34,197,94,0.5)'; ctx.font = '11px "DM Mono",monospace'
+        ctx.fillStyle = 'rgba(201,164,85,0.5)'; ctx.font = '11px "DM Mono",monospace'
         ctx.fillText(`SCORE: ${scoreRef.current.toString().padStart(3,'0')}   HI: ${hiRef.current.toString().padStart(3,'0')}`, SCW / 2, SCH / 2 - 4)
         ctx.fillStyle = '#22C55E'; ctx.fillText('[ENTER] RESTART   [ESC] BACK', SCW / 2, SCH / 2 + 26)
       }
       if (pauseRef.current && !deadRef.current) {
         ctx.fillStyle = 'rgba(5,9,5,0.78)'; ctx.fillRect(0, 0, SCW, SCH); ctx.textAlign = 'center'; ctx.fillStyle = '#22C55E'
         ctx.font = '12px "DM Mono",monospace'; ctx.fillText('// PAUSED', SCW / 2, SCH / 2)
-        ctx.fillStyle = 'rgba(34,197,94,0.35)'; ctx.font = '9px "DM Mono",monospace'; ctx.fillText('[P] RESUME   [ESC] BACK', SCW / 2, SCH / 2 + 22)
+        ctx.fillStyle = 'rgba(201,164,85,0.35)'; ctx.font = '9px "DM Mono",monospace'; ctx.fillText('[P] RESUME   [ESC] BACK', SCW / 2, SCH / 2 + 22)
       }
       snakeRaf.current = requestAnimationFrame(frame)
     }
@@ -800,18 +800,18 @@ export default function SecretTerminal() {
         const ch = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)]
         const x  = i * 14 + 7
         ctx.fillStyle = '#4ade80'; ctx.fillText(ch, x - 6, y * 14)
-        ctx.fillStyle = 'rgba(34,197,94,0.5)'; if (y > 1) ctx.fillText(MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)], x - 6, (y - 1) * 14)
-        ctx.fillStyle = 'rgba(34,197,94,0.18)'; if (y > 2) ctx.fillText(MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)], x - 6, (y - 2) * 14)
+        ctx.fillStyle = 'rgba(201,164,85,0.5)'; if (y > 1) ctx.fillText(MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)], x - 6, (y - 1) * 14)
+        ctx.fillStyle = 'rgba(201,164,85,0.18)'; if (y > 2) ctx.fillText(MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)], x - 6, (y - 2) * 14)
         dropsRef.current[i]++
         if (dropsRef.current[i] * 14 > H && Math.random() > 0.975) dropsRef.current[i] = 0
       })
       const blink = Math.sin(ts * 0.005) > 0
       ctx.fillStyle = 'rgba(5,9,5,0.82)'; ctx.fillRect(W / 2 - 178, H / 2 - 38, 356, 76)
-      ctx.strokeStyle = 'rgba(34,197,94,0.45)'; ctx.lineWidth = 1; ctx.strokeRect(W / 2 - 178, H / 2 - 38, 356, 76)
+      ctx.strokeStyle = 'rgba(201,164,85,0.45)'; ctx.lineWidth = 1; ctx.strokeRect(W / 2 - 178, H / 2 - 38, 356, 76)
       ctx.textAlign = 'center'
-      ctx.fillStyle = blink ? '#4ade80' : 'rgba(34,197,94,0.55)'; ctx.font = 'bold 14px "DM Mono", monospace'; ctx.fillText('// CLASSIFIED //', W / 2, H / 2 - 12)
-      ctx.fillStyle = 'rgba(34,197,94,0.6)'; ctx.font = '10px "DM Mono", monospace'; ctx.fillText('OPERATOR: IAN_ANDUJAR  ·  TARGET: ANDURIL_INDUSTRIES', W / 2, H / 2 + 12)
-      ctx.fillStyle = 'rgba(34,197,94,0.3)'; ctx.font = '9px "DM Mono", monospace'; ctx.fillText(`SESSION_UPTIME: ${Math.floor(ts / 1000).toString().padStart(6, '0')}s`, W / 2, H / 2 + 30)
+      ctx.fillStyle = blink ? '#4ade80' : 'rgba(201,164,85,0.55)'; ctx.font = 'bold 14px "DM Mono", monospace'; ctx.fillText('// CLASSIFIED //', W / 2, H / 2 - 12)
+      ctx.fillStyle = 'rgba(201,164,85,0.6)'; ctx.font = '10px "DM Mono", monospace'; ctx.fillText('OPERATOR: IAN_ANDUJAR  ·  TARGET: ANDURIL_INDUSTRIES', W / 2, H / 2 + 12)
+      ctx.fillStyle = 'rgba(201,164,85,0.3)'; ctx.font = '9px "DM Mono", monospace'; ctx.fillText(`SESSION_UPTIME: ${Math.floor(ts / 1000).toString().padStart(6, '0')}s`, W / 2, H / 2 + 30)
       coolRaf.current = requestAnimationFrame(drawCool)
     }
     coolRaf.current = requestAnimationFrame(drawCool)
@@ -892,13 +892,13 @@ export default function SecretTerminal() {
       ctx.fillRect(0, 0, SCW, SCH)
 
       ctx.setLineDash([6, 8])
-      ctx.strokeStyle = 'rgba(34,197,94,0.1)'
+      ctx.strokeStyle = 'rgba(201,164,85,0.1)'
       ctx.lineWidth = 1
       ctx.beginPath(); ctx.moveTo(SCW / 2, 0); ctx.lineTo(SCW / 2, SCH); ctx.stroke()
       ctx.setLineDash([])
 
       ctx.font = '32px "DM Mono",monospace'
-      ctx.fillStyle = 'rgba(34,197,94,0.22)'
+      ctx.fillStyle = 'rgba(201,164,85,0.22)'
       ctx.textAlign = 'center'
       ctx.fillText(String(pongSL.current), SCW / 2 - 90, 48)
       ctx.fillText(String(pongSR.current), SCW / 2 + 90, 48)
@@ -908,19 +908,19 @@ export default function SecretTerminal() {
 
       ctx.fillStyle = '#22C55E'
       ctx.fillRect(8, pongPL.current, PW, PH)
-      ctx.fillStyle = 'rgba(34,197,94,0.5)'
+      ctx.fillStyle = 'rgba(201,164,85,0.5)'
       ctx.fillRect(SCW - PW - 8, pongPR.current, PW, PH)
 
       const grd = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, 18)
-      grd.addColorStop(0, 'rgba(34,197,94,0.35)')
-      grd.addColorStop(1, 'rgba(34,197,94,0)')
+      grd.addColorStop(0, 'rgba(201,164,85,0.35)')
+      grd.addColorStop(1, 'rgba(201,164,85,0)')
       ctx.beginPath(); ctx.arc(b.x, b.y, 18, 0, Math.PI * 2)
       ctx.fillStyle = grd; ctx.fill()
       ctx.beginPath(); ctx.arc(b.x, b.y, BR, 0, Math.PI * 2)
       ctx.fillStyle = '#22C55E'; ctx.fill()
 
       ctx.font = '8px "DM Mono",monospace'
-      ctx.fillStyle = 'rgba(34,197,94,0.18)'
+      ctx.fillStyle = 'rgba(201,164,85,0.18)'
       ctx.textAlign = 'left'
       ctx.fillText('W/S or ↑↓ to move · first to 7 wins', 10, SCH - 8)
 
@@ -967,14 +967,14 @@ export default function SecretTerminal() {
         style={{
           position: 'fixed', bottom: 14, right: 14,
           background: 'none',
-          border: '1px solid rgba(34,197,94,0.2)',
+          border: '1px solid rgba(201,164,85,0.2)',
           padding: '5px 11px', cursor: 'pointer', zIndex: 9998,
-          color: 'rgba(34,197,94,0.4)', fontSize: '8px',
+          color: 'rgba(201,164,85,0.4)', fontSize: '8px',
           letterSpacing: '0.14em', opacity: 0.22,
           transition: 'all 0.35s ease', borderRadius: 0, ...MONO,
         }}
-        onMouseEnter={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.color = '#22C55E'; e.currentTarget.style.borderColor = 'rgba(34,197,94,0.6)' }}
-        onMouseLeave={e => { e.currentTarget.style.opacity = '0.22'; e.currentTarget.style.color = 'rgba(34,197,94,0.4)'; e.currentTarget.style.borderColor = 'rgba(34,197,94,0.2)' }}
+        onMouseEnter={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.color = '#22C55E'; e.currentTarget.style.borderColor = 'rgba(201,164,85,0.6)' }}
+        onMouseLeave={e => { e.currentTarget.style.opacity = '0.22'; e.currentTarget.style.color = 'rgba(201,164,85,0.4)'; e.currentTarget.style.borderColor = 'rgba(201,164,85,0.2)' }}
       >
         ◈ ACCESS
       </button>
@@ -1001,17 +1001,17 @@ export default function SecretTerminal() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.97, y: 14 }}
                   transition={{ duration: 0.2 }}
-                  style={{ background: '#050905', border: '1px solid rgba(34,197,94,0.2)', boxShadow: '0 0 80px rgba(34,197,94,0.06)', width: WIN_W, ...MONO }}
+                  style={{ background: '#050905', border: '1px solid rgba(201,164,85,0.2)', boxShadow: '0 0 80px rgba(201,164,85,0.06)', width: WIN_W, ...MONO }}
                 >
-                  <div style={{ padding: '9px 14px', borderBottom: '1px solid rgba(34,197,94,0.1)', background: 'rgba(34,197,94,0.025)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div style={{ padding: '9px 14px', borderBottom: '1px solid rgba(201,164,85,0.1)', background: 'rgba(201,164,85,0.025)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <div style={{ display: 'flex', gap: '5px' }}>
-                      {[0,1,2].map(i => <div key={i} onClick={i === 0 ? close : undefined} style={{ width: 8, height: 8, borderRadius: '50%', background: i === 0 ? '#ff5f57' : 'rgba(34,197,94,0.14)', cursor: i === 0 ? 'pointer' : 'default' }} />)}
+                      {[0,1,2].map(i => <div key={i} onClick={i === 0 ? close : undefined} style={{ width: 8, height: 8, borderRadius: '50%', background: i === 0 ? '#ff5f57' : 'rgba(201,164,85,0.14)', cursor: i === 0 ? 'pointer' : 'default' }} />)}
                     </div>
-                    <span style={{ fontSize: '9px', color: 'rgba(34,197,94,0.35)', letterSpacing: '0.14em', marginLeft: 10 }}>CLASSIFIED_ACCESS_TERMINAL v2.0</span>
+                    <span style={{ fontSize: '9px', color: 'rgba(201,164,85,0.35)', letterSpacing: '0.14em', marginLeft: 10 }}>CLASSIFIED_ACCESS_TERMINAL v2.0</span>
                   </div>
                   <div style={{ padding: '36px 46px' }}>
-                    <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.3)', letterSpacing: '0.12em', marginBottom: '24px' }}>{'>'} IDENTIFICATION_REQUIRED</div>
-                    <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.55)', letterSpacing: '0.1em', marginBottom: '14px' }}>ENTER_USERNAME:</div>
+                    <div style={{ fontSize: '10px', color: 'rgba(201,164,85,0.3)', letterSpacing: '0.12em', marginBottom: '24px' }}>{'>'} IDENTIFICATION_REQUIRED</div>
+                    <div style={{ fontSize: '10px', color: 'rgba(201,164,85,0.55)', letterSpacing: '0.1em', marginBottom: '14px' }}>ENTER_USERNAME:</div>
                     <input
                       ref={usernameRef}
                       value={usernameInput}
@@ -1021,14 +1021,14 @@ export default function SecretTerminal() {
                       spellCheck={false}
                       style={{
                         width: '100%', boxSizing: 'border-box',
-                        background: 'rgba(34,197,94,0.04)', border: '1px solid rgba(34,197,94,0.3)',
+                        background: 'rgba(201,164,85,0.04)', border: '1px solid rgba(201,164,85,0.3)',
                         color: '#22C55E', ...MONO, fontSize: '14px', padding: '10px 14px',
                         outline: 'none', letterSpacing: '0.05em',
                       }}
                     />
                     <div style={{ marginTop: '18px', display: 'flex', gap: 10 }}>
-                      <button onClick={submitUsername} style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.35)', color: '#22C55E', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>CONFIRM</button>
-                      <button onClick={close} style={{ background: 'transparent', border: '1px solid rgba(34,197,94,0.15)', color: 'rgba(34,197,94,0.35)', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>ABORT</button>
+                      <button onClick={submitUsername} style={{ background: 'rgba(201,164,85,0.08)', border: '1px solid rgba(201,164,85,0.35)', color: '#22C55E', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>CONFIRM</button>
+                      <button onClick={close} style={{ background: 'transparent', border: '1px solid rgba(201,164,85,0.15)', color: 'rgba(201,164,85,0.35)', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>ABORT</button>
                     </div>
                   </div>
                 </motion.div>
@@ -1044,18 +1044,18 @@ export default function SecretTerminal() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.97, y: 14 }}
                   transition={{ duration: 0.2 }}
-                  style={{ background: '#050905', border: '1px solid rgba(34,197,94,0.2)', boxShadow: '0 0 80px rgba(34,197,94,0.06)', width: WIN_W, ...MONO }}
+                  style={{ background: '#050905', border: '1px solid rgba(201,164,85,0.2)', boxShadow: '0 0 80px rgba(201,164,85,0.06)', width: WIN_W, ...MONO }}
                 >
-                  <div style={{ padding: '9px 14px', borderBottom: '1px solid rgba(34,197,94,0.1)', background: 'rgba(34,197,94,0.025)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div style={{ padding: '9px 14px', borderBottom: '1px solid rgba(201,164,85,0.1)', background: 'rgba(201,164,85,0.025)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <div style={{ display: 'flex', gap: '5px' }}>
-                      {[0,1,2].map(i => <div key={i} onClick={i === 0 ? close : undefined} style={{ width: 8, height: 8, borderRadius: '50%', background: i === 0 ? '#ff5f57' : 'rgba(34,197,94,0.14)', cursor: i === 0 ? 'pointer' : 'default' }} />)}
+                      {[0,1,2].map(i => <div key={i} onClick={i === 0 ? close : undefined} style={{ width: 8, height: 8, borderRadius: '50%', background: i === 0 ? '#ff5f57' : 'rgba(201,164,85,0.14)', cursor: i === 0 ? 'pointer' : 'default' }} />)}
                     </div>
-                    <span style={{ fontSize: '9px', color: 'rgba(34,197,94,0.35)', letterSpacing: '0.14em', marginLeft: 10 }}>CLASSIFIED_ACCESS_TERMINAL v2.0</span>
+                    <span style={{ fontSize: '9px', color: 'rgba(201,164,85,0.35)', letterSpacing: '0.14em', marginLeft: 10 }}>CLASSIFIED_ACCESS_TERMINAL v2.0</span>
                   </div>
                   <div style={{ padding: '36px 46px' }}>
-                    <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.3)', letterSpacing: '0.12em', marginBottom: '24px' }}>{'>'} ELEVATED_CLEARANCE_REQUIRED</div>
-                    <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.55)', letterSpacing: '0.1em', marginBottom: '4px' }}>USER: <span style={{ color: '#22C55E' }}>{usernameInput}</span></div>
-                    <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.55)', letterSpacing: '0.1em', marginBottom: '14px', marginTop: '14px' }}>ENTER_PASSWORD:</div>
+                    <div style={{ fontSize: '10px', color: 'rgba(201,164,85,0.3)', letterSpacing: '0.12em', marginBottom: '24px' }}>{'>'} ELEVATED_CLEARANCE_REQUIRED</div>
+                    <div style={{ fontSize: '10px', color: 'rgba(201,164,85,0.55)', letterSpacing: '0.1em', marginBottom: '4px' }}>USER: <span style={{ color: '#22C55E' }}>{usernameInput}</span></div>
+                    <div style={{ fontSize: '10px', color: 'rgba(201,164,85,0.55)', letterSpacing: '0.1em', marginBottom: '14px', marginTop: '14px' }}>ENTER_PASSWORD:</div>
                     <input
                       ref={adminPassRef}
                       type="password"
@@ -1065,7 +1065,7 @@ export default function SecretTerminal() {
                       autoComplete="off"
                       style={{
                         width: '100%', boxSizing: 'border-box',
-                        background: 'rgba(34,197,94,0.04)', border: '1px solid rgba(34,197,94,0.3)',
+                        background: 'rgba(201,164,85,0.04)', border: '1px solid rgba(201,164,85,0.3)',
                         color: '#22C55E', ...MONO, fontSize: '14px', padding: '10px 14px',
                         outline: 'none', letterSpacing: '0.2em',
                       }}
@@ -1079,8 +1079,8 @@ export default function SecretTerminal() {
                       )}
                     </AnimatePresence>
                     <div style={{ marginTop: '18px', display: 'flex', gap: 10 }}>
-                      <button onClick={submitAdminPass} style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.35)', color: '#22C55E', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>AUTHENTICATE</button>
-                      <button onClick={close} style={{ background: 'transparent', border: '1px solid rgba(34,197,94,0.15)', color: 'rgba(34,197,94,0.35)', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>ABORT</button>
+                      <button onClick={submitAdminPass} style={{ background: 'rgba(201,164,85,0.08)', border: '1px solid rgba(201,164,85,0.35)', color: '#22C55E', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>AUTHENTICATE</button>
+                      <button onClick={close} style={{ background: 'transparent', border: '1px solid rgba(201,164,85,0.15)', color: 'rgba(201,164,85,0.35)', ...MONO, fontSize: '10px', padding: '7px 20px', cursor: 'pointer', letterSpacing: '0.1em' }}>ABORT</button>
                     </div>
                   </div>
                 </motion.div>
@@ -1096,25 +1096,25 @@ export default function SecretTerminal() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.97, y: 14 }}
                   transition={{ duration: 0.2 }}
-                  style={{ background: '#050905', border: '1px solid rgba(34,197,94,0.2)', boxShadow: '0 0 80px rgba(34,197,94,0.06)', width: WIN_W, ...MONO }}
+                  style={{ background: '#050905', border: '1px solid rgba(201,164,85,0.2)', boxShadow: '0 0 80px rgba(201,164,85,0.06)', width: WIN_W, ...MONO }}
                 >
                   {/* Chrome */}
-                  <div style={{ padding: '9px 14px', borderBottom: '1px solid rgba(34,197,94,0.1)', background: 'rgba(34,197,94,0.025)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div style={{ padding: '9px 14px', borderBottom: '1px solid rgba(201,164,85,0.1)', background: 'rgba(201,164,85,0.025)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <div style={{ display: 'flex', gap: '5px' }}>
                       {[0, 1, 2].map(i => (
-                        <div key={i} onClick={i === 0 ? close : undefined} style={{ width: 8, height: 8, borderRadius: '50%', background: i === 0 ? '#ff5f57' : 'rgba(34,197,94,0.14)', cursor: i === 0 ? 'pointer' : 'default' }} />
+                        <div key={i} onClick={i === 0 ? close : undefined} style={{ width: 8, height: 8, borderRadius: '50%', background: i === 0 ? '#ff5f57' : 'rgba(201,164,85,0.14)', cursor: i === 0 ? 'pointer' : 'default' }} />
                       ))}
                     </div>
-                    <span style={{ fontSize: '9px', color: 'rgba(34,197,94,0.35)', letterSpacing: '0.14em', marginLeft: 10 }}>CLASSIFIED_ACCESS_TERMINAL v2.0</span>
+                    <span style={{ fontSize: '9px', color: 'rgba(201,164,85,0.35)', letterSpacing: '0.14em', marginLeft: 10 }}>CLASSIFIED_ACCESS_TERMINAL v2.0</span>
                   </div>
 
                   {(phase === 'pin' || phase === 'denied') && (
                     <div style={{ padding: '36px 46px' }}>
-                      <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.3)', letterSpacing: '0.12em', marginBottom: '24px' }}>{'>'} CLEARANCE_REQUIRED</div>
-                      <div style={{ fontSize: '10px', color: 'rgba(34,197,94,0.55)', letterSpacing: '0.1em', marginBottom: '14px' }}>ENTER_ACCESS_CODE:</div>
+                      <div style={{ fontSize: '10px', color: 'rgba(201,164,85,0.3)', letterSpacing: '0.12em', marginBottom: '24px' }}>{'>'} CLEARANCE_REQUIRED</div>
+                      <div style={{ fontSize: '10px', color: 'rgba(201,164,85,0.55)', letterSpacing: '0.1em', marginBottom: '14px' }}>ENTER_ACCESS_CODE:</div>
                       <div style={{ display: 'flex', gap: '10px', marginBottom: '24px' }}>
                         {[0, 1, 2, 3].map(i => (
-                          <div key={i} style={{ width: 54, height: 68, border: `1px solid ${pin.length > i ? 'rgba(34,197,94,0.6)' : i === pin.length ? 'rgba(34,197,94,0.38)' : 'rgba(34,197,94,0.1)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#22C55E', background: pin.length > i ? 'rgba(34,197,94,0.06)' : 'transparent', transition: 'border-color 0.15s ease, background 0.15s ease' }}>
+                          <div key={i} style={{ width: 54, height: 68, border: `1px solid ${pin.length > i ? 'rgba(201,164,85,0.6)' : i === pin.length ? 'rgba(201,164,85,0.38)' : 'rgba(201,164,85,0.1)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#22C55E', background: pin.length > i ? 'rgba(201,164,85,0.06)' : 'transparent', transition: 'border-color 0.15s ease, background 0.15s ease' }}>
                             {pin.length > i ? '●' : ''}
                           </div>
                         ))}
@@ -1127,9 +1127,9 @@ export default function SecretTerminal() {
                           </motion.div>
                         )}
                       </AnimatePresence>
-                      <div style={{ fontSize: '8px', color: 'rgba(34,197,94,0.18)', letterSpacing: '0.08em', marginTop: '20px', lineHeight: 2 }}>
+                      <div style={{ fontSize: '8px', color: 'rgba(201,164,85,0.18)', letterSpacing: '0.08em', marginTop: '20px', lineHeight: 2 }}>
                         [TYPE 4-DIGIT CODE]  ·  [ESC] ABORT<br />
-                        <span style={{ color: 'rgba(34,197,94,0.1)' }}>{'// HINT: FINAL YEAR FROM MISSION_OBJECTIVES'}</span>
+                        <span style={{ color: 'rgba(201,164,85,0.1)' }}>{'// HINT: FINAL YEAR FROM MISSION_OBJECTIVES'}</span>
                       </div>
                     </div>
                   )}
@@ -1138,7 +1138,7 @@ export default function SecretTerminal() {
                     <div style={{ padding: '36px 46px' }}>
                       {['> VERIFYING_CLEARANCE_CODE...', '> IDENTITY_CONFIRMED', '> INITIALIZING_TERMINAL...', '> WELCOME, OPERATOR_ANDUJAR'].map((line, i) => (
                         <motion.div key={line} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.38, duration: 0.3 }}
-                          style={{ fontSize: '11px', letterSpacing: '0.1em', marginBottom: '10px', color: i === 3 ? '#4ade80' : 'rgba(34,197,94,0.55)' }}>
+                          style={{ fontSize: '11px', letterSpacing: '0.1em', marginBottom: '10px', color: i === 3 ? '#4ade80' : 'rgba(201,164,85,0.55)' }}>
                           {line}
                         </motion.div>
                       ))}
@@ -1167,8 +1167,8 @@ export default function SecretTerminal() {
                     width: sessW,
                     zIndex: sess.zOrder,
                     background: '#050905',
-                    border: `1px solid ${isActive ? 'rgba(34,197,94,0.3)' : 'rgba(34,197,94,0.12)'}`,
-                    boxShadow: isActive ? '0 8px 48px rgba(34,197,94,0.08)' : '0 4px 24px rgba(0,0,0,0.4)',
+                    border: `1px solid ${isActive ? 'rgba(201,164,85,0.3)' : 'rgba(201,164,85,0.12)'}`,
+                    boxShadow: isActive ? '0 8px 48px rgba(201,164,85,0.08)' : '0 4px 24px rgba(0,0,0,0.4)',
                     transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
                     ...MONO,
                   }}
@@ -1178,8 +1178,8 @@ export default function SecretTerminal() {
                     onMouseDown={e => startDrag(e, sess.id)}
                     style={{
                       padding: '9px 14px',
-                      borderBottom: '1px solid rgba(34,197,94,0.1)',
-                      background: 'rgba(34,197,94,0.025)',
+                      borderBottom: '1px solid rgba(201,164,85,0.1)',
+                      background: 'rgba(201,164,85,0.025)',
                       display: 'flex', alignItems: 'center', gap: '6px',
                       cursor: 'grab', userSelect: 'none',
                     }}
@@ -1187,26 +1187,26 @@ export default function SecretTerminal() {
                     <div style={{ display: 'flex', gap: '5px' }}>
                       <div onClick={e => { e.stopPropagation(); closeSession(sess.id) }}
                         style={{ width: 8, height: 8, borderRadius: '50%', background: '#ff5f57', cursor: 'pointer' }} />
-                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'rgba(34,197,94,0.14)' }} />
-                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'rgba(34,197,94,0.14)' }} />
+                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'rgba(201,164,85,0.14)' }} />
+                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'rgba(201,164,85,0.14)' }} />
                     </div>
-                    <span style={{ fontSize: '9px', color: 'rgba(34,197,94,0.35)', letterSpacing: '0.14em', marginLeft: 10 }}>
+                    <span style={{ fontSize: '9px', color: 'rgba(201,164,85,0.35)', letterSpacing: '0.14em', marginLeft: 10 }}>
                       {sess.sub === 'hacknet' ? 'HACKNET — NETWORK_SIM' : `CLASSIFIED_TERMINAL — ${sess.name}`}
                     </span>
                     {sess.sub === 'snake' && (
-                      <span style={{ marginLeft: 'auto', fontSize: '9px', color: 'rgba(34,197,94,0.45)', letterSpacing: '0.08em' }}>
+                      <span style={{ marginLeft: 'auto', fontSize: '9px', color: 'rgba(201,164,85,0.45)', letterSpacing: '0.08em' }}>
                         SCORE:{sScore.toString().padStart(3, '0')} · HI:{sHi.toString().padStart(3, '0')}
                       </span>
                     )}
                     {sess.sub === 'pong' && (
-                      <span style={{ marginLeft: 'auto', fontSize: '9px', color: 'rgba(34,197,94,0.45)', letterSpacing: '0.08em' }}>
+                      <span style={{ marginLeft: 'auto', fontSize: '9px', color: 'rgba(201,164,85,0.45)', letterSpacing: '0.08em' }}>
                         YOU {pongScore[0]} · AI {pongScore[1]}
                       </span>
                     )}
                     {sessions.length > 1 && sess.sub !== 'snake' && (
                       <button
                         onClick={e => { e.stopPropagation(); addSession() }}
-                        style={{ marginLeft: 'auto', background: 'none', border: 'none', color: 'rgba(34,197,94,0.3)', fontSize: '14px', cursor: 'pointer', padding: '0 2px', lineHeight: 1 }}
+                        style={{ marginLeft: 'auto', background: 'none', border: 'none', color: 'rgba(201,164,85,0.3)', fontSize: '14px', cursor: 'pointer', padding: '0 2px', lineHeight: 1 }}
                         title="New window"
                       >+</button>
                     )}
@@ -1214,9 +1214,9 @@ export default function SecretTerminal() {
 
                   {/* ── Sub-app breadcrumb ─────────────────────────────────── */}
                   {sess.sub !== null && (
-                    <div style={{ padding: '6px 14px', borderBottom: '1px solid rgba(34,197,94,0.08)', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '9px', color: 'rgba(34,197,94,0.38)', letterSpacing: '0.1em' }}>
+                    <div style={{ padding: '6px 14px', borderBottom: '1px solid rgba(201,164,85,0.08)', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '9px', color: 'rgba(201,164,85,0.38)', letterSpacing: '0.1em' }}>
                       <span>~/terminal/{sess.sub}</span>
-                      <button onClick={() => exitSubForSess(sess.id)} style={{ marginLeft: 'auto', background: 'none', border: '1px solid rgba(34,197,94,0.22)', color: 'rgba(34,197,94,0.5)', padding: '3px 10px', fontSize: '8px', cursor: 'pointer', letterSpacing: '0.1em', borderRadius: 0, ...MONO }}>
+                      <button onClick={() => exitSubForSess(sess.id)} style={{ marginLeft: 'auto', background: 'none', border: '1px solid rgba(201,164,85,0.22)', color: 'rgba(201,164,85,0.5)', padding: '3px 10px', fontSize: '8px', cursor: 'pointer', letterSpacing: '0.1em', borderRadius: 0, ...MONO }}>
                         ← BACK
                       </button>
                     </div>
@@ -1233,8 +1233,8 @@ export default function SecretTerminal() {
                             </div>
                           ))}
                         </div>
-                        <div style={{ borderTop: '1px solid rgba(34,197,94,0.08)', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span style={{ fontSize: '11px', color: 'rgba(34,197,94,0.5)' }}>{'>'}</span>
+                        <div style={{ borderTop: '1px solid rgba(201,164,85,0.08)', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ fontSize: '11px', color: 'rgba(201,164,85,0.5)' }}>{'>'}</span>
                           <input
                             ref={el => { inputRefs.current[sess.id] = el }}
                             value={sess.input}
@@ -1257,10 +1257,10 @@ export default function SecretTerminal() {
                   {sess.sub === 'snake' && (
                     <div>
                       <canvas ref={snakeCvs} width={SCW} height={SCH} style={{ display: 'block' }} />
-                      <div style={{ padding: '8px 14px', borderTop: '1px solid rgba(34,197,94,0.07)', display: 'flex', justifyContent: 'space-between', fontSize: '8px', color: 'rgba(34,197,94,0.28)', letterSpacing: '0.1em' }}>
+                      <div style={{ padding: '8px 14px', borderTop: '1px solid rgba(201,164,85,0.07)', display: 'flex', justifyContent: 'space-between', fontSize: '8px', color: 'rgba(201,164,85,0.28)', letterSpacing: '0.1em' }}>
                         <span>WASD / ARROWS  ·  P PAUSE  ·  ESC BACK</span>
                         {sPause && !sDead && <span style={{ color: '#22C55E' }}>// PAUSED</span>}
-                        {sDead && <span style={{ color: 'rgba(34,197,94,0.5)' }}>[ENTER] RESTART</span>}
+                        {sDead && <span style={{ color: 'rgba(201,164,85,0.5)' }}>[ENTER] RESTART</span>}
                       </div>
                     </div>
                   )}
@@ -1268,16 +1268,16 @@ export default function SecretTerminal() {
                   {/* ── TicTacToe ─────────────────────────────────────────── */}
                   {sess.sub === 'tictactoe' && (
                     <motion.div key="ttt" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ padding: '24px 28px' }}>
-                      <div style={{ fontSize: '9px', color: 'rgba(34,197,94,0.4)', letterSpacing: '0.1em', marginBottom: '20px' }}>YOU ARE X  ·  AI IS O  ·  CLICK TO PLAY</div>
+                      <div style={{ fontSize: '9px', color: 'rgba(201,164,85,0.4)', letterSpacing: '0.1em', marginBottom: '20px' }}>YOU ARE X  ·  AI IS O  ·  CLICK TO PLAY</div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6, marginBottom: 22, maxWidth: 270 }}>
                         {ttt.map((cell, i) => (
-                          <button key={i} onClick={() => tttPlay(i)} style={{ height: 80, background: cell ? 'rgba(34,197,94,0.05)' : 'rgba(34,197,94,0.02)', border: `1px solid ${cell ? 'rgba(34,197,94,0.4)' : 'rgba(34,197,94,0.1)'}`, color: cell === 'X' ? '#4ade80' : cell === 'O' ? 'rgba(34,197,94,0.5)' : 'transparent', fontSize: '32px', cursor: (!cell && !tttMsg) ? 'pointer' : 'default', transition: 'all 0.15s', borderRadius: 0, ...MONO }}>
+                          <button key={i} onClick={() => tttPlay(i)} style={{ height: 80, background: cell ? 'rgba(201,164,85,0.05)' : 'rgba(201,164,85,0.02)', border: `1px solid ${cell ? 'rgba(201,164,85,0.4)' : 'rgba(201,164,85,0.1)'}`, color: cell === 'X' ? '#4ade80' : cell === 'O' ? 'rgba(201,164,85,0.5)' : 'transparent', fontSize: '32px', cursor: (!cell && !tttMsg) ? 'pointer' : 'default', transition: 'all 0.15s', borderRadius: 0, ...MONO }}>
                             {cell || '·'}
                           </button>
                         ))}
                       </div>
                       {tttMsg && <div style={{ fontSize: '10px', color: '#22C55E', letterSpacing: '0.1em', marginBottom: 14 }}>{'> '}{tttMsg}</div>}
-                      <button onClick={() => { setTtt(Array(9).fill('')); setTttMsg(null); aiThink.current = false }} style={{ background: 'none', border: '1px solid rgba(34,197,94,0.25)', color: 'rgba(34,197,94,0.55)', padding: '6px 18px', fontSize: '9px', cursor: 'pointer', letterSpacing: '0.1em', borderRadius: 0, ...MONO }}>
+                      <button onClick={() => { setTtt(Array(9).fill('')); setTttMsg(null); aiThink.current = false }} style={{ background: 'none', border: '1px solid rgba(201,164,85,0.25)', color: 'rgba(201,164,85,0.55)', padding: '6px 18px', fontSize: '9px', cursor: 'pointer', letterSpacing: '0.1em', borderRadius: 0, ...MONO }}>
                         RESTART
                       </button>
                     </motion.div>
@@ -1286,12 +1286,12 @@ export default function SecretTerminal() {
                   {/* ── Notepad ───────────────────────────────────────────── */}
                   {sess.sub === 'notepad' && (
                     <motion.div key="notepad" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                      <div style={{ padding: '8px 14px', fontSize: '8px', color: 'rgba(34,197,94,0.25)', letterSpacing: '0.1em', borderBottom: '1px solid rgba(34,197,94,0.06)' }}>
+                      <div style={{ padding: '8px 14px', fontSize: '8px', color: 'rgba(201,164,85,0.25)', letterSpacing: '0.1em', borderBottom: '1px solid rgba(201,164,85,0.06)' }}>
                         NOTEPAD_MODE — use BACK to return
                       </div>
                       <textarea autoFocus value={noteText} onChange={e => setNoteText(e.target.value)} spellCheck={false} placeholder={'// start typing...\n'}
                         style={{ width: '100%', height: 290, background: 'transparent', border: 'none', outline: 'none', color: '#22C55E', fontSize: '12px', padding: '14px 16px', resize: 'none', lineHeight: 1.75, caretColor: '#22C55E', ...MONO }} />
-                      <div style={{ padding: '6px 14px', borderTop: '1px solid rgba(34,197,94,0.07)', fontSize: '8px', color: 'rgba(34,197,94,0.25)', letterSpacing: '0.08em', display: 'flex', gap: 20 }}>
+                      <div style={{ padding: '6px 14px', borderTop: '1px solid rgba(201,164,85,0.07)', fontSize: '8px', color: 'rgba(201,164,85,0.25)', letterSpacing: '0.08em', display: 'flex', gap: 20 }}>
                         <span>{noteText.length} chars</span>
                         <span>{noteText.split('\n').length} lines</span>
                       </div>
@@ -1303,12 +1303,12 @@ export default function SecretTerminal() {
                     <motion.div key="credits" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ padding: '24px 14px' }}>
                       {CREDITS.map((line, i) => (
                         <motion.div key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.06, duration: 0.25 }}
-                          style={{ fontSize: '10px', lineHeight: 1.55, whiteSpace: 'pre', color: [1, 6, 10, 13].includes(i) ? '#4ade80' : 'rgba(34,197,94,0.6)' }}>
+                          style={{ fontSize: '10px', lineHeight: 1.55, whiteSpace: 'pre', color: [1, 6, 10, 13].includes(i) ? '#4ade80' : 'rgba(201,164,85,0.6)' }}>
                           {line}
                         </motion.div>
                       ))}
                       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
-                        style={{ fontSize: '8px', color: 'rgba(34,197,94,0.2)', letterSpacing: '0.1em', marginTop: 14, paddingLeft: 14 }}>
+                        style={{ fontSize: '8px', color: 'rgba(201,164,85,0.2)', letterSpacing: '0.1em', marginTop: 14, paddingLeft: 14 }}>
                         [ESC] OR BACK TO RETURN
                       </motion.div>
                     </motion.div>
@@ -1318,7 +1318,7 @@ export default function SecretTerminal() {
                   {sess.sub === 'cool' && (
                     <motion.div key="cool" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                       <canvas ref={coolCvs} width={WIN_W} height={320} style={{ display: 'block' }} />
-                      <div style={{ padding: '8px 14px', borderTop: '1px solid rgba(34,197,94,0.07)', fontSize: '8px', color: 'rgba(34,197,94,0.25)', letterSpacing: '0.1em' }}>
+                      <div style={{ padding: '8px 14px', borderTop: '1px solid rgba(201,164,85,0.07)', fontSize: '8px', color: 'rgba(201,164,85,0.25)', letterSpacing: '0.1em' }}>
                         CLASSIFIED_VISUAL_FEED · LIVE · [ESC] BACK
                       </div>
                     </motion.div>
@@ -1337,14 +1337,14 @@ export default function SecretTerminal() {
                           <div style={{ fontSize: 22, color: pongWinner === 'YOU' ? '#22C55E' : '#ef4444', letterSpacing: 3, marginBottom: 10 }}>
                             {pongWinner === 'YOU' ? '▶ YOU WIN' : '◉ AI WINS'}
                           </div>
-                          <div style={{ fontSize: 11, color: 'rgba(34,197,94,0.5)', marginBottom: 20 }}>
+                          <div style={{ fontSize: 11, color: 'rgba(201,164,85,0.5)', marginBottom: 20 }}>
                             {pongScore[0]} — {pongScore[1]}
                           </div>
                           <button
                             onClick={() => { setPongWinner(null); setPongScore([0,0]); /* loop restarts via pongVisible effect reset */ exitSubForSess(sess.id); setTimeout(() => { const s = sessions.find(x => x.id === sess.id); if (s) {} }, 50) }}
-                            style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.4)', color: '#22C55E', fontFamily: '"DM Mono",monospace', fontSize: 10, padding: '6px 20px', cursor: 'pointer', letterSpacing: 2 }}
-                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(34,197,94,0.2)'}
-                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(34,197,94,0.1)'}
+                            style={{ background: 'rgba(201,164,85,0.1)', border: '1px solid rgba(201,164,85,0.4)', color: '#22C55E', fontFamily: '"DM Mono",monospace', fontSize: 10, padding: '6px 20px', cursor: 'pointer', letterSpacing: 2 }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(201,164,85,0.2)'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(201,164,85,0.1)'}
                           >
                             PLAY AGAIN
                           </button>
@@ -1364,7 +1364,7 @@ export default function SecretTerminal() {
 
             {/* ── Close overlay hint (terminal phase) ─────────────────────── */}
             {phase === 'terminal' && (
-              <div style={{ position: 'absolute', top: 14, left: '50%', transform: 'translateX(-50%)', fontSize: '8px', color: 'rgba(34,197,94,0.2)', letterSpacing: '0.14em', pointerEvents: 'none' }}>
+              <div style={{ position: 'absolute', top: 14, left: '50%', transform: 'translateX(-50%)', fontSize: '8px', color: 'rgba(201,164,85,0.2)', letterSpacing: '0.14em', pointerEvents: 'none' }}>
                 DRAG TITLE BAR TO MOVE  ·  /new FOR NEW WINDOW  ·  × TO CLOSE
               </div>
             )}

@@ -11,6 +11,13 @@ export const metadata: Metadata = {
     title: 'Ian Andujar',
     description: 'Engineering Student · Builder · Creative Technologist',
     type: 'website',
+    images: ['/og-image.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Ian Andujar',
+    description: 'Engineering Student · Builder · Creative Technologist',
+    images: ['/og-image.png'],
   },
 }
 
