@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Download } from 'lucide-react'
 import AmbientOrbs from './AmbientOrbs'
+import SectionSideLabel from './SectionSideLabel'
 
 const education = [
   {
@@ -44,8 +45,17 @@ const skillGroups = [
 
 export default function Resume() {
   return (
-    <section id="resume" style={{ padding: 'clamp(80px, 10vw, 140px) 0', background: 'var(--white)', position: 'relative', overflow: 'hidden' }}>
+    <section
+      id="resume"
+      style={{
+        padding: 'clamp(80px, 10vw, 140px) 0',
+        background: 'linear-gradient(to bottom, var(--white) 0%, transparent 14%, transparent 86%, var(--white) 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
       <AmbientOrbs variant="olive" />
+      <SectionSideLabel index="04" label="Resume" side="right" />
       <div className="section-inner">
 
         {/* Header */}

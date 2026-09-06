@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import AmbientOrbs from './AmbientOrbs'
+import SectionSideLabel from './SectionSideLabel'
 
 const activeItems = [
   {
@@ -34,6 +35,7 @@ export default function Building() {
       }}
     >
       <AmbientOrbs variant="gold" />
+      <SectionSideLabel index="02" label="Building" side="right" />
       <div className="section-inner">
 
         {/* Header */}

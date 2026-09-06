@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import AmbientOrbs from './AmbientOrbs'
+import SectionSideLabel from './SectionSideLabel'
 
 interface WorkItem {
   slug: string
@@ -34,9 +35,15 @@ export default function Work() {
     <section
       id="work"
       onMouseMove={handleMouseMove}
-      style={{ padding: 'clamp(80px, 10vw, 140px) 0', background: 'var(--white)', position: 'relative', overflow: 'hidden' }}
+      style={{
+        padding: 'clamp(80px, 10vw, 140px) 0',
+        background: 'linear-gradient(to bottom, var(--white) 0%, transparent 14%, transparent 86%, var(--white) 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
     >
       <AmbientOrbs variant="olive" />
+      <SectionSideLabel index="01" label="Work" side="left" />
 
       {/* Cursor-following preview */}
       <AnimatePresence>

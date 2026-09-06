@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import AmbientOrbs from './AmbientOrbs'
+import SectionSideLabel from './SectionSideLabel'
 
 const goals = [
   {
@@ -41,6 +42,7 @@ export default function Vision() {
       }}
     >
       <AmbientOrbs variant="gold" />
+      <SectionSideLabel index="05" label="Vision" side="left" />
       <div className="section-inner">
 
         {/* Header */}

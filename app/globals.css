@@ -250,6 +250,12 @@ body::after {
   transition: all 0.1s ease;
 }
 
+/* Vertical section-index labels in the side gutters — only where there's
+   room for them without colliding with real content */
+@media (max-width: 1180px) {
+  .section-side-label { display: none; }
+}
+
 @media (max-width: 768px) {
   .work-row {
     grid-template-columns: 36px 1fr auto;

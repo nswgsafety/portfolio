@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import AmbientOrbs from './AmbientOrbs'
+import SectionSideLabel from './SectionSideLabel'
 
 const aphorisms = [
   'Fear is the ground state of being — not a reaction, but the foundation everything else is built on.',
@@ -12,7 +13,15 @@ const aphorisms = [
 
 export default function Philosophy() {
   return (
-    <section id="philosophy" style={{ padding: 'clamp(100px, 14vw, 200px) 0', background: 'var(--white)', position: 'relative', overflow: 'hidden' }}>
+    <section
+      id="philosophy"
+      style={{
+        padding: 'clamp(100px, 14vw, 200px) 0',
+        background: 'linear-gradient(to bottom, var(--white) 0%, transparent 14%, transparent 86%, var(--white) 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
       <div
         aria-hidden
         style={{
@@ -21,6 +30,7 @@ export default function Philosophy() {
         }}
       />
       <AmbientOrbs variant="terracotta" />
+      <SectionSideLabel index="06" label="Philosophy" side="right" />
 
       <div className="section-inner" style={{ position: 'relative', zIndex: 1 }}>
 

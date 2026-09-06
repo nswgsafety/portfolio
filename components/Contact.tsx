@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Linkedin, Mail, Phone, ArrowUpRight, Check } from 'lucide-react'
 import AmbientOrbs from './AmbientOrbs'
+import SectionSideLabel from './SectionSideLabel'
 
 const EMAIL = 'ianmarcoandujar9@gmail.com'
 
@@ -24,8 +25,17 @@ export default function Contact() {
   }
 
   return (
-    <footer id="contact" style={{ padding: 'clamp(80px, 10vw, 140px) 0 48px', background: 'var(--white)', position: 'relative', overflow: 'hidden' }}>
+    <footer
+      id="contact"
+      style={{
+        padding: 'clamp(80px, 10vw, 140px) 0 48px',
+        background: 'linear-gradient(to bottom, var(--white) 0%, transparent 14%, transparent 70%, var(--white) 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
       <AmbientOrbs variant="terracotta" />
+      <SectionSideLabel index="07" label="Contact" side="left" />
       <div className="section-inner">
 
         {/* Big CTA block */}

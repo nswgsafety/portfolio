@@ -77,7 +77,38 @@ interface DockedModelProps {
   targetSize: number
 }
 
-function DockedModel({ id, url, side, targetSize }: DockedModelProps) {
+/**
+ * With 9 GLBs across the page (~180MB total) we can't keep them all resident
+ * at once like the first 3 were. Each docked model only actually loads once
+ * its section is within `rootMargin` of the viewport, and its GLTF cache
+ * entry is released once the section is well out of view — so peak memory
+ * stays bounded to whichever 1-2 sections are near the viewport, regardless
+ * of how many models the page uses in total.
+ */
+function DockedModel(props: DockedModelProps) {
+  const [near, setNear] = useState(false)
+
+  useEffect(() => {
+    const el = document.getElementById(props.id)
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setNear(entry.isIntersecting),
+      { rootMargin: '50% 0px 50% 0px' },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [props.id])
+
+  useEffect(() => {
+    if (near) return
+    return () => { useGLTF.clear(props.url) }
+  }, [near, props.url])
+
+  if (!near) return null
+  return <DockedModelInner {...props} />
+}
+
+function DockedModelInner({ id, url, side, targetSize }: DockedModelProps) {
   const { scene, scale } = useFittedScene(url, targetSize)
   const ref = useRef<THREE.Group>(null!)
 
@@ -118,18 +149,36 @@ function Rig() {
         <FalconHeavy />
       </Suspense>
       <Suspense fallback={null}>
+        <DockedModel id="work" url="/models/yf-23_black_widow_ii_-_fighter_jet_-_free.glb" side={-1} targetSize={2.3} />
+      </Suspense>
+      <Suspense fallback={null}>
         <DockedModel id="building" url="/models/anduril_altius_700m.glb" side={1} targetSize={2.2} />
       </Suspense>
       <Suspense fallback={null}>
+        <DockedModel id="manifesto" url="/models/f-35_lightning_ii_-_fighter_jet_-_free.glb" side={-1} targetSize={2.2} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <DockedModel id="passion" url="/models/f22_raptor_free.glb" side={1} targetSize={2.3} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <DockedModel id="resume" url="/models/brain.glb" side={-1} targetSize={1.5} />
+      </Suspense>
+      <Suspense fallback={null}>
         <DockedModel id="vision" url="/models/satelite.glb" side={-1} targetSize={1.8} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <DockedModel id="philosophy" url="/models/mars.glb" side={1} targetSize={2} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <DockedModel id="contact" url="/models/northrop_grumman_b-2_spirit_-_free.glb" side={1} targetSize={2.4} />
       </Suspense>
     </>
   )
 }
 
+// Only the hero's model needs to be ready at first paint — everything else
+// loads lazily as its section approaches the viewport (see DockedModel).
 useGLTF.preload('/models/falcon_heavy.glb')
-useGLTF.preload('/models/anduril_altius_700m.glb')
-useGLTF.preload('/models/satelite.glb')
 
 const SKY_GRADIENT = 'linear-gradient(180deg, var(--dusk-deep) 0%, var(--dusk-mid) 45%, var(--dusk-warm) 78%, var(--dusk-glow) 100%)'
 const HAZE_GRADIENT = 'linear-gradient(to top, var(--dusk-deep) 0%, rgba(60,42,30,0.55) 35%, transparent 100%)'

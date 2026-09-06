@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import AmbientOrbs from './AmbientOrbs'
+import SectionSideLabel from './SectionSideLabel'
 
 const passions = [
   {
@@ -31,8 +32,17 @@ export default function Passion() {
   const [hovered, setHovered] = useState<string | null>(null)
 
   return (
-    <section id="passion" style={{ padding: 'clamp(80px, 10vw, 140px) 0', background: 'var(--white)', position: 'relative', overflow: 'hidden' }}>
+    <section
+      id="passion"
+      style={{
+        padding: 'clamp(80px, 10vw, 140px) 0',
+        background: 'linear-gradient(to bottom, var(--white) 0%, transparent 14%, transparent 86%, var(--white) 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
       <AmbientOrbs variant="terracotta" />
+      <SectionSideLabel index="03" label="Passion" side="left" />
       <div className="section-inner">
 
         {/* Header */}
