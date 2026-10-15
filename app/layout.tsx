@@ -4,18 +4,18 @@ import SecretTerminal from '@/components/SecretTerminal'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ianandujar.com'),
-  title: 'Ian Andujar — Engineering Student',
-  description: 'Portfolio of Ian Andujar, engineering student, builder, and creative technologist.',
+  title: 'Ian Andujar — Under Construction',
+  description: 'Site under construction.',
   openGraph: {
     title: 'Ian Andujar',
-    description: 'Engineering Student · Builder · Creative Technologist',
+    description: 'Site under construction.',
     type: 'website',
     images: ['/og-image.png'],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Ian Andujar',
-    description: 'Engineering Student · Builder · Creative Technologist',
+    description: 'Site under construction.',
     images: ['/og-image.png'],
   },
 }
