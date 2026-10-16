@@ -28,7 +28,7 @@ const instrumentSans = Instrument_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ianandujar.com'),
-  title: 'Ian Andujar · Engineer, researcher, debater',
+  title: 'Ian Andujar',
   description: 'Ian Andujar is a mechatronics student in New Jersey: EEG brain-computer interface research, competition drones, a 3D printing lab, and debate.',
   openGraph: {
     type: 'website',
