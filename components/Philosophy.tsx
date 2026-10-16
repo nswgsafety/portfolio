@@ -1,120 +1,43 @@
-'use client'
-
-import { motion } from 'framer-motion'
-import AmbientOrbs from './AmbientOrbs'
-import SectionSideLabel from './SectionSideLabel'
-
-const aphorisms = [
-  'Fear is the ground state of being — not a reaction, but the foundation everything else is built on.',
-  'Power is what emerges when something tries to manage that fear.',
-  'Every human drive — love, curiosity, ambition — traces back to these two forces.',
-  "Power over yourself is the only kind that doesn't require someone else to lose.",
-]
-
 export default function Philosophy() {
   return (
-    <section
-      id="philosophy"
-      style={{
-        padding: 'clamp(100px, 14vw, 200px) 0',
-        background: 'linear-gradient(to bottom, var(--white) 0%, transparent 14%, transparent 86%, var(--white) 100%)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 70% 55% at 50% 0%, rgba(181,80,46,0.06) 0%, transparent 70%)',
-        }}
-      />
-      <AmbientOrbs variant="terracotta" />
-      <SectionSideLabel index="06" label="Philosophy" side="right" />
-
-      <div className="section-inner" style={{ position: 'relative', zIndex: 1 }}>
-
-        {/* Eyebrow */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '32px' }}
-        >
-          <span className="diamond-divider" />
-          <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--muted)' }}>
-            Philosophy
-          </span>
-          <span className="diamond-divider" />
-        </motion.div>
-
-        {/* Dominant serif quote */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display"
-          style={{
-            fontSize: 'clamp(30px, 5.4vw, 76px)',
-            color: 'var(--ink)',
-            lineHeight: 1.15,
-            fontStyle: 'italic',
-            fontWeight: 400,
-            textAlign: 'center',
-            maxWidth: '920px',
-            margin: '0 auto 56px',
-          }}
-        >
-          &ldquo;Fear just is. What you do with it is the{' '}
-          <span style={{ color: 'var(--accent-terracotta)' }}>only question</span> that matters.&rdquo;
-        </motion.p>
-
-        {/* Aphorisms */}
-        <div style={{ maxWidth: '640px', margin: '0 auto 48px' }}>
-          {aphorisms.map((a, i) => (
-            <motion.p
-              key={a}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              style={{
-                fontSize: '15px', lineHeight: 1.9, color: 'var(--muted)', fontWeight: 300,
-                textAlign: 'center', padding: '18px 0',
-                borderTop: i > 0 ? '1px solid var(--border)' : 'none',
-              }}
-            >
-              {a}
-            </motion.p>
-          ))}
+    <section id="philosophy" className="philosophy sec cv">
+      <span className="numeral" aria-hidden="true">VII</span>
+      <div className="moss moss--r" aria-hidden="true" />
+      <div className="moss moss--cl" aria-hidden="true" />
+      <div className="wrap philosophy__grid inner">
+        <div className="philosophy__copy rv">
+          <span className="lab">Plate VII · Philosophy</span>
+          <h2>Fear <span className="it">&amp;</span> Power</h2>
+          <p className="read">I wrote a paper about what drives people. My argument is that fear comes first. I don&rsquo;t mean fear as a feeling. I mean the basic setup every living thing has for avoiding its own destruction. Power is whatever we build in response: strength, knowledge, friendships, laws, religions, whole civilizations.</p>
+          <p className="read">I tested the idea against eight thinkers, answered the six strongest objections I could find, and wrote down where it stops working.</p>
+          <div className="chips"><span className="chip">Plato</span><span className="chip">Machiavelli</span><span className="chip">Hobbes</span><span className="chip">Nietzsche</span><span className="chip">Adler</span><span className="chip">Dostoyevsky</span><span className="chip">Becker</span><span className="chip">Zlotnick</span></div>
+          <a className="btn btn--ink" href="/fear-and-power.html">Read the paper <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H4.5M11 3V9.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg></a>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          style={{ display: 'flex', justifyContent: 'center' }}
-        >
-          <a
-            href="/fear-and-power.html"
-            download="Fear-and-Power-Ian-Andujar.html"
-            className="corner-frame"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: '10px',
-              fontFamily: 'DM Sans, sans-serif', fontSize: '12px', letterSpacing: '0.1em', textTransform: 'uppercase',
-              color: 'var(--accent-gold)', border: '1px solid var(--accent-gold-dim)',
-              borderRadius: '2px', padding: '12px 24px', textDecoration: 'none',
-              transition: 'all 0.25s ease',
-            }}
-          >
-            Read the Full Framework
-          </a>
-        </motion.div>
-
+        <a className="paper rv" href="/fear-and-power.html" aria-label="Open the Fear and Power paper">
+          <div className="sheet sheet--back moss-bg" aria-hidden="true" />
+          <div className="sheet sheet--front">
+            <div className="sheet__head">
+              <span className="lab">De · Philosophia</span>
+              <span className="sheet__title">Fear<br /><span>&amp;</span><br />Power</span>
+              <span className="sheet__rule" />
+              <span className="sheet__sub">On the irreducible architecture of motivation, from the cellular to the civilizational.</span>
+            </div>
+            <ol className="toc">
+              <li><span>I. The Ground State</span><span>3</span></li>
+              <li><span>II. Power</span><span>5</span></li>
+              <li><span>III. The Convergence</span><span>7</span></li>
+              <li><span>IV. The Macro Architecture</span><span>9</span></li>
+              <li><span>V. The Objections</span><span>11</span></li>
+              <li><span>VI. The Honest Limits</span><span>13</span></li>
+            </ol>
+            <span className="lab sheet__by">Ian Andujar · 2026</span>
+          </div>
+        </a>
       </div>
+      <blockquote className="wrap pull inner rv">
+        <p>&ldquo;Power over oneself is the only form of power that does not require another person to lose.&rdquo;</p>
+        <cite className="lab" style={{ fontStyle: 'normal' }}>From the conclusion of Fear &amp; Power</cite>
+      </blockquote>
     </section>
   )
 }

@@ -1,168 +1,37 @@
-'use client'
-
-import { motion } from 'framer-motion'
-
 export default function Hero() {
   return (
-    <section
-      id="hero"
-      style={{
-        minHeight: '100svh',
-        background: 'transparent',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-      className="flex flex-col items-center justify-center"
-    >
-      {/* Corner frame — echoes the logo's frame motif at the scale of the viewport */}
-      {([
-        { top: 'clamp(24px, 4vw, 48px)', left: 'clamp(24px, 4vw, 48px)', borderWidth: '1px 0 0 1px' },
-        { top: 'clamp(24px, 4vw, 48px)', right: 'clamp(24px, 4vw, 48px)', borderWidth: '1px 1px 0 0' },
-        { bottom: 'clamp(24px, 4vw, 48px)', left: 'clamp(24px, 4vw, 48px)', borderWidth: '0 0 1px 1px' },
-        { bottom: 'clamp(24px, 4vw, 48px)', right: 'clamp(24px, 4vw, 48px)', borderWidth: '0 1px 1px 0' },
-      ] as const).map((pos, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 + i * 0.1, duration: 0.8 }}
-          style={{
-            position: 'absolute',
-            ...pos,
-            width: '32px',
-            height: '32px',
-            borderStyle: 'solid',
-            borderColor: 'rgba(248,239,224,0.55)',
-            zIndex: 2,
-            pointerEvents: 'none',
-          }}
-        />
-      ))}
+    <section id="top" className="wrap hero inner" aria-label="Intro">
+      <div className="hero__copy">
+        <span className="lab kicker in" style={{ ['--d0' as string]: '.05s' }}>Plate I · Engineer, researcher, debater</span>
+        <h1 className="in" style={{ ['--d0' as string]: '.12s' }}><span className="first">Ian</span><span className="last">Andujar</span></h1>
+        <p className="read in" style={{ ['--d0' as string]: '.2s' }}>I&rsquo;m a mechatronics student at Applied Technology High School and Bergen Community College. I lead an EEG research project that moves a robotic hand, build competition drones with my TSA team, run a lab full of 3D printers, and I&rsquo;m president of my debate league.</p>
+        <div className="actions in" style={{ ['--d0' as string]: '.28s' }}>
+          <a className="btn btn--ink" href="#work">See my work
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 2v10M7 12l-4-4M7 12l4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </a>
+          <a className="btn btn--line" href="#debate">Pick a side with me</a>
+        </div>
+      </div>
 
-      {/* Side details — coordinates + mission tag, echoing an aerospace plaque */}
-      <motion.div
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1.1, duration: 0.9 }}
-        style={{
-          position: 'absolute',
-          left: 'clamp(24px, 4vw, 48px)',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 2,
-          writingMode: 'vertical-rl',
-          fontFamily: 'DM Sans, sans-serif',
-          fontSize: '10px',
-          letterSpacing: '0.28em',
-          color: 'rgba(248,239,224,0.55)',
-          textTransform: 'uppercase',
-        }}
-      >
-        40.9274&deg;N &middot; 74.0762&deg;W
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, x: 10 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1.1, duration: 0.9 }}
-        style={{
-          position: 'absolute',
-          right: 'clamp(24px, 4vw, 48px)',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 2,
-          writingMode: 'vertical-rl',
-          fontFamily: 'DM Sans, sans-serif',
-          fontSize: '10px',
-          letterSpacing: '0.28em',
-          color: 'rgba(248,239,224,0.55)',
-          textTransform: 'uppercase',
-        }}
-      >
-        Mechatronics &middot; Aerospace
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}
-      >
-        <h1
-          className="font-display"
-          style={{
-            fontSize: 'clamp(52px, 11vw, 148px)',
-            fontWeight: 400,
-            color: '#F8EFE0',
-            letterSpacing: '-0.03em',
-            lineHeight: 0.95,
-            textShadow: '0 4px 40px rgba(42,20,8,0.35)',
-          }}
-        >
-          Ian Andujar<span style={{ color: 'var(--dusk-warm)' }}>.</span>
-        </h1>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 1 }}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '14px',
-            marginTop: '22px',
-          }}
-        >
-          <span style={{ width: '6px', height: '6px', background: 'var(--dusk-warm)', transform: 'rotate(45deg)' }} />
-          <span
-            style={{
-              fontFamily: 'DM Sans, sans-serif',
-              fontSize: '11px',
-              letterSpacing: '0.32em',
-              textTransform: 'uppercase',
-              color: 'rgba(248,239,224,0.75)',
-            }}
-          >
-            Engineer &middot; Builder
-          </span>
-          <span style={{ width: '6px', height: '6px', background: 'var(--dusk-warm)', transform: 'rotate(45deg)' }} />
-        </motion.div>
-      </motion.div>
-
-      <motion.a
-        href="#work"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.3, duration: 0.9 }}
-        whileHover={{ scale: 1.05 }}
-        style={{
-          position: 'absolute',
-          bottom: '56px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 2,
-          width: '64px',
-          height: '64px',
-          borderRadius: '50%',
-          border: '1px solid rgba(248,239,224,0.4)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textDecoration: 'none',
-        }}
-      >
-        <span
-          style={{
-            fontFamily: 'DM Sans, sans-serif',
-            fontSize: '9px',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: 'rgba(248,239,224,0.85)',
-          }}
-        >
-          Scroll
-        </span>
-      </motion.a>
+      <div className="stack" data-loop aria-label="Featured: debate, BCI research, TSA drone">
+        <div className="plate plate--a">
+          <span className="lab">Debate</span>
+          <div className="plate__col"><span className="plate__big">Prop<br />or Opp?</span><span style={{ fontSize: 15, fontWeight: 500 }}>President of my debate league</span></div>
+        </div>
+        <div className="plate plate--b">
+          <span className="lab muted">Research</span>
+          <svg viewBox="0 0 284 80" width="100%" style={{ overflow: 'hidden' }} aria-hidden="true">
+            <g className="wave"><use href="#w1" stroke="#D3DB8F" /></g>
+            <g className="wave wave--slow"><use href="#w2" stroke="#D9773F" /></g>
+          </svg>
+          <div className="plate__col"><span className="plate__title">Brain-computer interface</span><span className="muted" style={{ fontSize: 15 }}>Lead Researcher, Bergen CC</span></div>
+        </div>
+        <div className="plate plate--c">
+          <img src="/img/drone-claw.webp" alt="Team-built quadcopter with a three-finger claw and blue propellers" width={1200} height={1120} fetchPriority="high" />
+          <span className="lab plate__tag">TSA drone · 2026</span>
+          <span className="plate__note"><strong className="lichen">6th in NJ</strong> in 2024. Qualified for nationals.</span>
+        </div>
+      </div>
     </section>
   )
 }

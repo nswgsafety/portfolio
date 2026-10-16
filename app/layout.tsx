@@ -1,37 +1,69 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
+import { Bodoni_Moda, Syne, Instrument_Sans } from 'next/font/google'
 import './globals.css'
-import SecretTerminal from '@/components/SecretTerminal'
+
+// Self-hosted at build time by next/font — no runtime request to Google Fonts,
+// no render-blocking <link>, automatic font-display: swap.
+const bodoniModa = Bodoni_Moda({
+  subsets: ['latin'],
+  weight: 'variable',
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+})
+
+const syne = Syne({
+  subsets: ['latin'],
+  weight: ['600', '700', '800'],
+  variable: '--font-label',
+  display: 'swap',
+})
+
+const instrumentSans = Instrument_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-sans',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ianandujar.com'),
-  title: 'Ian Andujar — Under Construction',
-  description: 'Site under construction.',
+  title: 'Ian Andujar · Engineer, researcher, debater',
+  description: 'Ian Andujar is a mechatronics student in New Jersey: EEG brain-computer interface research, competition drones, a 3D printing lab, and debate.',
   openGraph: {
-    title: 'Ian Andujar',
-    description: 'Site under construction.',
     type: 'website',
-    images: ['/og-image.png'],
+    url: 'https://ianandujar.com/',
+    title: 'Ian Andujar',
+    description: 'BCI research, competition drones, a 3D printing lab, and debate.',
+    images: ['https://ianandujar.com/og.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ian Andujar',
-    description: 'Site under construction.',
-    images: ['/og-image.png'],
   },
+  alternates: {
+    canonical: 'https://ianandujar.com/',
+  },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#12110F',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-color-scheme="light" suppressHydrationWarning>
+    <html lang="en" className={`${bodoniModa.variable} ${syne.variable} ${instrumentSans.variable}`}>
       <head>
-        <meta name="color-scheme" content="light" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Show the loader once per session; skip it for reduced motion. Must run before paint. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem('ia-seen')||matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('no-loader');sessionStorage.setItem('ia-seen','1');}catch(e){}`,
+          }}
+        />
       </head>
-      <body suppressHydrationWarning>
-        <SecretTerminal />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
