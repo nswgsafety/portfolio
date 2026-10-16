@@ -10,6 +10,7 @@ export default function SiteEffects() {
   useEffect(() => {
     const root = document.documentElement
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+    const lowPower = root.classList.contains('low-power')
     const hasIO = 'IntersectionObserver' in window
     const cleanups: Array<() => void> = []
 
@@ -38,9 +39,11 @@ export default function SiteEffects() {
     document.addEventListener('visibilitychange', onVisibility)
     cleanups.push(() => document.removeEventListener('visibilitychange', onVisibility))
 
-    // Firefly cursor: follows the mouse, glows only over dark areas. Fine-pointer desktop only.
+    // Firefly cursor: follows the mouse, glows only over dark areas. Fine-pointer
+    // desktop only, and skipped on low-power devices — it's a permanent rAF +
+    // pointermove loop for the life of the page, not worth it on weak hardware.
     const fly = document.querySelector<HTMLElement>('.fly')
-    if (fly && !reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    if (fly && !reduce && !lowPower && matchMedia('(hover: hover) and (pointer: fine)').matches) {
       let x = 0, y = 0, dark = false, raf = 0
       const paint = () => {
         raf = 0

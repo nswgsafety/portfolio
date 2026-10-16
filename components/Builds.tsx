@@ -12,7 +12,7 @@ export default function Builds() {
         </div>
         <div className="builds__grid">
           <article className="bench rv">
-            <div className="bench__vis bench__vis--pcb" data-dark>
+            <div className="bench__vis bench__vis--pcb" data-dark data-loop>
               <svg viewBox="0 0 320 230" width="100%" height="100%" role="img" aria-label="Illustration of the EEG board layout: ADS1299 front end, ESP32-S3 module, USB-C and battery connectors">
                 <rect x="34" y="14" width="252" height="190" rx="12" fill="#2F3A1A" stroke="#55692F" strokeWidth="2" />
                 <g fill="#12110F" stroke="#C9A85A" strokeWidth="2"><circle cx="50" cy="30" r="6" /><circle cx="270" cy="30" r="6" /><circle cx="50" cy="188" r="6" /><circle cx="270" cy="188" r="6" /></g>
@@ -43,7 +43,7 @@ export default function Builds() {
           </article>
           <article className="bench rv">
             <div className="cap cap--flip" aria-hidden="true" style={{ right: 16, width: '44%' }} />
-            <div className="bench__vis bench__vis--code">
+            <div className="bench__vis bench__vis--code" data-loop>
               <svg viewBox="0 0 300 170" style={{ width: '84%', height: 'auto' }} role="img" aria-label="A barcode with a scan line passing over it">
                 <path d="M18 20h6v110h-6zM31 20h3v110h-3zM47 20h3v110h-3zM60 20h6v110h-6zM73 20h3v110h-3zM83 20h9v110h-9zM102 20h3v110h-3zM112 20h6v110h-6zM131 20h3v110h-3zM141 20h6v110h-6zM154 20h3v110h-3zM167 20h3v110h-3zM183 20h6v110h-6zM196 20h3v110h-3zM209 20h3v110h-3zM219 20h9v110h-9zM235 20h6v110h-6zM248 20h3v110h-3zM261 20h9v110h-9z" fill="#1A1916" />
                 <rect className="scan" x="14" y="22" width="272" height="2.5" fill="#D9773F" />

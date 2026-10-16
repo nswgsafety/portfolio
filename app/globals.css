@@ -361,7 +361,8 @@ main img { filter: saturate(.88) sepia(.08) contrast(1.03); }
 .timeline ol::before { content: ""; position: absolute; left: 0; right: 0; top: 8px; height: 2px; background: var(--rule); }
 .timeline li { position: relative; display: flex; flex-direction: column; gap: 8px; padding-top: 34px; }
 .timeline li::before { content: ""; position: absolute; left: 0; top: 0; width: 18px; height: 18px; box-sizing: border-box; border-radius: 50%; background: var(--paper-2); border: 3px solid var(--moss-deep); }
-.timeline li.now::before { background: var(--lichen); animation: nowpulse 2s ease-out infinite; }
+.timeline li.now::before { background: var(--lichen); }
+.timeline li.now::after { content: ""; position: absolute; left: 0; top: 0; width: 18px; height: 18px; border-radius: 50%; background: var(--lichen); opacity: .5; animation: nowpulse 2s ease-out infinite; pointer-events: none; }
 .timeline li .tuft { left: 22px; top: -27px; width: 70px; }
 .timeline .bod { font-size: 24px; font-style: italic; line-height: 1.1; color: var(--moss-ink); }
 .timeline li > span:last-child { font-size: 16px; line-height: 1.5; color: var(--ink-2); }
@@ -441,6 +442,16 @@ main img { filter: saturate(.88) sepia(.08) contrast(1.03); }
 }
 .paused, .paused * { animation-play-state: paused !important; }
 
+/* Low-RAM / low-core / data-saver devices (flagged before paint — see the
+   inline script in layout.tsx): drop the mix-blend-mode grain layer (a known
+   compositor cost on weak GPUs) and every decorative infinite-loop animation.
+   Scoped to [data-loop] specifically — NOT a blanket rule — because the .rv
+   scroll-reveal animations play once and must be allowed to finish; pausing
+   those would leave content frozen invisible. */
+.low-power .grain { display: none; }
+.low-power [data-loop], .low-power [data-loop] * { animation-play-state: paused !important; }
+.low-power .timeline li.now::after { animation-play-state: paused !important; }
+
 @keyframes lift { to { transform: translateY(-100%); visibility: hidden; } }
 @keyframes grow-up { to { clip-path: inset(0 0 0 0); } }
 @keyframes count { to { --p: 100; } }
@@ -454,7 +465,7 @@ main img { filter: saturate(.88) sepia(.08) contrast(1.03); }
 @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes sig { to { stroke-dashoffset: -88; } }
 @keyframes scan { from { transform: translateY(0); } to { transform: translateY(96px); } }
-@keyframes nowpulse { 0% { box-shadow: 0 0 0 0 rgba(110, 132, 54, .5); } 100% { box-shadow: 0 0 0 12px rgba(110, 132, 54, 0); } }
+@keyframes nowpulse { 0% { transform: scale(1); opacity: .5; } 100% { transform: scale(2.3); opacity: 0; } }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
