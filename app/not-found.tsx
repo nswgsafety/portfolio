@@ -16,7 +16,7 @@ export default function NotFound() {
         gap: 28,
       }}
     >
-      <span className="lab muted">Plate &times; · Not found</span>
+      <span className="lab muted">Not found</span>
       <h1
         style={{
           fontFamily: 'var(--display)',

@@ -76,7 +76,7 @@ export default function Debate() {
       <div className="wrap case inner">
         <div className="intro rv">
           <div className="intro__title">
-            <span className="lab copper">Plate VI · Debate</span>
+            <span className="lab copper">Debate</span>
             <h2>I love <span className="it copper">an argument.</span></h2>
           </div>
           <div className="block" style={{ gap: 16 }}>

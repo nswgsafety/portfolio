@@ -2,7 +2,7 @@ export default function Hero() {
   return (
     <section id="top" className="wrap hero inner" aria-label="Intro">
       <div className="hero__copy">
-        <span className="lab kicker in" style={{ ['--d0' as string]: '.05s' }}>Plate I · Engineer, researcher, debater</span>
+        <span className="lab kicker in" style={{ ['--d0' as string]: '.05s' }}>Engineer, researcher, debater</span>
         <h1 className="in" style={{ ['--d0' as string]: '.12s' }}><span className="first">Ian</span><span className="last">Andujar</span></h1>
         <p className="read in" style={{ ['--d0' as string]: '.2s' }}>I&rsquo;m a mechatronics student at Applied Technology High School and Bergen Community College. I lead an EEG research project that moves a robotic hand, build competition drones with my TSA team, run a lab full of 3D printers, and I&rsquo;m president of my debate league.</p>
         <div className="actions in" style={{ ['--d0' as string]: '.28s' }}>

@@ -6,8 +6,7 @@ export default function Work() {
       <div className="moss moss--cl" aria-hidden="true" />
       <div className="wrap work inner">
         <div className="head rv">
-          <div className="head__title"><span className="lab">Plate II · Now</span><h2 className="h2">What I&rsquo;m working on</h2></div>
-          <p style={{ maxWidth: 360 }}>Four things, all still going. Three have full write-ups further down.</p>
+          <div className="head__title"><span className="lab">Now</span><h2 className="h2">What I&rsquo;m working on</h2></div>
         </div>
         <div className="cards">
           <article className="card card--slab" data-dark style={{ ['--i' as string]: 0 }}>

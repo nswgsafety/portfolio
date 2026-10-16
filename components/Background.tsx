@@ -6,7 +6,7 @@ export default function Background() {
       <div className="ledge ledge--floor" aria-hidden="true" style={{ height: 64 }} />
       <div className="wrap inner">
         <div className="head rv">
-          <div className="head__title"><span className="lab">Plate VIII · Background</span><h2 className="h2">Background</h2></div>
+          <div className="head__title"><h2 className="h2">Background</h2></div>
           <a className="btn btn--line" href="/Ian_Andujar_Resume.pdf" download>Download resume</a>
         </div>
         <div className="timeline rv">

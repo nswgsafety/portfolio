@@ -7,8 +7,7 @@ export default function Builds() {
       <div className="ledge ledge--floor" aria-hidden="true" style={{ height: 56 }} />
       <div className="wrap case inner">
         <div className="head rv">
-          <div className="head__title"><span className="lab">Plate V · More builds</span><h2 className="h2">On the <span className="it" style={{ color: 'var(--moss-ink)' }}>bench</span></h2></div>
-          <p style={{ maxWidth: 380 }}>Two smaller projects, both still in progress.</p>
+          <div className="head__title"><span className="lab">More builds</span><h2 className="h2">On the <span className="it" style={{ color: 'var(--moss-ink)' }}>bench</span></h2></div>
         </div>
         <div className="builds__grid">
           <article className="bench rv">

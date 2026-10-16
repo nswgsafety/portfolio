@@ -6,7 +6,7 @@ export default function Philosophy() {
       <div className="moss moss--cl" aria-hidden="true" />
       <div className="wrap philosophy__grid inner">
         <div className="philosophy__copy rv">
-          <span className="lab">Plate VII · Philosophy</span>
+          <span className="lab">Philosophy</span>
           <h2>Fear <span className="it">&amp;</span> Power</h2>
           <p className="read">I wrote a paper about what drives people. My argument is that fear comes first. I don&rsquo;t mean fear as a feeling. I mean the basic setup every living thing has for avoiding its own destruction. Power is whatever we build in response: strength, knowledge, friendships, laws, religions, whole civilizations.</p>
           <p className="read">I tested the idea against eight thinkers, answered the six strongest objections I could find, and wrote down where it stops working.</p>

@@ -7,7 +7,7 @@ export default function Drone() {
       <div className="wrap case inner">
         <div className="two two--loose">
           <div className="block rv" style={{ gap: 22 }}>
-            <span className="lab">Plate IV · UAV</span>
+            <span className="lab">UAV</span>
             <h2 className="h2 h2--case">Two drones, one claw, <span className="it">a maze full of animals</span></h2>
             <p className="read lede">In TSA&rsquo;s 2026 Safari Rescue challenge, you fly through a maze, find model animals, and pick them up with a claw. Our team built two identical quadcopters from parts, so a pilot can switch drones without relearning anything.</p>
             <p className="read">I did the soldering, designed the printed parts, tuned the flight controller, and flew as primary pilot.</p>

@@ -7,7 +7,7 @@ export default function BCI() {
       <div className="wrap case inner">
         <div className="intro rv">
           <div className="intro__title">
-            <span className="lab lichen">Plate III · Research</span>
+            <span className="lab lichen">Research</span>
             <h2 className="h2 h2--case">Reading movement from brain signals, <span className="it">on a microcontroller</span></h2>
             <span className="muted">With David Meyer · Bergen Community College STEM Research Center</span>
           </div>
